@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="homePage.css">
+  </head>
+  <body background="bck.png">
+    <STYLE>
+    body{background-repeat: no-repeat;
+    background-size: auto;
+  background-size: cover;}
+    
+.backgroundImage{
+  width: 300px;
+}
+    a {text-decoration: none;
+
+    }
+    .login{
+      background-color: #FF8C00;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 16px;
+  margin-left: 1000px;
+    } 
+    .register{
+      background-color: #FF8C00;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 16px;
+    }
+    .login:hover, .login:focus {
+  background-color: #FF4500;
+}
+.register:hover, .register:focus {
+  background-color: #FF4500;
+}</STYLE>
+      <h1>
+      <div class="dropdown">
+          <button onclick="myFunction()" class="dropbtn">Categories</button>
+          <a href="http://localhost/CC1/Login/" class="button">Login</a></button>
+          <a href="http://localhost/CC1/Register/" class="button">Register</a></button>
+
+          <div id="myDropdown" class="dropdown-content">
+              <a href="cate1.php">Social Care</a>
+              <a href="cate2.php">Animal Care</a>
+              <a href="cate3.php">Development</a>
+          </div>
+      </div>
+      <br>
+      <div class="backgroundImage" >
+          <!--<div> <img class = "mySlides" src="acts/image1.png"> </div>
+          <div> <img class = "mySlides" src="acts/image2.png"> </div>
+          <div> <img class = "mySlides" src="acts/image3.png"> </div>
+          <div> <img class = "mySlides" src="acts/image4.png"> </div>-->
+      </div>
+      <script>
+        var myIndex = 0;
+        slideshow();
+        function slideshow(){
+            var i;
+            var x = document.getElementsByClassName("mySlides");
+            for(i=0; i<x.length; i++){
+                x[i].style.display = "none";
+                x[i].style.width='900px';
+                x[i].style.marginLeft = "250px";
+                x[i].style.borderRadius='20px';
+                x[i].style.borderStyle = "solid";
+                x[i].style.borderWidth='30px';
+
+            }
+            myIndex++;
+            if(myIndex > x.length){
+                myIndex = 1;
+            }
+            x[myIndex-1].style.display = "block";
+            setTimeout(slideshow, 2000);
+        }
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+        // Close the dropdown menu if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+        </script>
+    </body>
+</html>
