@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <STYLE>
+        body{font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif}
+        input[type=submit] {
+    line-height: 40px;
+  display: inline-block;
+  padding: 0 25px;
+  cursor: pointer;
+  color: dark grey;
+  background-color: #4169E1;
+  font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius:4px;
+}
+input[type=submit]:hover{
+    opacity: 0.8;
+}
+[type=radio]{
+  border: 1px solid #ddd;
+    border-radius: 100%;
+     background: #F87DA9;
+}
+[type=radio]:checked{
+  background: #F87DA9;
+}
+h1{color: black;
+  text-shadow: 0px 1px 0px #999, 0px 2px 0px #888, 0px 3px 0px #777, 0px 4px 0px #666, 0px 5px 0px #555, 0px 6px 0px #444, 0px 7px 0px #333, 0px 8px 7px #001135;}
+  a {text-decoration: none;
+
+    }
+
+</STYLE>
+        <link rel="stylesheet" href="cate.css">
+        <h1 align="center"><a href="homepage.html">  <font face = "WildWest" size = "21" color="black">SelfieLessActs</font></a> </h1>
+        <div class="uploadForm" style="padding-left:500px; padding-top:200px;">
+            <form action="http://localhost:5000/uploadImage" method="post" enctype="multipart/form-data">
+                <input type="radio" name="category" value="category1"> Social care
+                <input type="radio" name="category" value="category2"> Animal Care
+                <input type="radio" name="category" value="category3"> Development
+                <br>
+                <br>
+                Select image to upload:
+                <input type="file" name="fileToUpload" id="fileToUpload">
+                <br><br>
+                <input type="submit" value="Upload Image" name="submit">
+            </form>
+        </div>
+    </body>
+</html>

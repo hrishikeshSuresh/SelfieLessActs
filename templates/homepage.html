@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='homePage.css')}}">
+  </head>
+  <body background="{{ url_for('static', filename='home/background.jpeg')}}">
+    <STYLE>
+        body{ background-repeat: no-repeat;
+              background-size: auto;
+              background-size: cover;}
+        h1{ color: #fff;
+            text-shadow: 0px 1px 0px #999, 0px 2px 0px #888,
+                         0px 3px 0px #777, 0px 4px 0px #666,
+                         0px 5px 0px #555, 0px 6px 0px #444,
+                         0px 7px 0px #333, 0px 8px 7px #001135;}
+        .backgroundImage{
+            width: 300px;
+        }
+        a {text-decoration: none;
+        }
+        .login{
+            background-color: #FF8C00;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 16px;
+            margin-left: 1000px;
+        }
+        .register{
+            background-color: #FF8C00;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 16px;
+        }
+        .login:hover, .login:focus {
+            background-color: #FF4500;
+        }
+        .register:hover, .register:focus {
+            background-color: #FF4500;
+        }</STYLE>
+      <h1 align="center"> <a href="{{ url_for('templates', filename='homePage.html')}}"> <font face = "WildWest" size = "21" color="black">SelfieLessActs</font></a> </h1>
+      <div class="dropdown">
+          <button onclick="myFunction()" class="dropbtn">Categories</button>
+          <button class="login">Login</button><button class="register">Register</button>
+          <div id="myDropdown" class="dropdown-content">
+              <a href="cate1.html">Social Care</a>
+              <a href="cate2.php">Animal Care</a>
+              <a href="cate3.php">Development</a>
+          </div>
+      </div>
+      <br>
+      <div class="backgroundImage" >
+          <div> <img class = "mySlides" src="{{ url_for('static', filename='home/beggar.jpg')}}"> </div>
+          <div> <img class = "mySlides" src="{{ url_for('static', filename='home/kangaroo.jpeg')}}"> </div>
+          <div> <img class = "mySlides" src="{{ url_for('static', filename='home/oldLady.jpg')}}"> </div>
+      </div>
+      <script>
+        var myIndex = 0;
+        slideshow();
+        function slideshow(){
+            var i;
+            var x = document.getElementsByClassName("mySlides");
+            for(i=0; i<x.length; i++){
+                x[i].style.display = "none";
+                x[i].style.width='900px';
+                x[i].style.marginLeft = "250px";
+                x[i].style.borderRadius='20px';
+                x[i].style.borderStyle = "solid";
+                x[i].style.borderWidth='30px';
+
+            }
+            myIndex++;
+            if(myIndex > x.length){
+                myIndex = 1;
+            }
+            x[myIndex-1].style.display = "block";
+            setTimeout(slideshow, 2000);
+        }
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+        // Close the dropdown menu if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+        </script>
+    </body>
+</html>
