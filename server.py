@@ -11,6 +11,7 @@ from flask import (
     request
 )
 import os
+import json
 from werkzeug import secure_filename
 
 #Markup('<h1><strong>Hello!</strong></h1>')
@@ -79,8 +80,17 @@ def register():
     return render_template('register.html')
 
 #add user
-@app.route('/api/v1/users')
-
+@app.route('/api/v1/users', methods = ['POST', 'GET'])
+def addUser():
+    if request.method == 'POST':
+        print("Receiving data....")
+        u_data = request.args.get('username')
+        u_password = request.args.get('password')
+        print(u_data, u_password)
+        return 'User has been added'
+    else:
+        return 'Poor Request'
+"""
 #remove user
 @app.route('/api/v1/users/<username>')
 
@@ -110,8 +120,7 @@ def register():
 
 #upload an act
 @app.route('/api/v1/acts')
-
-#
+"""
 
 if __name__ == '__main__':
     app.run(debug = True)
