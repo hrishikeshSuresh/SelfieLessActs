@@ -14,6 +14,8 @@ root --> templates
                     --> home
                     --> cate.css
                     --> homePage.css
+     --> data
+                    --> users
 
 ---------------------------------------
  File Structure for SelfieLessActs_API
