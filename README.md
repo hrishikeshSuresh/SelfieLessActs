@@ -1,3 +1,3 @@
 Cloud Computing Project
 
-Check file structure before starting with teh code
+Check file structure before starting with the code
