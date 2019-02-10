@@ -14,6 +14,8 @@ import os
 import json
 from werkzeug import secure_filename
 
+http_methods = ['GET', 'POST']
+
 #Markup('<h1><strong>Hello!</strong></h1>')
 
 #create application instance
@@ -60,7 +62,7 @@ def upload():
 
 #localhost:5000/uploadImage
 #need to fix this
-@app.route('/uploadImage', methods = ['POST', 'GET'])
+@app.route('/uploadImage', methods = http_methods)
 def uploadFile():
     #sub routine not working
     if request.method == 'POST':
@@ -80,22 +82,47 @@ def register():
     return render_template('register.html')
 
 #add user
-@app.route('/api/v1/users', methods = ['POST', 'GET'])
+@app.route('/api/v1/users', methods = http_methods)
 def addUser():
-    if request.method == 'POST':
+    if(request.method == 'POST'):
         print("Receiving data....")
         u_data = request.args.get('username')
         u_password = request.args.get('password')
-        print(u_data, u_password)
-        return 'User has been added'
+        data = dict()
+        data['username'] = u_data
+        data['password'] = u_password
+        file = "data/users/" + u_data + ".json"
+        with open(file, 'w') as fp:
+            json.dump(data, fp, sort_keys = True, indent = 4)
+        message = u_data + ' has been added'
+        return message
     else:
-        return 'Poor Request'
-"""
-#remove user
-@app.route('/api/v1/users/<username>')
+        return 'Invalid Request'
 
+#remove user
+@app.route('/api/v1/users/<username>', methods = ['DELETE'])
+def removeUser(username):
+    #username = "kvs"
+    if(request.method == 'DELETE'):
+        print("Receiving data....")
+        print('OBJECTIVE : ', username)
+        folder = os.listdir('data/users/')
+        print(folder)
+        target = username + ".json"
+        found = False
+        for i in folder:
+            if(i == target):
+                found =  True
+                os.remove('data/users/'+target)
+                message = username + ' has been removed'
+                return message
+        if(found == False):
+            return username + ' not found'
+    else:
+        return 'Invalid Request'
+"""
 #list all categories
-@app.route('/api/v1/categories')
+@app.route('/api/v1/categories', methods = http_methods)
 
 #add a category
 @app.route('/api/v1/categories/<username>')
