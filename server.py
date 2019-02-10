@@ -78,11 +78,40 @@ def login():
 def register():
     return render_template('register.html')
 
-#with app.test_request_context():
-    #print(url_for('home', filename = 'home/homePage.css'))
-    #print(url_for('home', filename = 'bck.jpeg'))
-    #print(url_for('upload', filename = 'upload.html'))
-    #url_for('static', filename = "homePage.css")
+#add user
+@app.route('/api/v1/users')
+
+#remove user
+@app.route('/api/v1/users/<username>')
+
+#list all categories
+@app.route('/api/v1/categories')
+
+#add a category
+@app.route('/api/v1/categories/<username>')
+
+#remove a category
+@app.route('/api/v1/categories/<username>')
+
+#list acts for a given category
+@app.route('/api/v1/categories/<categoryName>/acts')
+
+#list number of acts for a given category
+@app.route('/api/v1/categories/<categoryName>/acts/size')
+
+#return number of acts for a given category in a given range(inclusive)
+@app.route('/api/v1/categories/<categoryName>/acts?start=<startRange>&end=<endRange>')
+
+#upvote an act
+@app.route('/api/v1/acts/upvote')
+
+#remove an act
+@app.route('/api/v1/acts/<actId>')
+
+#upload an act
+@app.route('/api/v1/acts')
+
+#
 
 if __name__ == '__main__':
     app.run(debug = True)
