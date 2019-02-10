@@ -13,6 +13,7 @@ from flask import (
 import os
 import json
 from werkzeug import secure_filename
+import datetime
 
 http_methods = ['GET', 'POST']
 
@@ -81,6 +82,14 @@ def login():
 def register():
     return render_template('register.html')
 
+@app.route('/registerUser')
+def registeredUser():
+    if(request.method == 'POST'):
+        print("Receiving data...")
+        data = request.form
+        print(data[0])
+    return redirect(url_for('home'))
+
 #add user
 @app.route('/api/v1/users', methods = http_methods)
 def addUser():
@@ -120,16 +129,57 @@ def removeUser(username):
             return username + ' not found'
     else:
         return 'Invalid Request'
-"""
+
 #list all categories
-@app.route('/api/v1/categories', methods = http_methods)
+@app.route('/api/v1/categories', methods = ['GET'])
+def listCategories():
+    if request.method == 'GET':
+        print(os.listdir())
+        cat =[]
+        cat = os.listdir('./static/categories')
+        print(cat)
+        dictionary = {}
+        for i in range(0,len(cat)):
+            files = []
+            directory = "./static/categories/"+cat[i]
+            files = os.listdir(directory)
+            dictionary[cat[i]] = len(files)
+        return str(dictionary)
+    else:
+        return 'Poor Request'
 
 #add a category
-@app.route('/api/v1/categories/<username>')
+#should be json array
+@app.route('/api/v1/categories', methods = ['POST'])
+def addCategory(categoryName):
+    if request.method == "POST":
+        print("Receiving category name")
+        catName = request.args.get('catName')
+        print(catName)
+        os.mkdir("./static/categories/"+catName)
+        # should be entered into database
+        return 'Category added'
+    else:
+        return 'Category not added'
+
 
 #remove a category
-@app.route('/api/v1/categories/<username>')
+@app.route('/api/v1/categories/<categoryName>', methods = ['DELETE'])
+def removecategory(categoryName):
+    print('OBJECTIVE : ', categoryName)
+    if(request.method == 'DELETE'):
+        print("Receiving data....")
+        if(os.path.exists("static/categories/" + categoryName)):
+            #print("Going to delete it")
+            os.rmdir("static/categories/"+categoryName)
+            message = "Deleting "+ categoryName
+            return message
+        else:
+            return 'This category does not exists'
+    else:
+        return 'Poor Request'
 
+"""
 #list acts for a given category
 @app.route('/api/v1/categories/<categoryName>/acts')
 
@@ -145,9 +195,37 @@ def removeUser(username):
 #remove an act
 @app.route('/api/v1/acts/<actId>')
 
+"""
 #upload an act
 @app.route('/api/v1/acts')
-"""
+def uploadAct():
+    print("Received : ", datetime.datetime.now().time())
+    if(request.method == 'POST'):
+        print("Receiving data....")
+        u_data = request.args.get('username')
+        u_file = u_data + ".json"
+        all_users = os.listdir("data/users/")
+        all_act_ids = os.listdir("data/acts_data/")
+        u_act_id = request.args.get('actId')
+        if u_file in all_users:
+            print("Valid User")
+            if u_act_id not in all_act_ids:
+                print("Act found")
+                try:
+                    datetime.datetime.strptime(request.args.get('timestamp'), '%d-%m-%Y:%s-%M-%H')
+                except ValueError:
+                    print("Incorrect format")
+                    return "Invalid"
+                if(request.args.get('upvotes') == null):
+                    request.args.get('upvotes') = 0
+                    if(request.args.get('categoryName') == null):
+                        return 'No category name'
+                    else:
+                        file = "data/users/" + u_act_id + ".json"
+                        with open(file, 'w') as fp:
+                            json.dump(request.args, fp, sort_keys = True, indent = 4)
+                        message = u_act_id + ' has been added'
+                        return message
 
 if __name__ == '__main__':
     app.run(debug = True)
