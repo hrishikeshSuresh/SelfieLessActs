@@ -14,6 +14,8 @@ import os
 import json
 from werkzeug import secure_filename
 import datetime
+import base64
+import binascii
 
 http_methods = ['GET', 'POST']
 
@@ -179,13 +181,46 @@ def removecategory(categoryName):
     else:
         return 'Poor Request'
 
-"""
 #list acts for a given category
-@app.route('/api/v1/categories/<categoryName>/acts')
+@app.route('/api/v1/categories/<categoryName>/acts', methods = http_methods)
+def listActs(categoryName):
+    if request.method == "GET":
+        list_acts = []
+        path = "./data/categories/"+categoryName
+        list_acts = os.listdir(path)
+        file = list_acts[0]+".json"
+        with open(file) as json_file:
+            data = json.load(json_file)
+            arr = [] # This is array of dictionary...
+            for d in data['acts']:
+                dictionary = {}
+                dictionary['actId'] = d['actId']
+                dictionary['username'] = d['username']
+                dictionary['timestamp'] = d['timestamp']
+                dictionary['caption'] = d['caption']
+                dictionary['upvotes'] = d['upvotes']
+                dictionary['imgB64'] = d['imgB64']
+                arr.append(dictionary)
+        return str(arr)
+    else:
+        return "categoryName Not Found"
 
 #list number of acts for a given category
-@app.route('/api/v1/categories/<categoryName>/acts/size')
-
+@app.route('/api/v1/categories/<categoryName>/acts/size', methods = ['POST', 'GET'])
+def listNoOfActs(categoryName):
+    if request.method == "GET":
+        list_acts = []
+        path = "./data/categories/"+categoryName
+        list_acts = os.listdir(path)
+        file = list_acts[0]+".json"
+        with open(file) as json_file:
+            data = json.load(json_file)
+            print(data['acts'])
+            print(len(data['acts']))
+            return str(len(data['acts']))
+    else:
+        return "categoryName Not Found"
+"""
 #return number of acts for a given category in a given range(inclusive)
 @app.route('/api/v1/categories/<categoryName>/acts?start=<startRange>&end=<endRange>')
 
@@ -194,38 +229,59 @@ def removecategory(categoryName):
 
 #remove an act
 @app.route('/api/v1/acts/<actId>')
-
 """
 #upload an act
-@app.route('/api/v1/acts')
+@app.route('/api/v1/acts', methods = http_methods)
 def uploadAct():
-    print("Received : ", datetime.datetime.now().time())
+    x = datetime.datetime.now()
+    print("Received : ", x.time())
     if(request.method == 'POST'):
         print("Receiving data....")
+        print(request.args)
         u_data = request.args.get('username')
         u_file = u_data + ".json"
         all_users = os.listdir("data/users/")
-        all_act_ids = os.listdir("data/acts_data/")
+        all_act_ids = os.listdir("data/categories/")
         u_act_id = request.args.get('actId')
         if u_file in all_users:
             print("Valid User")
             if u_act_id not in all_act_ids:
                 print("Act found")
+                timeFormat = "%d-%m-%Y:%S-%M-%H"
+                input_time = request.args.get('timestamp')
                 try:
-                    datetime.datetime.strptime(request.args.get('timestamp'), '%d-%m-%Y:%s-%M-%H')
+                    valid_time = datetime.datetime.strptime(input_time, timeFormat)
+                    print("Valid time")
                 except ValueError:
-                    print("Incorrect format")
-                    return "Invalid"
-                if(request.args.get('upvotes') == null):
-                    request.args.get('upvotes') = 0
-                    if(request.args.get('categoryName') == null):
-                        return 'No category name'
+                    print("Incorrect Time format")
+                    print(input_time)
+                    return "Invalid Time Format"
+                if(request.args.get('categoryName') == ):
+                    return 'No category name'
+                else:
+                    try:
+                        image = base64.decodestring(request.args.get('imgB64'))
+                    except binascii.Error:
+                        return "not a valid base64 string"
+                    file = "data/categories/"+ request.args.get('categoryName') +"/"+request.args.get('categoryName') + ".json"
+                    dictionary= {}
+                    dictionary['actId'] = request.args.get('actId')
+                    dictionary['username'] = request.args.get('username')
+                    dictionary['timestamp'] = request.args.get('timestamp')
+                    dictionary['caption'] = request.args.get('caption')
+                    if(request.args.get('upvotes') == null):
+                        upvotes = 0
+                        dictionary['upvotes'] = upvotes
                     else:
-                        file = "data/users/" + u_act_id + ".json"
-                        with open(file, 'w') as fp:
-                            json.dump(request.args, fp, sort_keys = True, indent = 4)
-                        message = u_act_id + ' has been added'
-                        return message
+                        dictionary['upvotes'] =  request.args.get('upvotes')
+                    dictionary['categoryName'] = request.args.get('categoryName')
+                    dictionary['imgB64'] = request.args.get('imgB64')
+                    with open(file, 'a') as json_file:
+                        data = json.load(json_file)
+                        data['acts'].append(dictionary)
+                        #json.dump(request.args.get, fp, sort_keys = True, indent = 4)
+                    message = u_act_id + ' has been added'
+                    return message
 
 if __name__ == '__main__':
     app.run(debug = True)
