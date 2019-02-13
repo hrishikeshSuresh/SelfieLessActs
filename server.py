@@ -256,12 +256,15 @@ def uploadAct():
                     print("Incorrect Time format")
                     print(input_time)
                     return "Invalid Time Format"
-                if(request.args.get('categoryName') == ):
+                if(request.args.get('categoryName') == ""):
                     return 'No category name'
                 else:
+                    print("Valid category")
+                    image = ""
                     try:
-                        image = base64.decodestring(request.args.get('imgB64'))
-                    except binascii.Error:
+                        image = base64.b64decode(request.args.get('imgB64'))
+                        print(image)
+                    except binascii:
                         return "not a valid base64 string"
                     file = "data/categories/"+ request.args.get('categoryName') +"/"+request.args.get('categoryName') + ".json"
                     dictionary= {}
@@ -269,13 +272,15 @@ def uploadAct():
                     dictionary['username'] = request.args.get('username')
                     dictionary['timestamp'] = request.args.get('timestamp')
                     dictionary['caption'] = request.args.get('caption')
-                    if(request.args.get('upvotes') == null):
+                    if(request.args.get('upvotes') == None):
                         upvotes = 0
                         dictionary['upvotes'] = upvotes
                     else:
                         dictionary['upvotes'] =  request.args.get('upvotes')
                     dictionary['categoryName'] = request.args.get('categoryName')
                     dictionary['imgB64'] = request.args.get('imgB64')
+                    dictionary = [dictionary]
+                    print(dictionary)
                     with open(file, 'a') as json_file:
                         data = json.load(json_file)
                         data['acts'].append(dictionary)
