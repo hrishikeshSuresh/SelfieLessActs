@@ -79,10 +79,12 @@ def uploadFile():
 def login():
     return render_template('login.html')
 
+"""
 #needs fixing on HTML & CSS side immediately
 @app.route('/register.html')
 def register():
-    return render_template('register.html')
+    return render_template('signup.html')
+"""
 
 @app.route('/registerUser')
 def registeredUser():
@@ -92,6 +94,33 @@ def registeredUser():
         print(data[0])
     return redirect(url_for('home'))
 
+#test, signup
+@app.route('/signup')
+def signUp():
+    return render_template('signup.html')
+"""
+#test, signup user
+@app.route('/api/v1/users', methods=['POST'])
+def signUpUser():
+    if(request.method == 'POST'):
+        print("Receiving data....")
+        u_data = request.args.get('username')
+        u_password = request.args.get('password')
+        print(u_data, u_password)
+        if(u_data == None and u_password == None):
+            u_data = request.form['username']
+            u_password = request.form['password']
+        data = dict()
+        data['username'] = u_data
+        data['password'] = u_password
+        file = "data/users/" + u_data + ".json"
+        with open(file, 'w') as fp:
+            json.dump(data, fp, sort_keys = True, indent = 4)
+        message = u_data + ' has been added'
+        return message
+    else:
+        return 'Invalid Request'
+"""
 #add user
 @app.route('/api/v1/users', methods = http_methods)
 def addUser():
@@ -99,6 +128,10 @@ def addUser():
         print("Receiving data....")
         u_data = request.args.get('username')
         u_password = request.args.get('password')
+        print(u_data, u_password)
+        if(u_data == None and u_password == None):
+            u_data = request.form['username']
+            u_password = request.form['password']
         data = dict()
         data['username'] = u_data
         data['password'] = u_password
