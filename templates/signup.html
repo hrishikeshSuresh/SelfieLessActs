@@ -6,7 +6,7 @@
 	 <!---<script src="signUp.js"></script>-->
 	 <script>
      $(function(){
-	        $('button').click(function(){
+	        $('.btnblock').click(function(){
 		              var user = $('#inputUsername').val();
 		              var pass = $('#inputPassword').val();
 		              $.ajax({
@@ -36,9 +36,9 @@
     <div class="container">
         <form class="form-signin" enctype="multipart/form-data" action="http://localhost:5000/api/v1/users" method="post" role="form">
         <h2 class="form-signin-heading">Please Sign Up</h2>
-        <input type="email" id="inputUsername" name="username" class="form-control" placeholder="Email address" required autofocus>
+        <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
         <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
-        <button class="btn btn-lg btn-primary btn-block" type="button">Register</button>
+        <button class="btnblock" type="submit">Register</button>
 		</form>
      </div>
 </body>

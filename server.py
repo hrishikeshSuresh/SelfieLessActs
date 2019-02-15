@@ -177,12 +177,12 @@ def listCategories():
     if request.method == 'GET':
         print(os.listdir())
         cat = []
-        cat = os.listdir('./static/categories')
+        cat = os.listdir('./data/categories')
         print(cat)
         dictionary = {}
         for i in range(0,len(cat)):
             files = []
-            directory = "./static/categories/"+cat[i]
+            directory = "./data/categories/"+cat[i]
             files = os.listdir(directory)
             dictionary[cat[i]] = len(files)
         return str(dictionary)
@@ -210,9 +210,9 @@ def removecategory(categoryName):
     print('OBJECTIVE : ', categoryName)
     if(request.method == 'DELETE'):
         print("Receiving data....")
-        if(os.path.exists("static/categories/" + categoryName)):
+        if(os.path.exists("data/categories/" + categoryName)):
             #print("Going to delete it")
-            os.rmdir("static/categories/"+categoryName)
+            os.rmdir("data/categories/"+categoryName)
             message = "Deleting "+ categoryName
             return message
         else:
@@ -285,7 +285,7 @@ def upvoteAct():
             with open(list_file[0], 'w') as data_file:
                 data= json.dump(data, data_file,indent = 4)
     else:
-        return "Bad Request"    
+        return "Bad Request"
 #remove an act
 @app.route('/api/v1/acts/<actId>')
 def removeAct(actId):
