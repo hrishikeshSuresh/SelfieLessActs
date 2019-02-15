@@ -143,6 +143,12 @@ def addUser():
     else:
         return 'Invalid Request'
 
+#remove category webpage
+@app.route('/rmcategory')
+def removeUserSupport():
+    f = os.listdir('data/categories')
+    return render_template('rmcat.html', categories = f)
+
 #remove user
 @app.route('/api/v1/users/<username>', methods = ['DELETE'])
 def removeUser(username):
@@ -170,7 +176,7 @@ def removeUser(username):
 def listCategories():
     if request.method == 'GET':
         print(os.listdir())
-        cat =[]
+        cat = []
         cat = os.listdir('./static/categories')
         print(cat)
         dictionary = {}
@@ -256,13 +262,50 @@ def listNoOfActs(categoryName):
 """
 #return number of acts for a given category in a given range(inclusive)
 @app.route('/api/v1/categories/<categoryName>/acts?start=<startRange>&end=<endRange>')
-
+"""
 #upvote an act
 @app.route('/api/v1/acts/upvote')
-
+def upvoteAct():
+    if request.method == "POST":
+        actId = request.args.get('actId')
+        list_cat = []
+        path = "./data/categories"
+        list_cat = os.listdir(path)
+        for fold in list_cat:
+            cur_path = path+"/"+fold
+            list_file = os.listdir(cur_path)
+            with open(list_file[0]) as json_file:
+                data = json.load(json_file)
+                count = 0
+                for d in data['acts']:
+                    if(d['actId'] == actId):
+                        data['acts'][count]['upvotes'] =str(int(d['upvotes '])+1)
+                        break
+                    count+=1
+            with open(list_file[0], 'w') as data_file:
+                data= json.dump(data, data_file,indent = 4)
+    else:
+        return "Bad Request"    
 #remove an act
 @app.route('/api/v1/acts/<actId>')
-"""
+def removeAct(actId):
+    if request.method == "DELETE":
+        list_cat = []
+        path = "./data/categories"
+        list_cat = os.listdir(path)
+        for fold in list_cat:
+            cur_path = path+"/"+fold
+            list_file = os.listdir(cur_path)
+            with open(list_file[0]) as json_file:
+                data = json.load(json_file)
+                arr = data['acts']
+                arr [:] = [d for d in arr if a.get('actId') != actId]
+                data['acts'] = arr
+            with open(list_file[0], 'w') as data_file:
+                data= json.dump(data, data_file,indent = 4)
+    else:
+         return "Bad Request"
+
 #upload an act
 @app.route('/api/v1/acts', methods = http_methods)
 def uploadAct():

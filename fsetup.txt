@@ -9,6 +9,8 @@ root --> templates
                     --> cate3.html
                     --> login.html
                     --> register.html
+                    --> rmcat.html
+                    --> signup.html
      --> static
                     --> categories
                         --> category1
