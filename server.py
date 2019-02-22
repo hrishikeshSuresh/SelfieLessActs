@@ -449,6 +449,7 @@ def removeAct(actId):
 # upload an act
 # check if BASE64 string or not
 # act id must be globally unique
+# add image in static
 @app.route('/api/v1/acts', methods = ['POST'])
 def uploadAct():
     x = datetime.datetime.now()
