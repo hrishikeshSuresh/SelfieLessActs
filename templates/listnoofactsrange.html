@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html>
+<!-- Ajax part enter the URL
+and enter the alert message if successful
+-->
 	<head>
-		<title>REMOVE CATEGORY</title>
+		<title>Return number of acts in a given range</title>
 		<script src="../static/jquery-3.3.1.min.js"></script>
 	</head>
 	<center>
-		<h1> Choose the category you want to remove. </h1>
+		<h1> Return number of acts in a given range </h1>
 	</center>
 	<body background="{{ url_for('static', filename='home/background.jpeg')}}">
-	 		<form id="form-rm" enctype="multipart/form-data" action="" method="delete" role="form">
-				{% for category in categories %}
-	 					<h5> {{category}} </h5>
-				{% endfor %}
-				<input type="text" name="category" id = "category">
+	 		<form id="form-range" enctype="multipart/form-data" action="" method="delete" role="form">
+
+				<br>
+Enter category<br><br>
+				<input type="text" name="category" id = "category"><br><br>Start of Range
+				<br>
+				<br>
+				<input type="text" name="Start of range" id="start"><br><br>End of Range
+				<br>
+				<br>
+				<input type="text" name="End of range" id="end"><br><br>
 				<button type="submit" action = "submit">SUBMIT</button>
 			</form>
 			<style type="text/css">
@@ -74,19 +83,21 @@
 			<script>
 	  			// Shorthand for $(document).ready();
 	  			$(function() {
-	   				$('#form-rm').submit(function(){
+	   				$('#form-range').submit(function(){
 						//alert("this works");
-						var user = $('#category').val();
+						var catname = $('#category').val();
+						var start = $('#start').val();
+						var end = $('#end').val();
 						//alert(user);
 						//$(this).attr('action', "http://localhost:5000/api/v1/categories/" + user + " ");
 						//$(this).attr('method', "DELETE");
-						msg = user;
+
 						//alert(user);
 						$.ajax({
-    						type: "DELETE",
-    						url: "http://localhost:5000/api/v1/categories/" + user,
+    						type: "GET",
+    						url: "http://localhost:5000/api/v1/categories/"+ catname +"/acts?start="+ start +"&end="+end,
     						success: function(msg){
-        						console.log("Data Deleted: " + msg);
+        						console.log("SENT");
     						}
 						});
 	     				//var user = $("input[name*='checks']");

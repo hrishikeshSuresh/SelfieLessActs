@@ -66,13 +66,59 @@ app.secret_key = os.urandom(16)
 # error handler 405
 
 
-#declarator
-#localhost:5000/homePage.html, non-functional
+# supports
+# localhost:5000/homePage.html, non-functional
 @app.route('/homePage.html')
-def home():
+def homeSupport():
     #flash("Works!")
     #print(os.listdir())
     return render_template('homePage.html')
+
+# upload webpage
+# localhost:5000/upload.html
+@app.route('/upload.html')
+def uploadSupport():
+    f = os.listdir('data/categories')
+    return render_template('upload.html', categories = f)
+
+# list number of acts webpage
+# localhost:5000/listnoofacts.html
+@app.route('/listnoofacts.html')
+def displaylistnoonactsSupport():
+    f = os.listdir('data/categories')
+    return render_template('listnoofacts.html', categories = f)
+
+# list number of acts range webpage
+# localhost:5000/listnoofactsrange.html
+@app.route('/listnoofactsrange.html')
+def displaylistnoonactsrangeSupport():
+    f = os.listdir('data/categories')
+    return render_template('listnoofactsrange.html', categories = f)
+
+# signup / add user webpage
+# localhost:5000/signup
+@app.route('/signup')
+def signUpSupport():
+    return render_template('signup.html')
+
+# remove category webpage
+# localhost:5000/rmcategory
+@app.route('/rmcategory')
+def removeCategorySupport():
+    f = os.listdir('data/categories')
+    return render_template('rmcat.html', categories = f)
+
+# add category webpage
+# localhost:5000/addCategory
+@app.route('/addcat.html')
+def addCategorySupport():
+    return render_template('addcat.html')
+
+# remove user webpage
+# localhost:5000/rmuser.html
+@app.route('/rmuser.html')
+def removeUserSupport():
+    return render_template('rmuser.html')
 
 #for cate1, cate2 and cate3, the upload button is not rendering properly
 #also need to the HTML page to load the images with the upvote button and name of user
@@ -93,11 +139,6 @@ def home():
 ##def cate3():
 ##    #print(os.listdir())
 ##    return render_template('cate3.html')
-
-#localhost:5000/upload.html
-@app.route('/upload.html')
-def upload():
-    return render_template('upload.html')
 
 #localhost:5000/uploadImage
 #need to fix this, non-functional
@@ -129,17 +170,6 @@ def upload():
 ##        print(data[0])
 ##    return redirect(url_for('home'))
 
-# signup / add user
-@app.route('/signup')
-def signUp():
-    return render_template('signup.html')
-
-# remove category webpage
-@app.route('/rmcategory')
-def removeUserSupport():
-    f = os.listdir('data/categories')
-    return render_template('rmcat.html', categories = f)
-
 #test, signup user
 ##@app.route('/api/v1/users', methods=['POST'])
 ##def signUpUser():
@@ -170,6 +200,7 @@ APIs
 # use this flag is True if data is from 'form'
 # check if user is already in the database
 # check is password is SHA1 hash hex
+# getting added twice
 @app.route('/api/v1/users', methods = http_methods)
 def addUser():
     if(request.method == 'POST'):

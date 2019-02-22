@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>REMOVE CATEGORY</title>
+		<title>REMOVE USER</title>
 		<script src="../static/jquery-3.3.1.min.js"></script>
 	</head>
 	<center>
-		<h1> Choose the category you want to remove. </h1>
+		<h1> Choose the user you wish  to remove. </h1>
 	</center>
 	<body background="{{ url_for('static', filename='home/background.jpeg')}}">
-	 		<form id="form-rm" enctype="multipart/form-data" action="" method="delete" role="form">
-				{% for category in categories %}
-	 					<h5> {{category}} </h5>
+	 		<form id="form-us" enctype="multipart/form-data" action="" method="delete" role="form">
+				{% for user in users %}
+	 					<h5> {{user}} </h5>
 				{% endfor %}
-				<input type="text" name="category" id = "category">
+				<input type="text" name="user" id = "user" required autofocus>
 				<button type="submit" action = "submit">SUBMIT</button>
 			</form>
 			<style type="text/css">
@@ -74,9 +74,9 @@
 			<script>
 	  			// Shorthand for $(document).ready();
 	  			$(function() {
-	   				$('#form-rm').submit(function(){
+	   				$('#form-us').submit(function(){
 						//alert("this works");
-						var user = $('#category').val();
+						var user = $('#user').val();
 						//alert(user);
 						//$(this).attr('action', "http://localhost:5000/api/v1/categories/" + user + " ");
 						//$(this).attr('method', "DELETE");
@@ -84,9 +84,9 @@
 						//alert(user);
 						$.ajax({
     						type: "DELETE",
-    						url: "http://localhost:5000/api/v1/categories/" + user,
+    						url: "http://localhost:5000/api/v1/users/" + user,
     						success: function(msg){
-        						console.log("Data Deleted: " + msg);
+        						alert("Data Deleted: " + msg);
     						}
 						});
 	     				//var user = $("input[name*='checks']");

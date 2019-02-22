@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+
+	 <script src="../static/jquery-3.3.1.min.js"></script>
+	 <!---<script src="signUp.js"></script>-->
+	 <script>
+     $(function(){
+	        $('.btnblock').click(function(){
+		              var cat = $('#inputcatname').val();
+
+		              $.ajax({
+			                       url: '/api/v1/categories',
+			                       data: $('form').serialize(),
+			                       type: 'POST',
+			                       success: function(response){
+				                                   console.log("SENT");
+			                       }
+		              });
+	          });
+     });
+     </script>
+	 <meta charset="utf-8">
+	 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	 <meta name="viewport" content="width=device-width, initial-scale=1">
+	 <meta name="description" content="">
+	 <meta name="author" content="">
+
+	 <title>Rmcat Template for Bootstrap </title>
+</head>
+
+<body background="{{ url_for('static', filename='home/background.jpeg')}}">
+    <div class="container">
+        <form class="form-addcat" enctype="multipart/form-data" action="http://localhost:5000/api/v1/categories" method="post" role="form">
+        <h2 class="form-addcat-heading">Please Add a new Category</h2>
+        <input type="text" id="inputcatname" name="category name" class="form-control" placeholder="Category Name" required autofocus>
+        <button class="btnblock" type="submit">Create</button>
+		</form>
+     </div>
+</body>
+
+</html>
