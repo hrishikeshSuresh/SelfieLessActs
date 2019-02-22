@@ -383,10 +383,10 @@ def listActsInGivenRange(categoryName,startRange,endRange):
         return str(arr)
     else:
         return "categoryName Not Found"
+
 # upvote an act
 # does not work
 # global act ID
-
 @app.route('/api/v1/acts/upvote', methods = ['POST'])
 def upvoteAct():
     if request.method == "POST":
