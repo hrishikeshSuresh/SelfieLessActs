@@ -49,6 +49,9 @@ not sure ajax part of caption will work as it is a textarea tag and not a normal
         {% endfor %}<br>
         Category name
         <input type="text" name="category" id = "category">
+        <br>
+        Username
+        <input type="text" name="username" value="username">
                 <br>
                 Enter Caption<br>
                  <textarea id="textbox" rows="4" cols="50">
@@ -57,7 +60,7 @@ not sure ajax part of caption will work as it is a textarea tag and not a normal
                 <input type="file" name="fileToUpload" id="fileToUpload">
                 <br><br>
 
-                <input type="submit" value="Upload Image" name="submit">
+                <input type="submit" value="Upload Image" name="submit" id="sub">
             </form>
         </div>
         <script>
@@ -65,19 +68,30 @@ not sure ajax part of caption will work as it is a textarea tag and not a normal
           $(function() {
             $('#form-upload').submit(function(){
             //alert("this works");
-            var catname = $('#category').val();
-            var caption = $('#caption').val();
+                var catname = $('#category').val();
+                var caption = $('#caption').val();
+                var username = $('#username').val();
+                var min = 1
+                var max = Math.pow(10, 6)
+                var actId = Math.floor(Math.random()*(+max - +min))+ +min;
+                console.log(actId);
+                var image_data = Base64.encode($('#sub').val());
+                console.log(image_data)
             //alert(user);
             //$(this).attr('action', "http://localhost:5000/api/v1/categories/" + user + " ");
             //$(this).attr('method', "DELETE");
             //alert(user);
-            $.ajax({
-                type: "POST",
-                url: "http://localhost:5000/api/v1/acts",
-                success: function(msg){
-                    console.log("Enter message");
-                }
-            });
+                $.ajax({
+                    type: "POST",
+                    data: "actId="+actId+", caption="+caption+", category="+catname+", username"+username+", timestamp="++,"imgB64=,"+image_data,
+                    url: "http://localhost:5000/api/v1/acts",
+                    success: function(msg){
+                        console.log("SENT");
+                    }
+                    error: function(error){
+                                    console.log();
+                    }
+                });
               //var user = $("input[name*='checks']");
             //alert(JSON.stringify(user));
             /*for (var key in user){
