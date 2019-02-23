@@ -57,11 +57,14 @@ app.secret_key = os.urandom(16)
 # error handler 204
 
 # error handler 400
+##@app.errorhandler(400)
+##def error_400():
+##    print("Error Status code 400")
 
 # error handler 404
 ##@app.errorhandler(404)
 ##def error_404():
-##    print("Not working")
+##    print("Error Status code 404")
 
 # error handler 405
 
@@ -119,6 +122,20 @@ def addCategorySupport():
 @app.route('/rmuser.html')
 def removeUserSupport():
     return render_template('rmuser.html')
+
+# display category
+@app.route('/display/<categoryName>.html')
+def categoryDisplaySupport(categoryName):
+    cat = os.listdir('./data/categories')
+    curr_path = './data/categories/'+categoryName
+    file = os.listdir(curr_path)
+    with open(curr_path + '/' + file[0]) as json_file:
+        data = json.load(json_file)
+    ##print(data)
+    for i in data['acts']:
+        ##i['imgB64'] = base64.b64decode(i['imgB64'])
+        print(i['actId'])
+    return render_template('catetemplate.html', categories = cat, image_data = data['acts'], catName = categoryName)
 
 #for cate1, cate2 and cate3, the upload button is not rendering properly
 #also need to the HTML page to load the images with the upvote button and name of user
@@ -529,6 +546,8 @@ def uploadAct():
             data['acts'].append(dictionary)
         with open(path,'w') as data_file:
             data= json.dump(data, data_file,indent = 4)
+        ##with open('./static/categories/' + u_cat + '/'+ u_actId + '.png', 'wb') as f_img:
+        ##    f_img.write(image.decode('base64'))
         return "Uploaded Act successfully.  "
         ##u_data = request.args.get('username')
         ##u_file = u_data + ".json"
