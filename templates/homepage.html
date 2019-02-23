@@ -44,14 +44,29 @@
             background-color: #FF4500;
         }</STYLE>
       <h1 align="center"> <a href="homePage.html"> <font face = "WildWest" size = "21" color="black">SelfieLessActs</font></a> </h1>
+      <div class="dropdown1">
+        <button onclick="myFunction1()" class="dropbtn">Categories</button>
+        <div id="myDropdown1" class="dropdown-content1">
+ 			  {% for cat in category%}
+                <a href="/display/{{cat}}.html">{{cat}}</a>
+              {% endfor %}
+            </div>
+       </div> 
       <div class="dropdown">
-          <button onclick="myFunction()" class="dropbtn">Categories</button>
+          <button onclick="myFunction()" class="dropbtn">Functionalities</button>
           <button class="login"><a href="login.html">Login</a></button>
           <button class="register"><a href="register.html">Register</a></button>
           <div id="myDropdown" class="dropdown-content">
-              <a href="cate1.html">Social Care</a>
-              <a href="cate2.html">Animal Care</a>
-              <a href="cate3.html">Development</a>
+              <a href="/signup">1)Add user</a>
+              <a href="/rmuser.html">2)Remove User</a>
+              <a href="">3)List all acts</a>
+              <a href="/addcat.html">4)Add a Category</a>
+              <a href="/rmcategory">5)Remove a Category</a>
+              <a href="/listallacts.html">6)List all categories</a>
+              <a href="/listnoofacts.html">7)List number of acts</a>
+              <a href="listnoofactsrange.html">8)Acts in a given Range</a>
+              <a href="/rmuser.html">10)Remove an act</a>
+              <a href="/upload.html">11)Upload act</a>
           </div>
       </div>
       <br>
@@ -88,7 +103,23 @@
         // Close the dropdown menu if the user clicks outside of it
         window.onclick = function(event) {
             if (!event.target.matches('.dropbtn')) {
-                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var dropdowns = document.getElementsByClassName("dropdown-content1");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+        function myFunction1() {
+            document.getElementById("myDropdown1").classList.toggle("show");
+        }
+        // Close the dropdown menu if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content1");
                 var i;
                 for (i = 0; i < dropdowns.length; i++) {
                     var openDropdown = dropdowns[i];
