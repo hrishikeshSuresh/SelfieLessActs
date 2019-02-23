@@ -35,14 +35,26 @@ def checkCategory(categoryName):
         return 1
     return 0
 
-def checkId(actId,categoryName):
-    path = "./data/categories/"+categoryName+'/'
-    with open(path+categoryName+".json") as json_file:
+def checkUser(username):
+    path = "./data/users/users.json"
+    with open(path) as json_file:
         data = json.load(json_file)
-        length = len(data['acts'])
-        for i in range(length):
-            if(data['acts'][i]['actId'] == actId):
-                return 1
+    for user in data['users']:
+        if(username == user['username']):
+            return 1
+    return 0
+
+def checkId(actId):
+    path = "./data/categories/"
+    list_cat = os.listdir(path)
+    for cat in list_cat:
+        new_path = path + cat + '/' + cat + ".json"
+        with open(new_path) as json_file:
+            data = json.load(json_file)
+            length = len(data['acts'])
+            for i in range(length):
+                if(data['acts'][i]['actId'] == actId):
+                    return 1
     return 0
 
 # create application instance
@@ -235,6 +247,8 @@ def addUser():
             ##print("Opening a file is done")
             data = json.load(json_file)
         ##print("This is data -->",data)
+        if(checkUser(u_data)):
+            return "User already Exists."
         dictionary = {}
         dictionary["username"] = u_data
         dictionary["password"] = u_password
@@ -258,7 +272,9 @@ def removeUser(username):
         file = os.listdir('./data/users/')
         with open('./data/users/'+file[0]) as json_file:
             data = json.load(json_file)
-        print("data is --> ",data)
+        ##print("data is --> ",data)
+        if(not checkUser(username)):
+            return "User does not Exists."
         arr = data['users']
         arr [:] = [d for d in arr if d.get('username') != username]
         data['users'] = arr
@@ -364,6 +380,8 @@ def listActs(categoryName):
         path = "./data/categories/"+categoryName
         list_acts = os.listdir(path)
         file = list_acts[0]
+        if(categoryName not in cats):
+            return "category Name Not Exists."
         print("This is file --> ",file)
         with open(path+file) as json_file:
             data = json.load(json_file)
@@ -395,6 +413,8 @@ def listNoOfActs(categoryName):
         path = "./data/categories/"+categoryName
         list_acts = os.listdir(path)
         file = list_acts[0]
+        if(categoryName not in cats):
+            return "category Name Not Exists."
         with open(path+'/'+file) as json_file:
             data = json.load(json_file)
             print(data['acts'])
@@ -423,6 +443,8 @@ def listActsInGivenRange(categoryName,startRange,endRange):
         path = "./data/categories/"+categoryName
         list_acts = os.listdir(path)
         file = list_acts[0]
+        if(not checkCategory(categoryName)):
+            return "category does not exists."
         with open(path+'/'+file) as json_file:
             data = json.load(json_file)
         arr = []
@@ -440,6 +462,8 @@ def upvoteAct():
     if request.method == "POST":
         actId = request.args.get('actId')
         list_cat = []
+        if(not checkId(actId)):
+                return "ActId does not Exists."
         path = "./data/categories"
         list_cat = os.listdir(path)
         for fold in list_cat:
@@ -474,6 +498,8 @@ def removeAct(actId):
         for fold in list_cat:
             cur_path = path+"/"+fold
             list_file = os.listdir(cur_path)
+            if(not checkId(actId)):
+                return "ActId does not Exists."
             with open(cur_path+'/'+list_file[0]) as json_file:
                 data = json.load(json_file)
             arr = data['acts']
