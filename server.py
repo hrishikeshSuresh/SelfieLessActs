@@ -96,6 +96,12 @@ def uploadSupport():
     f = os.listdir('data/categories')
     return render_template('upload.html', categories = f)
 
+# list all acts
+@app.route('/listallacts.html')
+def listallactsSupport():
+    f = os.listdir('data/categories')
+    return render_template('listallacts.html', categories = f)
+
 # list number of acts webpage
 # localhost:5000/listnoofacts.html
 @app.route('/listnoofacts.html')
@@ -124,7 +130,7 @@ def removeCategorySupport():
     return render_template('rmcat.html', categories = f)
 
 # add category webpage
-# localhost:5000/addCategory
+# localhost:5000/addcat.html
 @app.route('/addcat.html')
 def addCategorySupport():
     return render_template('addcat.html')
@@ -321,6 +327,8 @@ def addCategory():
     if request.method == "POST":
         print("Receiving category name")
         catName = request.args.get('categoryName')
+        if(catName == None):
+            catName = request.form['categoryName']
         print("category Name is -->", catName)
         # should be entered into database
         path = "./static/categories/"
@@ -383,8 +391,10 @@ def listActs(categoryName):
         if(categoryName not in cats):
             return "category Name Not Exists."
         print("This is file --> ",file)
-        with open(path+file) as json_file:
+        with open(path + file) as json_file:
             data = json.load(json_file)
+        if(len(data['acts']) > 100):
+            return "Number of acts are more than 100"
         print("This is data -->",data['acts'])
         return str(data['acts'])
         ##file = list_acts[0]+".json"
@@ -546,6 +556,13 @@ def uploadAct():
         u_cat = request.args.get('categoryName')
         u_imgB64 = request.args.get('imgB64')
         image = ""
+        if(u_name == None):
+            u_actId = request.form['actId']
+            u_name = request.form['username']
+            u_time = request.form['timestamp']
+            u_caption = request.form['caption']
+            u_cat = request.form['categoryName']
+            u_imgB64 = request.form['imgB64']
         try:
             image = base64.b64decode(request.args.get('imgB64'))
             print(image)

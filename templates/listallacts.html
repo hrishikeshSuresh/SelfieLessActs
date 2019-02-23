@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>List the number of acts</title>
+		<title>REMOVE CATEGORY</title>
 		<script src="../static/jquery-3.3.1.min.js"></script>
 	</head>
 	<center>
-		<h1> Enter category name, whose number of acts you want to find. </h1>
+		<h1> Choose the category you want to remove. </h1>
 	</center>
 	<body background="{{ url_for('static', filename='home/background.jpeg')}}">
-	 		<form id="form-listacts" enctype="multipart/form-data" action="" method="get" role="form">
-				{% for category in categories %}
+		{% for category in categories %}
 	 					<h5> {{category}} </h5>
 				{% endfor %}
-				<input type="text" name="category" id = "category">
-				<button type="submit" action = "submit">SUBMIT</button>
-			</form>
 			<style type="text/css">
 				.button{
 				}
@@ -71,30 +67,6 @@
 				  transform: rotate(45deg);
 				}
 			</style>
-			<script>
-	  			// Shorthand for $(document).ready();
-	  			$(function() {
-	   				$('#form-listacts').submit(function(){
-						//alert("this works");
-						var catname = $('#category').val();
-						msg = catname;
-						alert(catName);
-						//alert(user);
-						$.ajax({
-    						type: "GET",
-    						url: "http://localhost:5000/api/v1/categories/" + catname + "/acts/size",
-    						success: function(msg){
-        						console.log("SENT");
-    						}
-						});
-	     				//var user = $("input[name*='checks']");
-						//alert(JSON.stringify(user));
-						/*for (var key in user){
-							alert(key + "---->" + JSON.stringify(user[key]));
-						}*/
-					});
-	   			});
-	 		</script>
 	</body>
 
 </html>

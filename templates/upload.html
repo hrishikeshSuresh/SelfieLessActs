@@ -42,7 +42,7 @@ not sure ajax part of caption will work as it is a textarea tag and not a normal
         <link rel="stylesheet" href="cate.css">
         <h1 align="center"><a href="homePage.html">  <font face = "WildWest" size = "21" color="black">SelfieLessActs</font></a> </h1>
         <div class="uploadForm" style="padding-left:500px; padding-top:200px;">
-            <form action="http://localhost:5000/uploadImage" method="post" enctype="multipart/form-data" role="form">
+            <form action="http://localhost:5000/api/v1/acts" method="post" enctype="multipart/form-data" role="form">
               <h4>List of categories<h4><br>
                 {% for category in categories %}
             <h5> {{category}} </h5>
@@ -71,6 +71,10 @@ not sure ajax part of caption will work as it is a textarea tag and not a normal
                 var catname = $('#category').val();
                 var caption = $('#caption').val();
                 var username = $('#username').val();
+                var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+                var time = today.getSeconds() + "-" + today.getMinutes() + "-" + today.getHours();
+                var date_time = date +":" time;
+                console.log(date_time);
                 var min = 1
                 var max = Math.pow(10, 6)
                 var actId = Math.floor(Math.random()*(+max - +min))+ +min;
@@ -83,7 +87,7 @@ not sure ajax part of caption will work as it is a textarea tag and not a normal
             //alert(user);
                 $.ajax({
                     type: "POST",
-                    data: "actId="+actId+", caption="+caption+", category="+catname+", username"+username+", timestamp="++,"imgB64=,"+image_data,
+                    data: "actId="+actId+", caption="+caption+", category="+catname+", username"+username+", timestamp="+date_time+,"imgB64=,"+image_data,
                     url: "http://localhost:5000/api/v1/acts",
                     success: function(msg){
                         console.log("SENT");
