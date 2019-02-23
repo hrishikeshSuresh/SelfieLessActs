@@ -239,6 +239,7 @@ APIs
 @app.route('/api/v1/users', methods = http_methods)
 def addUser():
     if(request.method == 'POST'):
+        print(request.form)
         print("Receiving data....")
         u_data = request.args.get('username')
         u_password = request.args.get('password')
@@ -416,7 +417,7 @@ def listActs(categoryName):
 
 # list number of acts for a given category
 # check if category is present
-@app.route('/api/v1/categories/<categoryName>/acts/size', methods = ['POST', 'GET'])
+@app.route('/api/v1/categories/<categoryName>/acts/size', methods = ['GET'])
 def listNoOfActs(categoryName):
     if request.method == "GET":
         list_acts = []
@@ -540,10 +541,23 @@ def uploadAct():
     print("Received @ ", x.time())
     if(request.method == 'POST'):
         print("Receiving data....")
-        ##print(request.args)
+        print(request.form)
         u_actId = request.args.get('actId')
+        ##print(u_actId)
         u_name = request.args.get('username')
         u_time = request.args.get('timestamp')
+        u_caption = request.args.get('caption')
+        u_cat = request.args.get('categoryName')
+        u_imgB64 = request.args.get('imgB64')
+        if(u_name == None):
+            u_actId = request.form['actId']
+            print(u_actId)
+            u_name = request.form['username']
+            u_caption = request.form['caption']
+            u_cat = request.form['categoryName']
+            u_imgB64 = request.form['imgB64']
+            u_time = request.form['timestamp']
+        print(u_actId, u_name, u_caption, u_cat, u_time, u_imgB64)
         timeFormat = "%d-%m-%Y:%S-%M-%H"
         try:
             valid_time = datetime.datetime.strptime(u_time, timeFormat)
@@ -552,17 +566,7 @@ def uploadAct():
             print("Incorrect Time format")
             print(u_time)
             return "Invalid Time Format"
-        u_caption = request.args.get('caption')
-        u_cat = request.args.get('categoryName')
-        u_imgB64 = request.args.get('imgB64')
         image = ""
-        if(u_name == None):
-            u_actId = request.form['actId']
-            u_name = request.form['username']
-            u_time = request.form['timestamp']
-            u_caption = request.form['caption']
-            u_cat = request.form['categoryName']
-            u_imgB64 = request.form['imgB64']
         try:
             image = base64.b64decode(request.args.get('imgB64'))
             print(image)
@@ -571,7 +575,7 @@ def uploadAct():
         val = checkCategory(u_cat)
         if(val == 0):
             return "category does not exists."
-        val = checkId(u_actId,u_cat)
+        val = checkId(u_actId)
         # checks if the actId is currently there in the given directory.
         if(val):
             return "ActId is already assigned."
