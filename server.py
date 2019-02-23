@@ -87,7 +87,8 @@ app.secret_key = os.urandom(16)
 def homeSupport():
     #flash("Works!")
     #print(os.listdir())
-    return render_template('homePage.html')
+	f = os.listdir('data/categories')
+	return render_template('homePage.html', categories = f)
 
 # upload webpage
 # localhost:5000/upload.html
