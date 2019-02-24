@@ -86,7 +86,7 @@ app.secret_key = os.urandom(16)
 @app.route('/homePage.html')
 def homeSupport():
     #flash("Works!")
-    #print(os.listdir())
+    print(os.listdir())
 	f = os.listdir('data/categories')
 	return render_template('homePage.html', categories = f)
 
