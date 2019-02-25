@@ -31,7 +31,7 @@
 
 <body background="{{ url_for('static', filename='home/background.jpeg')}}">
     <div class="container">
-        <form class="form-addcat" enctype="multipart/form-data" action="http://localhost:5000/api/v1/categories" method="post" role="form">
+        <form class="form-addcat" enctype="multipart/form-data" action="http://ec2-54-91-43-57.compute-1.amazonaws.com:5000/api/v1/categories" method="post" role="form">
         <h2 class="form-addcat-heading">Please Add a new Category</h2>
         <input type="text" id="inputcatname" name="categoryName" class="form-control" placeholder="Category Name" required autofocus>
         <button class="btnblock" type="submit">Create</button>
