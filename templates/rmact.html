@@ -84,7 +84,7 @@
 						//alert(user);
 						$.ajax({
     						type: "DELETE",
-    						url: "http://localhost:5000/api/v1/act/{actID}" + act,
+    						url: "http://ec2-54-91-43-57.compute-1.amazonaws.com:5000/api/v1/act/{actID}" + act,
     						success: function(msg){
         						alert("Data Deleted: " + msg);
     						}
