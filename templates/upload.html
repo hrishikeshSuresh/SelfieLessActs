@@ -92,7 +92,7 @@ not sure ajax part of caption will work as it is a textarea tag and not a normal
                 $.ajax({
                     type: "POST",
                     data: "actId="+actId+", caption="+caption+", category="+catname+", username"+username+", timestamp="+date_time+", imgB64=,"+image_data,
-                    url: "http://localhost:5000/api/v1/acts",
+                    url: "http://ec2-54-91-43-57.compute-1.amazonaws.com:5000/api/v1/acts",
                     success: function(msg){
                         console.log("SENT");
                     }
