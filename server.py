@@ -139,6 +139,11 @@ def addCategorySupport():
 def removeUserSupport():
     return render_template('rmuser.html')
 
+# remove acts
+@app.route('/rmact.html')
+def rmactSupport():
+    return render_template('rmact.html')
+
 # display category
 @app.route('/display/<categoryName>.html')
 def categoryDisplaySupport(categoryName):
