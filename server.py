@@ -16,7 +16,7 @@ from flask import (
 )
 import os
 import json
-from werkzeug import secure_filename
+from werkzeug import secure_filename, exceptions
 import datetime
 import shutil
 import base64
@@ -57,28 +57,25 @@ def checkId(actId):
                     return 1
     return 0
 
-# create application instance
-app = Flask(__name__, template_folder = "templates")
-# generating a secret key for sessions
-app.secret_key = os.urandom(16)
+@app.errorhandler(werkzeug.exceptions.BadRequest)
+def error_400(e):
+    return 'bad request!', 400
 
-# error handler 200
+@app.errorhandler(401)
+def error_401(e):
+    return 'Unauthorized', 401
 
-# error handler 201
+@app.errorhandler(werkzeug.exceptions.NotFound)
+def error_404(e):
+    return 'Not Found', 404
 
-# error handler 204
+@app.errorhandler(werkzeug.exceptions.MethodNotAllowed)
+def error_405(e):
+    return 'Method Not Allowed', 405
 
-# error handler 400
-##@app.errorhandler(400)
-##def error_400():
-##    print("Error Status code 400")
-
-# error handler 404
-##@app.errorhandler(404)
-##def error_404():
-##    print("Error Status code 404")
-
-# error handler 405
+@app.errorhandler(werkzeug.exceptions.RequestEntityTooLarge)
+def error_413(e):
+    return 'Request Entity too large', 413
 
 
 # supports
