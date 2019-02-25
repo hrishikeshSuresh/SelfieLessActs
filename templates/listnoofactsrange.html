@@ -95,7 +95,7 @@ Enter category<br><br>
 						//alert(user);
 						$.ajax({
     						type: "GET",
-    						url: "http://localhost:5000/api/v1/categories/"+ catname +"/acts?start="+ start +"&end="+end,
+    						url: "http://ec2-54-91-43-57.compute-1.amazonaws.com:5000/api/v1/categories/"+ catname +"/acts?start="+ start +"&end="+end,
     						success: function(msg){
         						console.log("SENT");
     						}
