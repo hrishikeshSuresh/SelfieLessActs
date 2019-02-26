@@ -57,6 +57,11 @@ def checkId(actId):
                     return 1
     return 0
 
+# create application instance
+app = Flask(__name__, template_folder = "templates")
+# generating a secret key for sessions
+app.secret_key = os.urandom(16)
+
 @app.errorhandler(werkzeug.exceptions.BadRequest)
 def error_400(e):
     return 'bad request!', 400
