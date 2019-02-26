@@ -474,7 +474,11 @@ def listActsInGivenRange(categoryName,startRange,endRange):
 @app.route('/api/v1/acts/upvote', methods = ['POST'])
 def upvoteAct():
     if request.method == "POST":
-        actId = request.args.get('actId')
+        actId = request.get_data()
+        actId = str(actId)
+        actId = actId[2:len(actId)-1]
+        print("actId is = ",actId)
+        print("type of actId is = ",type(actId))
         list_cat = []
         if(not checkId(actId)):
                 return "ActId does not Exists."
@@ -483,15 +487,15 @@ def upvoteAct():
         for fold in list_cat:
             cur_path = path+"/"+fold
             list_file = os.listdir(cur_path)
-            with open(list_file[0]) as json_file:
+            with open(cur_path+'/'+list_file[0]) as json_file:
                 data = json.load(json_file)
                 count = 0
                 for d in data['acts']:
                     if(d['actId'] == actId):
-                        data['acts'][count]['upvotes'] =str(int(d['upvotes '])+1)
+                        data['acts'][count]['upvotes'] =str(int(d['upvotes'])+1)
                         break
                     count+=1
-            with open(cur_path+list_file[0], 'w') as data_file:
+            with open(cur_path+'/'+list_file[0], 'w') as data_file:
                 data= json.dump(data, data_file,indent = 4)
             return "Upvote Done"
             ##with open(list_file[0], 'w') as data_file:
