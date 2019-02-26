@@ -62,7 +62,7 @@ app = Flask(__name__, template_folder = "templates")
 # generating a secret key for sessions
 app.secret_key = os.urandom(16)
 
-@app.errorhandler(werkzeug.exceptions.BadRequest)
+@app.errorhandler(exceptions.BadRequest)
 def error_400(e):
     return 'bad request!', 400
 
@@ -70,15 +70,15 @@ def error_400(e):
 def error_401(e):
     return 'Unauthorized', 401
 
-@app.errorhandler(werkzeug.exceptions.NotFound)
+@app.errorhandler(exceptions.NotFound)
 def error_404(e):
     return 'Not Found', 404
 
-@app.errorhandler(werkzeug.exceptions.MethodNotAllowed)
+@app.errorhandler(exceptions.MethodNotAllowed)
 def error_405(e):
     return 'Method Not Allowed', 405
 
-@app.errorhandler(werkzeug.exceptions.RequestEntityTooLarge)
+@app.errorhandler(exceptions.RequestEntityTooLarge)
 def error_413(e):
     return 'Request Entity too large', 413
 
