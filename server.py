@@ -394,7 +394,7 @@ def removecategory(categoryName):
 def listActs(categoryName):
     if request.method == "GET":
         list_acts = []
-	cats = os.listdir('./data/categories')
+        cats = os.listdir('./data/categories')
         if(categoryName not in cats):
             return "category Name Not Exists."
         path = "./data/categories/"+categoryName
