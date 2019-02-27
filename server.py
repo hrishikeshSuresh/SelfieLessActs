@@ -397,6 +397,7 @@ def listActs(categoryName):
         path = "./data/categories/"+categoryName
         list_acts = os.listdir(path)
         file = list_acts[0]
+		cats = os.listdir('./data/categories')
         if(categoryName not in cats):
             return "category Name Not Exists."
         print("This is file --> ",file)
@@ -432,6 +433,7 @@ def listNoOfActs(categoryName):
         path = "./data/categories/"+categoryName
         list_acts = os.listdir(path)
         file = list_acts[0]
+		cats = os.listdir('./data/categories')
         if(categoryName not in cats):
             return "category Name Not Exists."
         with open(path+'/'+file) as json_file:
@@ -462,6 +464,7 @@ def listActsInGivenRange(categoryName,startRange,endRange):
         path = "./data/categories/"+categoryName
         list_acts = os.listdir(path)
         file = list_acts[0]
+		##cats = os.listdir('./data/categories')
         if(not checkCategory(categoryName)):
             return "category does not exists."
         with open(path+'/'+file) as json_file:
