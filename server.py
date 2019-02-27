@@ -394,12 +394,12 @@ def removecategory(categoryName):
 def listActs(categoryName):
     if request.method == "GET":
         list_acts = []
+	cats = os.listdir('./data/categories')
+        if(categoryName not in cats):
+            return "category Name Not Exists."
         path = "./data/categories/"+categoryName
         list_acts = os.listdir(path)
         file = list_acts[0]
-        cats = os.listdir('./data/categories')
-        if(categoryName not in cats):
-            return "category Name Not Exists."
         print("This is file --> ",file)
         with open(path + file) as json_file:
             data = json.load(json_file)
@@ -430,12 +430,12 @@ def listActs(categoryName):
 def listNoOfActs(categoryName):
     if request.method == "GET":
         list_acts = []
+	cats = os.listdir('./data/categories')
+        if(categoryName not in cats):
+            return "category Name Not Exists."
         path = "./data/categories/"+categoryName
         list_acts = os.listdir(path)
         file = list_acts[0]
-        cats = os.listdir('./data/categories')
-        if(categoryName not in cats):
-            return "category Name Not Exists."
         with open(path+'/'+file) as json_file:
             data = json.load(json_file)
             print(data['acts'])
@@ -461,12 +461,12 @@ def listActsInGivenRange(categoryName,startRange,endRange):
         print("type is ",type(startRange))
         print("endRange = ",endRange)
         list_acts = []
+	cats = os.listdir('./data/categories')
+        if(not checkCategory(categoryName)):
+            return "category does not exists."
         path = "./data/categories/"+categoryName
         list_acts = os.listdir(path)
         file = list_acts[0]
-        cats = os.listdir('./data/categories')
-        if(not checkCategory(categoryName)):
-            return "category does not exists."
         with open(path+'/'+file) as json_file:
             data = json.load(json_file)
         arr = []
