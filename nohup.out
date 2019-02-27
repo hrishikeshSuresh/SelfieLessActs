@@ -1,0 +1,158 @@
+ * Serving Flask app "server" (lazy loading)
+ * Environment: production
+   WARNING: Do not use the development server in a production environment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 132-771-476
+116.75.65.235 - - [27/Feb/2019 11:52:43] "GET /signup HTTP/1.1" 200 -
+116.75.65.235 - - [27/Feb/2019 11:52:48] "GET /rmcategory HTTP/1.1" 200 -
+116.75.65.235 - - [27/Feb/2019 11:53:27] "GET /homePage.html HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 12:22:28] "GET /homePage.html HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 12:22:28] "GET /favicon.ico HTTP/1.1" 404 -
+125.99.233.115 - - [27/Feb/2019 13:04:26] "GET /homePage.html HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 13:04:26] "GET /favicon.ico HTTP/1.1" 404 -
+125.99.233.115 - - [27/Feb/2019 13:04:31] "GET /favicon.ico HTTP/1.1" 404 -
+125.99.233.115 - - [27/Feb/2019 16:59:07] "GET /homePage.html HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 16:59:07] "GET /static/homePage.css HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 16:59:11] "GET /addcat.html HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 16:59:11] "GET /static/jquery-3.3.1.min.js HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 16:59:23] "GET /listallacts.html HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 16:59:35] "GET /listallacts.html HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 16:59:39] "GET /display/Development.html HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 16:59:39] "GET /static/cate.css HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 16:59:43] "GET /display/Animal%20Care.html HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 16:59:44] "GET /homePage.html HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 16:59:45] "GET /static/home/beggar.jpg HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 16:59:45] "GET /static/home/kangaroo.jpeg HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 16:59:45] "GET /static/home/oldLady.jpg HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:47:17] "GET /homePage.html HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:47:17] "GET /static/homePage.css HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:47:17] "GET /static/home/beggar.jpg HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:47:17] "GET /static/home/oldLady.jpg HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:47:17] "GET /static/home/kangaroo.jpeg HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:47:18] "GET /static/home/background.jpeg HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:48:18] "GET /listnoofactsrange.html HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:48:19] "GET /static/jquery-3.3.1.min.js HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:48:20] "GET /favicon.ico HTTP/1.1" 404 -
+125.99.233.115 - - [27/Feb/2019 17:48:23] "GET /addcat.html HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:48:24] "GET /static/home/background.jpeg HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:48:28] "GET /homePage.html HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:48:32] "GET /listallacts.html HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:48:33] "GET /favicon.ico HTTP/1.1" 404 -
+125.99.233.115 - - [27/Feb/2019 17:48:34] "POST /api/v1/categories HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 2309, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 2295, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1741, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/_compat.py", line 35, in reraise
+    raise value
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 2292, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1815, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1718, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/_compat.py", line 35, in reraise
+    raise value
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/ubuntu/server.py", line 344, in addCategory
+    cats = os.listdir(path)
+FileNotFoundError: [Errno 2] No such file or directory: './static/categories/'
+125.99.233.115 - - [27/Feb/2019 17:48:34] "POST /api/v1/categories HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 2309, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 2295, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1741, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/_compat.py", line 35, in reraise
+    raise value
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 2292, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1815, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1718, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/_compat.py", line 35, in reraise
+    raise value
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/ubuntu/server.py", line 344, in addCategory
+    cats = os.listdir(path)
+FileNotFoundError: [Errno 2] No such file or directory: './static/categories/'
+125.99.233.115 - - [27/Feb/2019 17:48:35] "GET /api/v1/categories?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:48:35] "GET /api/v1/categories?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:48:35] "GET /api/v1/categories?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:48:39] "GET /api/v1/categories?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:48:39] "GET /api/v1/categories?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:48:53] "GET /addcat.html HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:48:54] "GET /favicon.ico HTTP/1.1" 404 -
+49.206.12.222 - - [27/Feb/2019 17:49:00] "POST /api/v1/categories HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 2309, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 2295, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1741, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/_compat.py", line 35, in reraise
+    raise value
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 2292, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1815, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1718, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/_compat.py", line 35, in reraise
+    raise value
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1813, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ubuntu/.local/lib/python3.6/site-packages/flask/app.py", line 1799, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/ubuntu/server.py", line 344, in addCategory
+    cats = os.listdir(path)
+FileNotFoundError: [Errno 2] No such file or directory: './static/categories/'
+49.206.12.222 - - [27/Feb/2019 17:49:01] "GET /api/v1/categories?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:49:01] "GET /api/v1/categories?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:49:01] "GET /api/v1/categories?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:49:02] "GET /api/v1/categories?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:49:02] "GET /api/v1/categories?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:49:03] "GET /api/v1/categories?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:50:44] "GET /listnoofacts.html HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:50:44] "GET /favicon.ico HTTP/1.1" 404 -
+49.206.12.222 - - [27/Feb/2019 17:50:48] "GET /listnoofacts.html?category=Development HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:50:49] "GET /favicon.ico HTTP/1.1" 404 -
+49.206.12.222 - - [27/Feb/2019 17:50:49] "GET /listnoofacts.html?category= HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:50:49] "GET /favicon.ico HTTP/1.1" 404 -
+49.206.12.222 - - [27/Feb/2019 17:51:06] "GET /listnoofacts.html HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:51:15] "GET /listnoofacts.html HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:55:12] "GET /listnoofacts.html?category=Development HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:57:00] "GET /addcat.html HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:57:01] "GET /static/jquery-3.3.1.min.js HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:57:05] "GET /static/home/background.jpeg HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:57:10] "POST /api/v1/categories HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:57:11] "POST /api/v1/categories HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:57:43] "GET /favicon.ico HTTP/1.1" 404 -
+125.99.233.115 - - [27/Feb/2019 17:58:05] "GET /addcat.html HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:58:09] "POST /api/v1/categories HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:58:10] "POST /api/v1/categories HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:58:46] "GET /addcat.html HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:58:55] "POST /api/v1/categories HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:58:55] "GET /favicon.ico HTTP/1.1" 404 -
+49.206.12.222 - - [27/Feb/2019 17:59:01] "GET /listnoofacts.html HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:59:03] "GET /addcat.html HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:59:07] "GET /listnoofacts.html?category=Testing HTTP/1.1" 200 -
+125.99.233.115 - - [27/Feb/2019 17:59:07] "POST /api/v1/categories HTTP/1.1" 200 -
+49.206.12.222 - - [27/Feb/2019 17:59:07] "GET /favicon.ico HTTP/1.1" 404 -

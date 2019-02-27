@@ -1,0 +1,27 @@
+-----------------------------------------------------------
+ File Structure For SelfieLessActs_UI & SelfieLessActs_API
+-----------------------------------------------------------
+root --> templates
+                    --> homePage.html
+                    --> upload.html
+                    --> cate1.html
+                    --> cate2.html
+                    --> cate3.html
+                    --> login.html
+                    --> register.html
+                    --> rmcat.html
+                    --> signup.html
+     --> static
+                    --> categories
+                        --> category1
+                        --> category2
+                        --> category3
+                    --> home
+                    --> cate.css
+                    --> homePage.css
+     --> data
+                    --> users.json
+                    --> categories
+                        --> category1.json
+                        --> category2.json
+                        --> category3.json

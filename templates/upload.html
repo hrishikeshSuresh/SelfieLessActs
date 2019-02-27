@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../static/jquery-3.3.1.min.js"></script>
+    </head>
+<!-- In Flask update variable in render_template (categories,)
+check ajax part for empty url,alert commands
+not sure ajax part of caption will work as it is a textarea tag and not a normal input tag-->
+    <body background="{{ url_for('static', filename='home/background.jpeg')}}">
+        <STYLE>
+            body{
+                font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif
+            }
+            input[type=submit] {
+                line-height: 40px;
+                display: inline-block;
+                padding: 0 25px;
+                cursor: pointer;
+                color: dark grey;
+                background-color: #4169E1;
+                font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
+                font-size: 14px;
+                font-weight: 700;
+                border-radius:4px;
+            }
+            input[type=submit]:hover{
+                opacity: 0.8;
+            }
+            [type=radio]{
+                border: 1px solid #ddd;
+                border-radius: 100%;
+                background: #F87DA9;
+            }
+            [type=radio]:checked{
+                background: #F87DA9;
+            }
+            h1{
+                color: black;
+                text-shadow: 0px 1px 0px #999, 0px 2px 0px #888, 0px 3px 0px #777, 0px 4px 0px #666, 0px 5px 0px #555, 0px 6px 0px #444, 0px 7px 0px #333, 0px 8px 7px #001135;
+            }
+            a {
+                text-decoration: none;
+            }
+       </STYLE>
+        <link rel="stylesheet" href="{{ url_for('static', filename='cate.css')}}">
+        <h1 align="center"><a href="homePage.html">  <font face = "WildWest" size = "21" color="black">SelfieLessActs</font></a> </h1>
+        <div class="uploadForm" style="padding-left:500px; padding-top:200px;">
+            <form action="" method="post" enctype="multipart/form-data" role="form">
+              <h4>List of categories<h4><br>
+                {% for category in categories %}
+            <h5> {{category}} </h5>
+        {% endfor %}<br>
+        Category name<br><br>
+        <input type="text" name="category" id = "category" placeholder="category" autofocus>
+        <br><br>
+        Username<br><br>
+        <input type="text" name="username" id = "username" placeholder="username" autofocus>
+                <br><br>
+                Enter Caption<br>
+                 <textarea id="textbox" rows="4" cols="50">
+</textarea><br>
+                Select image to upload:
+                <input type="file" name="fileToUpload" id="fileToUpload">
+                <br><br>
+
+                <input type="submit" value="Upload Image" name="submit" id="sub">
+            </form>
+        </div>
+        <script>
+          // Shorthand for $(document).ready();
+          $(function() {
+            $('#form-upload').submit(function(){
+            //alert("this works");
+                var catname = $('#category').val();
+                var caption = $('#caption').val();
+                var username = $('#username').val();
+                var date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear();
+                var time = today.getSeconds() + "-" + today.getMinutes() + "-" + today.getHours();
+                var date_time = date +":"+ time;
+                console.log(date_time);
+                var min = 1
+                var max = Math.pow(10, 6)
+                var actId = Math.floor(Math.random()*(+max - +min))+ +min;
+                alert(actId)
+                console.log(actId);
+                var image_data = Base64.encode($('#sub').val());
+                console.log(image_data);
+            //alert(user);
+            //$(this).attr('action', "http://localhost:5000/api/v1/categories/" + user + " ");
+            //$(this).attr('method', "DELETE");
+            //alert(user);
+                $.ajax({
+                    type: "POST",
+                    data: "actId="+actId+", caption="+caption+", category="+catname+", username"+username+", timestamp="+date_time+", imgB64=,"+image_data,
+                    url: "http://ec2-54-91-43-57.compute-1.amazonaws.com:5000/api/v1/acts",
+                    success: function(msg){
+                        console.log("SENT");
+                    }
+                });
+              //var user = $("input[name*='checks']");
+            //alert(JSON.stringify(user));
+            /*for (var key in user){
+              alert(key + "---->" + JSON.stringify(user[key]));
+            }*/
+          });
+          });
+      </script>
+    </body>
+</html>
