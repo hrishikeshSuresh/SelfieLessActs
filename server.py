@@ -585,7 +585,7 @@ def uploadAct():
         try:
             image = base64.b64decode(request.args.get('imgB64'))
             print(image)
-        except binascii:
+        except:
             return "not a valid base64 string"
         val = checkCategory(u_cat)
         if(val == 0):
