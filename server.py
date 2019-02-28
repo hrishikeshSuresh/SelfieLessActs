@@ -401,7 +401,7 @@ def listActs(categoryName):
         list_acts = os.listdir(path)
         file = list_acts[0]
         print("This is file --> ",file)
-        with open(path + file) as json_file:
+        with open(path + '/'+ file) as json_file:
             data = json.load(json_file)
         if(len(data['acts']) > 100):
             return "Number of acts are more than 100"
@@ -535,7 +535,7 @@ def removeAct(actId):
             print(data['acts'])
             with open(cur_path + '/' + list_file[0], 'w') as data_file:
                 data= json.dump(data, data_file,indent = 4)
-            return "Acts successfully removed"
+        return "Acts successfully removed"
             ##with open(list_file[0]) as json_file:
             ##    data = json.load(json_file)
             ##    arr = data['acts']
@@ -584,7 +584,7 @@ def uploadAct():
         image = ""
         try:
             image = base64.b64decode(request.args.get('imgB64'))
-            print(image)
+            ##print(image)
         except:
             return "not a valid base64 string"
         val = checkCategory(u_cat)
@@ -608,8 +608,8 @@ def uploadAct():
             data['acts'].append(dictionary)
         with open(path,'w') as data_file:
             data= json.dump(data, data_file,indent = 4)
-        ##with open('./static/categories/' + u_cat + '/'+ u_actId + '.png', 'wb') as f_img:
-        ##    f_img.write(image.decode('base64'))
+        with open('./static/categories/' + u_cat + '/'+ u_actId + '.png', 'wb') as f_img:
+            f_img.write(image.decode('base64'))
         return "Uploaded Act successfully.  "
         ##u_data = request.args.get('username')
         ##u_file = u_data + ".json"
