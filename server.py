@@ -319,11 +319,18 @@ def listCategories():
         cat = os.listdir('./data/categories')
         print(cat)
         dictionary = {}
-        for i in range(0,len(cat)):
-            files = []
-            directory = "./data/categories/"+cat[i]
-            files = os.listdir(directory)
-            dictionary[cat[i]] = len(files)
+        ##for i in range(0,len(cat)):
+        ##    files = []
+        ##    directory = "./data/categories/"+cat[i]
+        ##    files = os.listdir(directory)
+        ##    dictionary[cat[i]] = len(files)
+        for file in cat:
+            # read number of acts from each folder
+            json_file = "./data/categories/" + file + "/" + file + ".json"
+            ##print(json_file)
+            with open(json_file, 'r') as fp:
+               data = json.load(fp)
+            dictionary[file] = len(data['acts'])
         return str(dictionary)
     else:
         return 'Invalid Request'
