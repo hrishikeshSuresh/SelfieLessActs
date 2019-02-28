@@ -160,7 +160,7 @@ def categoryDisplaySupport(categoryName):
     ##print(data)
     for i in data['acts']:
         ##i['imgB64'] = base64.b64decode(i['imgB64'])
-        print(i['actId'])
+        print(i['actId'],i['upvote'])
     return render_template('catetemplate.html', categories = cat, image_data = data['acts'], catName = categoryName)
 
 #for cate1, cate2 and cate3, the upload button is not rendering properly
