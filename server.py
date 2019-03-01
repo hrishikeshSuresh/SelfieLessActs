@@ -262,11 +262,16 @@ def addUser():
         u_data = u_data.lstrip()
         u_data = u_data.rstrip()
         u_data = u_data.replace("\"", "")
+        u_data = u_data.replace("\t", "")
+        u_data = u_data.replace("\n", "")
         u_password = u_password.lstrip()
         u_password = u_password.rstrip()
         u_password = u_password.replace("\"", "")
-        if(len(u_password)>=40):
-            return "not SHA1 password"
+        u_password = u_password.replace("\t", "")
+        u_password = u_password.replace("\n", "")
+        u_password = u_password.replace("}", "")
+        ##if(len(u_password)>=40):
+            ##return "not SHA1 password"
         flag = False
         if(u_data == None and u_password == None):
             u_data = request.form['username']
@@ -361,10 +366,12 @@ def addCategory():
         catName = str(request.get_data().decode())
         catName = catName.replace('\"', '')
         catName = catName.replace('\t', '')
-        catName = catName[2:len(catName)-2]
+        catName = catName.replace('\n', '')
+        ##catName = catName[2:len(catName)-2]
         catName = catName.replace("\"", "")
         catName = catName.lstrip(' ')
         catName = catName.rstrip(' ')
+        catName = catName[1:len(catName)-1]
         print(catName)
         if(catName == None):
             catName = request.form['categoryName']
@@ -514,7 +521,7 @@ def upvoteAct():
     if request.method == "POST":
         actId = request.get_data().decode()
         actId = str(actId)
-        actId = actId[2:len(actId)-1]
+        actId = actId[1:len(actId)-1]
         actId = actId.replace("\t", "")
         actId = actId.replace("\n", "")
         actId = actId.lstrip(' ')
@@ -540,7 +547,7 @@ def upvoteAct():
                     count+=1
             with open(cur_path+'/'+list_file[0], 'w') as data_file:
                 data= json.dump(data, data_file,indent = 4)
-            return "Upvote Done"
+        return "Upvote Done"
             ##with open(list_file[0], 'w') as data_file:
             ##    data= json.dump(data, data_file,indent = 4)
     else:
@@ -593,7 +600,8 @@ def uploadAct():
     print("Received @ ", x.time())
     if(request.method == 'POST'):
         print("Receiving data....")
-        ##print(json.loads(request.data.decode()))
+        ##print(request.data.decode())
+        print(json.loads(request.data.decode()))
         u_actId = json.loads(request.data.decode())['actId']
         ##print(u_actId)
         u_name = json.loads(request.data.decode())['username']
