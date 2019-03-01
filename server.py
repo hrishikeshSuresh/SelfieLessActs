@@ -247,11 +247,26 @@ APIs
 @app.route('/api/v1/users', methods = http_methods)
 def addUser():
     if(request.method == 'POST'):
-        print(request.form)
+        ##print(request.data.decode('utf-8'))
         print("Receiving data....")
-        u_data = request.args.get('username')
-        u_password = request.args.get('password')
-        print(u_data, u_password)
+        ##u_data = request.args.get('username')
+        ##u_password = request.args.get('password')
+        ##u_data = json.loads(request.data.decode())['username']
+        ##u_password = json.loads(request.data.decode())['password']
+        ##print(u_data, u_password)
+        data = request.data.decode()
+        ##print(data) 
+        data = data.split(sep = ',')
+        u_data = data[0].split(sep = ':')[1]
+        u_password = data[1].split(sep = ':')[1]
+        u_data = u_data.lstrip()
+        u_data = u_data.rstrip()
+        u_data = u_data.replace("\"", "")
+        u_password = u_password.lstrip()
+        u_password = u_password.rstrip()
+        u_password = u_password.replace("\"", "")
+        if(len(u_password)>=40):
+            return "not SHA1 password"
         flag = False
         if(u_data == None and u_password == None):
             u_data = request.form['username']
@@ -342,7 +357,15 @@ def listCategories():
 def addCategory():
     if request.method == "POST":
         print("Receiving category name")
-        catName = request.args.get('categoryName')
+        ##catName = request.args.get['categoryName']
+        catName = str(request.get_data().decode())
+        catName = catName.replace('\"', '')
+        catName = catName.replace('\t', '')
+        catName = catName[2:len(catName)-2]
+        catName = catName.replace("\"", "")
+        catName = catName.lstrip(' ')
+        catName = catName.rstrip(' ')
+        print(catName)
         if(catName == None):
             catName = request.form['categoryName']
         print("category Name is -->", catName)
@@ -489,11 +512,16 @@ def listActsInGivenRange(categoryName,startRange,endRange):
 @app.route('/api/v1/acts/upvote', methods = ['POST'])
 def upvoteAct():
     if request.method == "POST":
-        actId = request.get_data()
+        actId = request.get_data().decode()
         actId = str(actId)
         actId = actId[2:len(actId)-1]
-        print("actId is = ",actId)
-        print("type of actId is = ",type(actId))
+        actId = actId.replace("\t", "")
+        actId = actId.replace("\n", "")
+        actId = actId.lstrip(' ')
+        actId = actId.rstrip(' ')
+        actId = actId.replace(' ', '')
+        print("actId is = ", actId)
+        print("type of actId is = ", str(actId))
         list_cat = []
         if(not checkId(actId)):
                 return "ActId does not Exists."
@@ -526,6 +554,8 @@ def upvoteAct():
 def removeAct(actId):
     if request.method == "DELETE":
         list_cat = []
+        print(actId)
+        ##actId = int(actId)
         path = "./data/categories"
         list_cat = os.listdir(path)
         for fold in list_cat:
@@ -563,21 +593,21 @@ def uploadAct():
     print("Received @ ", x.time())
     if(request.method == 'POST'):
         print("Receiving data....")
-        print(request.form)
-        u_actId = request.args.get('actId')
+        ##print(json.loads(request.data.decode()))
+        u_actId = json.loads(request.data.decode())['actId']
         ##print(u_actId)
-        u_name = request.args.get('username')
-        u_time = request.args.get('timestamp')
-        u_caption = request.args.get('caption')
-        u_cat = request.args.get('categoryName')
-        u_imgB64 = request.args.get('imgB64')
+        u_name = json.loads(request.data.decode())['username']
+        u_time = json.loads(request.data.decode())['timestamp']
+        u_caption = json.loads(request.data.decode())['caption']
+        u_cat = json.loads(request.data.decode())['categoryName']
+        u_imgB64 = json.loads(request.data)['imgB64']
         if(u_name == None):
             u_actId = request.form['actId']
             print(u_actId)
             u_name = request.form['username']
             u_caption = request.form['caption']
             u_cat = request.form['categoryName']
-            u_imgB64 = request.form['imgB64']
+            u_imgB64 = str(request.form['imgB64'])
             u_time = request.form['timestamp']
         print(u_actId, u_name, u_caption, u_cat, u_time, u_imgB64)
         timeFormat = "%d-%m-%Y:%S-%M-%H"
@@ -590,7 +620,7 @@ def uploadAct():
             return "Invalid Time Format"
         image = ""
         try:
-            image = base64.b64decode(request.args.get('imgB64'))
+            image = base64.decodestring(u_imgB64.encode())
             ##print(image)
         except:
             return "not a valid base64 string"
@@ -601,22 +631,25 @@ def uploadAct():
         # checks if the actId is currently there in the given directory.
         if(val):
             return "ActId is already assigned."
+        new_val = checkUser(u_name)
+        if(new_val == 0):
+           return "user not found"
         dictionary = {}
-        dictionary['actId'] = u_actId
+        dictionary['actId'] = str(u_actId)
         dictionary['username'] = u_name
         dictionary['timestamp'] = u_time
         dictionary['caption'] = u_caption
         dictionary['categoryName'] = u_cat
         dictionary['imgB64'] = u_imgB64
-        dictionary['upvote'] = 0
+        dictionary['upvotes'] = 0
         path = "./data/categories/" + u_cat + '/' + u_cat + ".json"
         with open(path) as json_file:
             data = json.load(json_file)
             data['acts'].append(dictionary)
         with open(path,'w') as data_file:
             data= json.dump(data, data_file,indent = 4)
-        with open('./static/categories/' + u_cat + '/'+ u_actId + '.png', 'wb') as f_img:
-            f_img.write(image.decode('base64'))
+        ##with open('./static/categories/' + u_cat + '/'+ str(u_actId) + '.png', 'wb') as f_img:
+            ##f_img.write(image.decode('base64'))
         return "Uploaded Act successfully.  "
         ##u_data = request.args.get('username')
         ##u_file = u_data + ".json"
