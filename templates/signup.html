@@ -1,26 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
  <head>
-	 <script src="../static/jquery-3.3.1.min.js"></script>
-	 <!---<script src="signUp.js"></script>-->
+	 <script src= "../static/jquery-3.3.1.min.js"></script>
+	 <script src= "../static/sha1.min.js"></script>
+     <script src = "../static/sha1.js"></script>
 	 <script>
-     /*$(function(){
+     $(function(){
 	        $('.btnblock').click(function(){
 		              var user = $('#inputUsername').val();
-		              var pass = $('#inputPassword').val();
+		              var pass = sha1($('#inputPassword').val());
+                      //alert(pass);
+                      //alert(JSON.stringify({username : user, password : pass}))
 		              $.ajax({
-			                       url: '/api/v1/users',
-			                       data: $('form').serialize(),
-			                       type: 'POST',
-			                       success: function(){
-				                                   console.log("SUCCESS");
+			                       url : 'http://localhost:5000/api/v1/users',
+			                       data : JSON.stringify({username : user, password : pass}),
+			                       type : 'POST',
+                                   method : 'post',
+                                   ContentType : 'text/plain',
+                                   dataType: 'json',
+			                       success: function(response){
+				                                   alert(response);
 			                       },
 			                       error: function(error){
-				                                   console.log(error);
+				                                   alert(error);
 			                       }
 		              });
 	          });
-     });*/
+     });
      </script>
 	 <meta charset="utf-8">
 	 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,7 +40,7 @@
 
 <body background="{{ url_for('static', filename='home/background.jpeg')}}">
     <div class="container">
-        <form class="form-signin" enctype="multipart/form-data" action="http://ec2-54-91-43-57.compute-1.amazonaws.com:5000/api/v1/users" method="post" role="form">
+        <form class="form-signin" enctype="multipart/form-data" role="form">
         <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
         <br>
         <br>

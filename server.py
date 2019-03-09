@@ -2,9 +2,13 @@
 Authors : Hrishikesh S.   01FB16ECS139
           Karthik A.      01FB16ECS159
 Status  : Need to fix back-end front-end communications
+          Back-end does not work on the server.
 Note    : # for developer comment
           ## for comment/removing code
 """
+ip_address = '127.0.0.1'
+port_no = 5000
+
 from flask import (
     Flask,
     render_template,
@@ -21,6 +25,7 @@ import datetime
 import shutil
 import base64
 import binascii
+import re
 
 http_methods = ['GET', 'POST']
 ##Markup('<h1><strong>Hello!</strong></h1>')
@@ -83,9 +88,9 @@ def error_413(e):
     return 'Request Entity too large', 413
 
 
-# supports
-# localhost:5000/homePage.html, non-functional
-@app.route('/homePage.html')
+# front-end supports
+# localhost:5000/homePage.html
+@app.route('/homePage')
 def homeSupport():
     #flash("Works!")
 	#print(os.listdir())
@@ -94,27 +99,27 @@ def homeSupport():
 
 # upload webpage
 # localhost:5000/upload.html
-@app.route('/upload.html')
+@app.route('/upload')
 def uploadSupport():
     f = os.listdir('data/categories')
     return render_template('upload.html', categories = f)
 
 # list all acts
-@app.route('/listallacts.html')
+@app.route('/listallacts')
 def listallactsSupport():
     f = os.listdir('data/categories')
     return render_template('listallacts.html', categories = f)
 
 # list number of acts webpage
 # localhost:5000/listnoofacts.html
-@app.route('/listnoofacts.html')
+@app.route('/listnoofacts')
 def displaylistnoonactsSupport():
     f = os.listdir('data/categories')
     return render_template('listnoofacts.html', categories = f)
 
 # list number of acts range webpage
 # localhost:5000/listnoofactsrange.html
-@app.route('/listnoofactsrange.html')
+@app.route('/listnoofactsrange')
 def displaylistnoonactsrangeSupport():
     f = os.listdir('data/categories')
     return render_template('listnoofactsrange.html', categories = f)
@@ -123,7 +128,7 @@ def displaylistnoonactsrangeSupport():
 # localhost:5000/signup
 @app.route('/signup')
 def signUpSupport():
-    return render_template('signup.html')
+    return render_template('signup.html', ip_address = ip_address)
 
 # remove category webpage
 # localhost:5000/rmcategory
@@ -134,23 +139,23 @@ def removeCategorySupport():
 
 # add category webpage
 # localhost:5000/addcat.html
-@app.route('/addcat.html')
+@app.route('/addcat')
 def addCategorySupport():
     return render_template('addcat.html')
 
 # remove user webpage
 # localhost:5000/rmuser.html
-@app.route('/rmuser.html')
+@app.route('/rmuser')
 def removeUserSupport():
-    return render_template('rmuser.html')
+    return render_template('rmuser.html', ip_address = ip_address)
 
 # remove acts
-@app.route('/rmact.html')
+@app.route('/rmact')
 def rmactSupport():
     return render_template('rmact.html')
 
 # display category
-@app.route('/display/<categoryName>.html')
+@app.route('/display/<categoryName>')
 def categoryDisplaySupport(categoryName):
     cat = os.listdir('./data/categories')
     curr_path = './data/categories/'+categoryName
@@ -163,99 +168,26 @@ def categoryDisplaySupport(categoryName):
         print(i['actId'],i['upvote'])
     return render_template('catetemplate.html', categories = cat, image_data = data['acts'], catName = categoryName)
 
-#for cate1, cate2 and cate3, the upload button is not rendering properly
-#also need to the HTML page to load the images with the upvote button and name of user
-#localhost:5000/cate1.html, non-functional
-##@app.route('/cate1.html')
-##def cate1():
-##    #print(os.listdir())
-##    return render_template('cate1.html')
-
-#localhost:5000/cate2.html, non-functional
-##@app.route('/cate2.html')
-##def cate2():
-##    #print(os.listdir())
-##    return render_template('cate2.html')
-
-#localhost:5000/cate3.html, non-functional
-##@app.route('/cate3.html')
-##def cate3():
-##    #print(os.listdir())
-##    return render_template('cate3.html')
-
-#localhost:5000/uploadImage
-#need to fix this, non-functional
-##@app.route('/uploadImage', methods = http_methods)
-##def uploadFile():
-##    #sub routine not working
-##    if request.method == 'POST':
-##        f = request.files['file']
-##        f.save(secure_filename(f.filename))
-##        print('File uploaded successfully')
-##    return render_template('homePage.html')
-
-# needs fixing on HTML & CSS side immediately, non-functional
-##@app.route('/login.html')
-##def login():
-##    return render_template('login.html')
-
-# needs fixing on HTML & CSS side immediately, non-functional
-##@app.route('/register.html')
-##def register():
-##    return render_template('signup.html')
-
-# register user, non-functional
-##@app.route('/registerUser')
-##def registeredUser():
-##    if(request.method == 'POST'):
-##        print("Receiving data...")
-##        data = request.form
-##        print(data[0])
-##    return redirect(url_for('home'))
-
-#test, signup user
-##@app.route('/api/v1/users', methods=['POST'])
-##def signUpUser():
-##    if(request.method == 'POST'):
-##        print("Receiving data....")
-##        u_data = request.args.get('username')
-##        u_password = request.args.get('password')
-##        print(u_data, u_password)
-##        if(u_data == None and u_password == None):
-##            u_data = request.form['username']
-##            u_password = request.form['password']
-##        data = dict()
-##        data['username'] = u_data
-##        data['password'] = u_password
-##        file = "data/users/" + u_data + ".json"
-##        with open(file, 'w') as fp:
-##            json.dump(data, fp, sort_keys = True, indent = 4)
-##        message = u_data + ' has been added'
-##        return message
-##    else:
-##        return 'Invalid Request'
-
 """
 APIs
 """
 
 # add user
-# use this flag is True if data is from 'form'
-# check if user is already in the database
-# check is password is SHA1 hash hex
-# getting added twice
-@app.route('/api/v1/users', methods = http_methods)
+# checked
+@app.route('/api/v1/users', methods = ['POST'])
 def addUser():
     if(request.method == 'POST'):
-        ##print(request.data.decode('utf-8'))
+        ##print(request.data.decode())
         print("Receiving data....")
         ##u_data = request.args.get('username')
         ##u_password = request.args.get('password')
+        ##print(u_data, u_password)
         ##u_data = json.loads(request.data.decode())['username']
         ##u_password = json.loads(request.data.decode())['password']
         ##print(u_data, u_password)
         data = request.data.decode()
-        ##print(data) 
+        print(data)
+        ##print(data)
         data = data.split(sep = ',')
         u_data = data[0].split(sep = ':')[1]
         u_password = data[1].split(sep = ':')[1]
@@ -270,12 +202,18 @@ def addUser():
         u_password = u_password.replace("\t", "")
         u_password = u_password.replace("\n", "")
         u_password = u_password.replace("}", "")
-        ##if(len(u_password)>=40):
-            ##return "not SHA1 password"
+        print(u_data)
+        print(len(u_password))
+        # check if SHA1 password
+        pattern = re.compile(r'\b[0-9a-f]{40}\b')
+        match = re.match(pattern, u_password)
+        print(match)
+        if(match != None):
+            return "not SHA1 password"
         flag = False
-        if(u_data == None and u_password == None):
-            u_data = request.form['username']
-            u_password = request.form['password']
+        ##if(u_data == None and u_password == None):
+        ##    u_data = request.form['username']
+        ##    u_password = request.form['password']
         file = os.listdir('./data/users')
         ##print("This is file ---> ",file)
         with open('./data/users/'+file[0]) as json_file:
@@ -283,7 +221,7 @@ def addUser():
             data = json.load(json_file)
         ##print("This is data -->",data)
         if(checkUser(u_data)):
-            return "User already Exists."
+            return "user already exists."
         dictionary = {}
         dictionary["username"] = u_data
         dictionary["password"] = u_password
@@ -296,20 +234,20 @@ def addUser():
         return 'Invalid Request'
 
 # remove user
-# check if user is present or absent in the database before deleting (optional)
+# checked
 @app.route('/api/v1/users/<username>', methods = ['DELETE'])
 def removeUser(username):
     if(request.method == 'DELETE'):
         print("Receiving data....")
         if(username == None):
-            return "username does not exit on route"
+            return "username returned None"
         print('OBJECTIVE : ', username)
         file = os.listdir('./data/users/')
         with open('./data/users/'+file[0]) as json_file:
             data = json.load(json_file)
         ##print("data is --> ",data)
         if(not checkUser(username)):
-            return "User does not Exists."
+            return "user does not Exists."
         arr = data['users']
         arr [:] = [d for d in arr if d.get('username') != username]
         data['users'] = arr
@@ -331,6 +269,7 @@ def removeUser(username):
         return 'Invalid Request'
 
 # list all categories
+# checked
 @app.route('/api/v1/categories', methods = ['GET'])
 def listCategories():
     if request.method == 'GET':
@@ -356,8 +295,8 @@ def listCategories():
         return 'Invalid Request'
 
 # add a category
-# should be JSON ARRAY []
-# check if category is already present (case-sensitive) , done
+# input should be JSON ARRAY []
+# checked
 @app.route('/api/v1/categories', methods = ['POST'])
 def addCategory():
     if request.method == "POST":
@@ -372,19 +311,19 @@ def addCategory():
         catName = catName.lstrip(' ')
         catName = catName.rstrip(' ')
         catName = catName[1:len(catName)-1]
-        print(catName)
+        ##print(catName)
         if(catName == None):
             catName = request.form['categoryName']
-        print("category Name is -->", catName)
+        print("category name is -->", catName)
         # should be entered into database
         path = "./static/categories/"
         cats = os.listdir(path)
         if catName not in cats:
-            os.mkdir("./static/categories/"+ catName)
-            os.mkdir("./data/categories/"+ catName)
+            os.mkdir("./static/categories/" + catName)
+            os.mkdir("./data/categories/" + catName)
             data = {'acts':[]}
-            with open("./data/categories/"+ catName + '/' + catName + ".json",'w') as json_file:
-                data= json.dump(data, json_file,indent = 4)
+            with open("./data/categories/"+ catName + '/' + catName + ".json", 'w') as json_file:
+                data= json.dump(data, json_file, indent = 4)
             return catName + ' added'
         else:
             return catName + ' already present'
@@ -400,6 +339,7 @@ def addCategory():
 
 
 # remove a category
+# checked
 @app.route('/api/v1/categories/<categoryName>', methods = ['DELETE'])
 def removecategory(categoryName):
     ##print('OBJECTIVE : ', categoryName)
@@ -424,14 +364,15 @@ def removecategory(categoryName):
         return 'Invalid Request'
 
 # list acts for a given category (when total #acts is less than 100)
-# check if less than 100, else return relevant error code
-# category name must exist
 # return is JSON array [{}]
+# checked
 @app.route('/api/v1/categories/<categoryName>/acts', methods = http_methods)
 def listActs(categoryName):
     if request.method == "GET":
         list_acts = []
         cats = os.listdir('./data/categories')
+        print("List all categories")
+        print(categoryName)
         if(categoryName not in cats):
             return "category Name Not Exists."
         path = "./data/categories/"+categoryName
@@ -442,27 +383,14 @@ def listActs(categoryName):
             data = json.load(json_file)
         if(len(data['acts']) > 100):
             return "Number of acts are more than 100"
-        print("This is data -->",data['acts'])
+        ##print("This is data -->",data['acts'])
         return str(data['acts'])
-        ##file = list_acts[0]+".json"
-        ##with open(file) as json_file:
-        ##    data = json.load(json_file)
-        ##    arr = [] # This is array of dictionary...
-        ##    for d in data['acts']:
-        ##        dictionary = {}
-        ##        dictionary['actId'] = d['actId']
-        ##        dictionary['username'] = d['username']
-        ##        dictionary['timestamp'] = d['timestamp']
-        ##        dictionary['caption'] = d['caption']
-        ##        dictionary['upvotes'] = d['upvotes']
-        ##        dictionary['imgB64'] = d['imgB64']
-        ##        arr.append(dictionary)
-        ##return str(arr)
     else:
-        return "categoryName Not Found"
+        return 'Invalid Request'
 
 # list number of acts for a given category
 # check if category is present
+# checked
 @app.route('/api/v1/categories/<categoryName>/acts/size', methods = ['GET'])
 def listNoOfActs(categoryName):
     if request.method == "GET":
@@ -478,16 +406,11 @@ def listNoOfActs(categoryName):
             print(data['acts'])
             print(len(data['acts']))
             return str(len(data['acts']))
-        ##file = list_acts[0]+".json"
-        ##with open(file) as json_file:
-        ##    data = json.load(json_file)
-        ##    print(data['acts'])
-        ##    print(len(data['acts']))
-        ##    return str(len(data['acts']))
     else:
-        return "category not found"
+        return "Invalid Request"
 
 # return number of acts for a given category in a given range(inclusive)
+# checked
 @app.route('/api/v1/categories/<categoryName>/acts?start=<startRange>&end=<endRange>', methods = ['GET'])
 def listActsInGivenRange(categoryName,startRange,endRange):
     print("Receiving data...")
@@ -511,11 +434,11 @@ def listActsInGivenRange(categoryName,startRange,endRange):
             arr.append(data['acts'][i])
         return str(arr)
     else:
-        return "categoryName Not Found"
+        return "Invalid Request"
 
 # upvote an act
-# does not work
-# global act ID
+# json array []
+# checked
 @app.route('/api/v1/acts/upvote', methods = ['POST'])
 def upvoteAct():
     if request.method == "POST":
@@ -580,20 +503,12 @@ def removeAct(actId):
             with open(cur_path + '/' + list_file[0], 'w') as data_file:
                 data= json.dump(data, data_file,indent = 4)
         return "Acts successfully removed"
-            ##with open(list_file[0]) as json_file:
-            ##    data = json.load(json_file)
-            ##    arr = data['acts']
-            ##    arr [:] = [d for d in arr if a.get('actId') != actId]
-            ##    data['acts'] = arr
-            ##with open(list_file[0], 'w') as data_file:
-            ##    data= json.dump(data, data_file,indent = 4)
     else:
          return "Invalid Request"
 
 # upload an act
 # check if BASE64 string or not
-# act id must be globally unique
-# add image in static
+# checked
 @app.route('/api/v1/acts', methods = ['POST'])
 def uploadAct():
     x = datetime.datetime.now()
@@ -625,7 +540,7 @@ def uploadAct():
         except ValueError:
             print("Incorrect Time format")
             print(u_time)
-            return "Invalid Time Format"
+            return "invalid time format"
         image = ""
         try:
             image = base64.decodestring(u_imgB64.encode())
@@ -637,8 +552,8 @@ def uploadAct():
             return "category does not exists."
         val = checkId(u_actId)
         # checks if the actId is currently there in the given directory.
-        if(val):
-            return "ActId is already assigned."
+        if(val == 0):
+            return "act id is already assigned."
         new_val = checkUser(u_name)
         if(new_val == 0):
            return "user not found"
@@ -656,58 +571,9 @@ def uploadAct():
             data['acts'].append(dictionary)
         with open(path,'w') as data_file:
             data= json.dump(data, data_file,indent = 4)
-        ##with open('./static/categories/' + u_cat + '/'+ str(u_actId) + '.png', 'wb') as f_img:
-            ##f_img.write(image.decode('base64'))
-        return "Uploaded Act successfully.  "
-        ##u_data = request.args.get('username')
-        ##u_file = u_data + ".json"
-        ##all_users = os.listdir("data/users/")
-        ##all_act_ids = os.listdir("data/categories/")
-        ##u_act_id = request.args.get('actId')
-        ##if u_file in all_users:
-        ##    print("Valid User")
-        ##    if u_act_id not in all_act_ids:
-        ##        print("Act found")
-        ##        timeFormat = "%d-%m-%Y:%S-%M-%H"
-        ##        input_time = request.args.get('timestamp')
-        ##        try:
-        ##            valid_time = datetime.datetime.strptime(input_time, timeFormat)
-        ##            print("Valid time")
-        ##        except ValueError:
-        ##            print("Incorrect Time format")
-        ##            print(input_time)
-        ##            return "Invalid Time Format"
-        ##        if(request.args.get('categoryName') == ""):
-        ##            return 'No category name'
-        ##        else:
-        ##            print("Valid category")
-        ##            image = ""
-        ##            try:
-        ##                image = base64.b64decode(request.args.get('imgB64'))
-        ##                print(image)
-        ##            except binascii:
-        ##                return "not a valid base64 string"
-        ##            file = "data/categories/"+ request.args.get('categoryName') +"/"+request.args.get('categoryName') + ".json"
-        ##            dictionary= {}
-        ##            dictionary['actId'] = request.args.get('actId')
-        ##            dictionary['username'] = request.args.get('username')
-        ##            dictionary['timestamp'] = request.args.get('timestamp')
-        ##            dictionary['caption'] = request.args.get('caption')
-        ##            if(request.args.get('upvotes') == None):
-        ##                upvotes = 0
-        ##                dictionary['upvotes'] = upvotes
-        ##            else:
-        ##                dictionary['upvotes'] =  request.args.get('upvotes')
-        ##            dictionary['categoryName'] = request.args.get('categoryName')
-        ##            dictionary['imgB64'] = request.args.get('imgB64')
-        ##            dictionary = [dictionary]
-        ##            print(dictionary)
-        ##            with open(file, 'a') as json_file:
-        ##                data = json.load(json_file)
-        ##                data['acts'].append(dictionary)
-        ##                #json.dump(request.args.get, fp, sort_keys = True, indent = 4)
-        ##            message = u_act_id + ' has been added'
-        ##            return message
+        with open('./static/categories/' + u_cat + '/'+ str(u_actId) + '.png', 'wb') as f_img:
+            f_img.write(image)
+        return "act uploaded successfully"
 
 if __name__ == '__main__':
-    app.run(debug = True, host = '0.0.0.0', port = 5000)
+    app.run(debug = True, host = ip_address, port = port_no)

@@ -4,21 +4,22 @@
 root --> templates
                     --> homePage.html
                     --> upload.html
-                    --> cate1.html
-                    --> cate2.html
-                    --> cate3.html
-                    --> login.html
+                    --> catetemplate.html
                     --> register.html
                     --> rmcat.html
                     --> signup.html
      --> static
                     --> categories
                         --> category1
+							--> category1.json
                         --> category2
                         --> category3
                     --> home
                     --> cate.css
                     --> homePage.css
+					--> sha1.js
+					--> sha1.min.js
+					--> jquery.min.js
      --> data
                     --> users.json
                     --> categories
