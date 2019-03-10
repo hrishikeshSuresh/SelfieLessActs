@@ -33,6 +33,7 @@ import shutil
 import base64
 import binascii
 import re
+import requests
 
 http_methods = ['GET', 'POST']
 
@@ -75,7 +76,7 @@ app = Flask(__name__, template_folder = "templates")
 # generating a secret key for sessions
 app.secret_key = os.urandom(16)
 
-'''@app.errorhandler(exceptions.BadRequest)
+@app.errorhandler(exceptions.BadRequest)
 def error_400(e):
     return 'bad request', 400
 
@@ -93,7 +94,7 @@ def error_405(e):
 
 @app.errorhandler(exceptions.RequestEntityTooLarge)
 def error_413(e):
-    return 'Request Entity too large', 413'''
+    return 'Request Entity too large', 413
 
 # front-end supports
 # localhost:5000/homePage.html
@@ -210,7 +211,7 @@ def addUser():
             # check if SHA1 password
             pattern = re.compile(r'\b[0-9a-f]{40}\b')
             match = re.match(pattern, u_password)
-            print(match)
+            ##print(match)
             if(match != None):
                 return "not SHA1 password"
         else:
@@ -225,8 +226,17 @@ def addUser():
             ##print("Opening a file is done")
             data = json.load(json_file)
         ##print("This is data -->",data)
-        if(checkUser(u_data)):
-            return "user already exists."
+        list_of_users = requests.get('http://' + ip_address + ':' + str(port_no) + '/api/v1/users')
+        list_of_users = list_of_users.text
+        list_of_users = list_of_users.strip()[1:-1].split(sep = ",")
+        print(list_of_users)
+        for u in list_of_users:
+            ##print(u)
+            if(u_data in u):
+                print("Match")
+                return "user already exists"
+        ##if(checkUser(u_data)):
+            ##return "user already exists."
         dictionary = {}
         dictionary["username"] = u_data
         dictionary["password"] = u_password
@@ -252,8 +262,19 @@ def removeUser(username):
         with open('./data/users/'+file[0]) as json_file:
             data = json.load(json_file)
         ##print("data is --> ",data)
-        if(not checkUser(username)):
-            return "user does not exists."
+        list_of_users = requests.get('http://' + ip_address+ ':' + str(port_no) + '/api/v1/users')
+        list_of_users = list_of_users.text
+        list_of_users = list_of_users.strip()[1:-1].split(sep = ",")
+        print(list_of_users)
+        present = False
+        for u in list_of_users:
+            if(username in u):
+                present = True
+                break
+        if(present == False):
+            return "user does not exists"
+        ##if(not checkUser(username)):
+            ##return "user does not exists."
         arr = data['users']
         arr [:] = [d for d in arr if d.get('username') != username]
         data['users'] = arr
@@ -572,9 +593,20 @@ def uploadAct():
         # checks if the actId is currently there in the given directory.
         if(val == 1):
             return "act id is already assigned."
-        new_val = checkUser(u_name)
-        if(new_val == 0):
-           return "user not found"
+        list_of_users = requests.get('http://' + ip_address+ ':' + str(port_no) + '/api/v1/users')
+        list_of_users = list_of_users.text
+        list_of_users = list_of_users.strip()[1:-1].split(sep = ",")
+        print(list_of_users)
+        present = False
+        for u in list_of_users:
+            if(u_name in u):
+                present = True
+                break
+        if(present == False):
+            return "user does not exists"
+        ##new_val = checkUser(u_name)
+        ##if(new_val == 0):
+           ##return "user not found"
         dictionary = {}
         dictionary['actId'] = str(u_actId)
         dictionary['username'] = u_name
@@ -592,6 +624,21 @@ def uploadAct():
         with open('./static/categories/' + u_cat + '/'+ str(u_actId) + '.png', 'wb') as f_img:
             f_img.write(image)
         return "act uploaded successfully"
+
+# list all users
+@app.route('/api/v1/users', methods = ['GET'])
+def listAllUsers():
+    if(request.method == "GET"):
+        path = "./data/users/users.json";
+        with open(path) as json_file:
+            data = json.load(json_file)
+        users = []
+        for i in data['users']:
+            users.append(i['username'])
+        print(users)
+        return str(users)
+    else:
+        return "Invalid request."
 
 if __name__ == '__main__':
     app.run(debug = True, host = ip_address, port = port_no)
