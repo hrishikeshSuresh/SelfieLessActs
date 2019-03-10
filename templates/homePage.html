@@ -94,29 +94,27 @@ border-radius: 16px;}
       <div class="dropdown1">
         <button onclick="myFunction1()" class="dropbtn1">Categories</button>
         <div id="myDropdown1" class="dropdown-content1">
- 			  
                {% for cat in categories%}
-                <a href="/display/{{cat}}.html">{{cat}}</a>
+                <a href="http://{{ip_address}}:{{port_no}}/display/{{cat}}">{{cat}}</a>
               {% endfor %}
-
             </div>
-       </div> 
+       </div>
       <div class="dropdown">
           <button onclick="myFunction()" class="dropbtn">Functionalities</button>
           <button class="login"><a href="login.html">Login</a></button>
           <br> <br>
           <button class="register"><a href="register.html">Register</a></button>
           <div id="myDropdown" class="dropdown-content">
-              <a href="/signup">1)Add user</a>
-              <a href="/rmuser.html">2)Remove User</a>
-              <a href="">3)List all acts</a>
-              <a href="/addcat.html">4)Add a Category</a>
-              <a href="/rmcategory">5)Remove a Category</a>
-              <a href="/listallacts.html">6)List all categories</a>
-              <a href="/listnoofacts.html">7)List number of acts</a>
-              <a href="listnoofactsrange.html">8)Acts in a given Range</a>
-              <a href="/rmact.html">10)Remove an act</a>
-              <a href="/upload.html">11)Upload act</a>
+              <a href= "http://{{ip_address}}:{{port_no}}/signup">1)Add user</a>
+              <a href= "http://{{ip_address}}:{{port_no}}/rmuser">2)Remove User</a>
+              <a href= "http://{{ip_address}}:{{port_no}}/listallacts">3)List all acts</a>
+              <a href= "http://{{ip_address}}:{{port_no}}/addcat">4)Add a Category</a>
+              <a href= "http://{{ip_address}}:{{port_no}}/rmcategory">5)Remove a Category</a>
+              <a href= "http://{{ip_address}}:{{port_no}}/listallacts">6)List all categories</a>
+              <a href= "http://{{ip_address}}:{{port_no}}/listnoofacts">7)List number of acts</a>
+              <a href= "http://{{ip_address}}:{{port_no}}/listactsrange">8)Acts in a given Range</a>
+              <a href= "http://{{ip_address}}:{{port_no}}/rmact">10)Remove an act</a>
+              <a href= "http://{{ip_address}}:{{port_no}}/upload">11)Upload act</a>
           </div>
       </div>
       <br>

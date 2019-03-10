@@ -7,24 +7,25 @@
     <script src="../static/jquery-3.3.1.min.js"></script>
   </head>
   <body background="{{ url_for('static', filename='home/background.jpeg')}}">
-    <h1 align="center"><a href="/homePage.html">  <font face = "WildWest" size = "21" color="black">SelfieLessActs</font></a> </h1>
+    <h1 align="center"><a href="http://{{ip_address}}:{{port_no}}/homePage">  <font face = "WildWest" size = "21" color="black">SelfieLessActs</font></a> </h1>
     <div class="dropdown">
       <button onclick="myFunction()" class="dropbtn">Categories</button>
       <div id="myDropdown" class="dropdown-content">
           {% for category in categories %}
-                  <a href= "/display/{{category}}.html"> {{category}} </a>
+                  <a href= "http://{{ip_address}}:{{port_no}}/display/{{category}}"> {{category}} </a>
           {% endfor %}
       </div>
     </div>
     <div class="upload">
-        <a href="/upload.html"><button type="button" class="upl">Upload</button></a>
+        <a href="http://{{ip_address}}:{{port_no}}/upload"><button type="button" class="upl">Upload</button></a>
     </div>
+    <br><br>
     <div class="{{catName}}">
     {% for i in image_data %}
             <img src= "data:image/png;base64,{{i['imgB64']}}" alt ="">
             <h5>{{i['actId']}}</h5>
             <h5> {{i['caption']}} </h5>
-            <h5> Upvotes : {{i['upvote']}}</h5>
+            <h5> Upvotes : {{i['upvotes']}}</h5>
     {% endfor %}
     </div>
     <script>
@@ -49,7 +50,7 @@
             count++;
             var upvoteButton = document.getElementById(id_value);
             upvoteButton.innerHTML = "   "+ count + " Likes";
-          }
+      }
     </script>
     <!--<?php
         $dir = 'category1';

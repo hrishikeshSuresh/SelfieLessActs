@@ -3,6 +3,26 @@
 	<head>
 		<title>List the number of acts</title>
 		<script src="../static/jquery-3.3.1.min.js"></script>
+		<script>
+			$(function() {
+				$('#form-listacts').submit(function(){
+					//alert("this works");
+					var cat = $('#category').val();
+					url = "http://{{ip_address}}:{{port_no}}/api/v1/categories/"+ cat + "/acts/size";
+					alert(url);
+					$.ajax({
+						type: "GET",
+						url: url,
+						success: function(response){
+							alert(response);
+						},
+						error : function(error){
+							alert("Error");
+						}
+					});
+				});
+			});
+		</script>
 	</head>
 	<center>
 		<h1> Enter category name, whose number of acts you want to find. </h1>
@@ -71,30 +91,6 @@
 				  transform: rotate(45deg);
 				}
 			</style>
-			<script>
-	  			// Shorthand for $(document).ready();
-	  			$(function() {
-	   				$('#form-listacts').submit(function(){
-						//alert("this works");
-						var catname = $('#category').val();
-						msg = catname;
-						alert(catName);
-						//alert(user);
-						$.ajax({
-    						type: "GET",
-    						url: "http://ec2-54-91-43-57.compute-1.amazonaws.com:5000/api/v1/categories/" + catname + "/acts/size",
-    						success: function(msg){
-        						console.log("SENT");
-    						}
-						});
-	     				//var user = $("input[name*='checks']");
-						//alert(JSON.stringify(user));
-						/*for (var key in user){
-							alert(key + "---->" + JSON.stringify(user[key]));
-						}*/
-					});
-	   			});
-	 		</script>
 	</body>
 
 </html>

@@ -1,12 +1,18 @@
 """
 Authors : Hrishikesh S.   01FB16ECS139
           Karthik A.      01FB16ECS159
-Status  : Need to fix back-end front-end communications
-          Back-end does not work on the server.
-Note    : # for developer comment
-          ## for comment/removing code
+Status  : back-end front-end communications are mostly working
+          need to add upvote button to catetemplate.html and make upvote working
+          pass ip_address and port_no as arguments (OPTIONAL)
+Notes   : # for developer's comment/insight
+          ## for removing code
+          To access the V.M., get the .pem key and run
+                $ ssh -i "MYOSHLinux.pem" ubuntu@ec2-52-1-164-74.compute-1.amazonaws.com
+          Run pre-run.sh before running this code on terminal/CMD PROMPT
 """
-ip_address = '127.0.0.1'
+# I.P. address should be a string
+ip_address = 'localhost'
+# port number should be a number
 port_no = 5000
 
 from flask import (
@@ -18,6 +24,7 @@ from flask import (
     flash,
     request
 )
+
 import os
 import json
 from werkzeug import secure_filename, exceptions
@@ -28,6 +35,7 @@ import binascii
 import re
 
 http_methods = ['GET', 'POST']
+
 ##Markup('<h1><strong>Hello!</strong></h1>')
 
 """
@@ -67,9 +75,9 @@ app = Flask(__name__, template_folder = "templates")
 # generating a secret key for sessions
 app.secret_key = os.urandom(16)
 
-@app.errorhandler(exceptions.BadRequest)
+'''@app.errorhandler(exceptions.BadRequest)
 def error_400(e):
-    return 'bad request!', 400
+    return 'bad request', 400
 
 @app.errorhandler(401)
 def error_401(e):
@@ -85,8 +93,7 @@ def error_405(e):
 
 @app.errorhandler(exceptions.RequestEntityTooLarge)
 def error_413(e):
-    return 'Request Entity too large', 413
-
+    return 'Request Entity too large', 413'''
 
 # front-end supports
 # localhost:5000/homePage.html
@@ -95,64 +102,64 @@ def homeSupport():
     #flash("Works!")
 	#print(os.listdir())
 	f = os.listdir('data/categories')
-	return render_template('homePage.html', categories = f)
+	return render_template('homePage.html', categories = f, ip_address = ip_address, port_no = port_no)
+
+# signup / add user webpage
+# localhost:5000/signup
+@app.route('/signup')
+def signUpSupport():
+    return render_template('signup.html', ip_address = ip_address, port_no = port_no)
+
+# remove user webpage
+# localhost:5000/rmuser.html
+@app.route('/rmuser')
+def removeUserSupport():
+    return render_template('rmuser.html', ip_address = ip_address, port_no = port_no)
 
 # upload webpage
 # localhost:5000/upload.html
 @app.route('/upload')
 def uploadSupport():
     f = os.listdir('data/categories')
-    return render_template('upload.html', categories = f)
+    return render_template('upload.html', categories = f, ip_address = ip_address, port_no = port_no)
+
+# add category webpage
+# localhost:5000/addcat.html
+@app.route('/addcat')
+def addCategorySupport():
+    return render_template('addcat.html', ip_address = ip_address, port_no = port_no)
 
 # list all acts
 @app.route('/listallacts')
 def listallactsSupport():
     f = os.listdir('data/categories')
-    return render_template('listallacts.html', categories = f)
-
-# list number of acts webpage
-# localhost:5000/listnoofacts.html
-@app.route('/listnoofacts')
-def displaylistnoonactsSupport():
-    f = os.listdir('data/categories')
-    return render_template('listnoofacts.html', categories = f)
-
-# list number of acts range webpage
-# localhost:5000/listnoofactsrange.html
-@app.route('/listnoofactsrange')
-def displaylistnoonactsrangeSupport():
-    f = os.listdir('data/categories')
-    return render_template('listnoofactsrange.html', categories = f)
-
-# signup / add user webpage
-# localhost:5000/signup
-@app.route('/signup')
-def signUpSupport():
-    return render_template('signup.html', ip_address = ip_address)
+    return render_template('listallacts.html', categories = f, ip_address = ip_address, port_no = port_no)
 
 # remove category webpage
 # localhost:5000/rmcategory
 @app.route('/rmcategory')
 def removeCategorySupport():
     f = os.listdir('data/categories')
-    return render_template('rmcat.html', categories = f)
+    return render_template('rmcat.html', categories = f, ip_address = ip_address, port_no = port_no)
 
-# add category webpage
-# localhost:5000/addcat.html
-@app.route('/addcat')
-def addCategorySupport():
-    return render_template('addcat.html')
+# list number of acts webpage
+# localhost:5000/listnoofacts.html
+@app.route('/listnoofacts')
+def displaylistnoonactsSupport():
+    f = os.listdir('data/categories')
+    return render_template('listnoofacts.html', categories = f, ip_address = ip_address, port_no = port_no)
 
-# remove user webpage
-# localhost:5000/rmuser.html
-@app.route('/rmuser')
-def removeUserSupport():
-    return render_template('rmuser.html', ip_address = ip_address)
+# list number of acts range webpage
+# localhost:5000/listnoofactsrange.html
+@app.route('/listactsrange')
+def displaylistnoonactsrangeSupport():
+    f = os.listdir('data/categories')
+    return render_template('listactsrange.html', categories = f, ip_address = ip_address, port_no = port_no)
 
 # remove acts
 @app.route('/rmact')
 def rmactSupport():
-    return render_template('rmact.html')
+    return render_template('rmact.html', ip_address = ip_address, port_no = port_no)
 
 # display category
 @app.route('/display/<categoryName>')
@@ -165,8 +172,8 @@ def categoryDisplaySupport(categoryName):
     ##print(data)
     for i in data['acts']:
         ##i['imgB64'] = base64.b64decode(i['imgB64'])
-        print(i['actId'],i['upvote'])
-    return render_template('catetemplate.html', categories = cat, image_data = data['acts'], catName = categoryName)
+        print(i['actId'],i['upvotes'])
+    return render_template('catetemplate.html', categories = cat, image_data = data['acts'], catName = categoryName, ip_address = ip_address, port_no = port_no)
 
 """
 APIs
@@ -174,46 +181,44 @@ APIs
 
 # add user
 # checked
+# front-end done
 @app.route('/api/v1/users', methods = ['POST'])
 def addUser():
     if(request.method == 'POST'):
-        ##print(request.data.decode())
+        ##print(request.__dict__)
         print("Receiving data....")
-        ##u_data = request.args.get('username')
-        ##u_password = request.args.get('password')
-        ##print(u_data, u_password)
-        ##u_data = json.loads(request.data.decode())['username']
-        ##u_password = json.loads(request.data.decode())['password']
-        ##print(u_data, u_password)
         data = request.data.decode()
-        print(data)
-        ##print(data)
-        data = data.split(sep = ',')
-        u_data = data[0].split(sep = ':')[1]
-        u_password = data[1].split(sep = ':')[1]
-        u_data = u_data.lstrip()
-        u_data = u_data.rstrip()
-        u_data = u_data.replace("\"", "")
-        u_data = u_data.replace("\t", "")
-        u_data = u_data.replace("\n", "")
-        u_password = u_password.lstrip()
-        u_password = u_password.rstrip()
-        u_password = u_password.replace("\"", "")
-        u_password = u_password.replace("\t", "")
-        u_password = u_password.replace("\n", "")
-        u_password = u_password.replace("}", "")
-        print(u_data)
-        print(len(u_password))
-        # check if SHA1 password
-        pattern = re.compile(r'\b[0-9a-f]{40}\b')
-        match = re.match(pattern, u_password)
-        print(match)
-        if(match != None):
-            return "not SHA1 password"
+        ##print(type(data))
+        ##print(request.form['username'], request.form['password'])
+        if(data != ""):
+            print("Not from front-end")
+            data = data.split(sep = ',')
+            u_data = data[0].split(sep = ':')[1]
+            u_password = data[1].split(sep = ':')[1]
+            u_data = u_data.lstrip()
+            u_data = u_data.rstrip()
+            u_data = u_data.replace("\"", "")
+            u_data = u_data.replace("\t", "")
+            u_data = u_data.replace("\n", "")
+            u_password = u_password.lstrip()
+            u_password = u_password.rstrip()
+            u_password = u_password.replace("\"", "")
+            u_password = u_password.replace("\t", "")
+            u_password = u_password.replace("\n", "")
+            u_password = u_password.replace("}", "")
+            print(u_data, u_password)
+            # check if SHA1 password
+            pattern = re.compile(r'\b[0-9a-f]{40}\b')
+            match = re.match(pattern, u_password)
+            print(match)
+            if(match != None):
+                return "not SHA1 password"
+        else:
+            print("from front-end")
+            u_data = request.form['username']
+            u_password = request.form['password']
+            print(u_data, u_password)
         flag = False
-        ##if(u_data == None and u_password == None):
-        ##    u_data = request.form['username']
-        ##    u_password = request.form['password']
         file = os.listdir('./data/users')
         ##print("This is file ---> ",file)
         with open('./data/users/'+file[0]) as json_file:
@@ -235,6 +240,7 @@ def addUser():
 
 # remove user
 # checked
+# front-end done
 @app.route('/api/v1/users/<username>', methods = ['DELETE'])
 def removeUser(username):
     if(request.method == 'DELETE'):
@@ -247,7 +253,7 @@ def removeUser(username):
             data = json.load(json_file)
         ##print("data is --> ",data)
         if(not checkUser(username)):
-            return "user does not Exists."
+            return "user does not exists."
         arr = data['users']
         arr [:] = [d for d in arr if d.get('username') != username]
         data['users'] = arr
@@ -270,6 +276,7 @@ def removeUser(username):
 
 # list all categories
 # checked
+# front-end done
 @app.route('/api/v1/categories', methods = ['GET'])
 def listCategories():
     if request.method == 'GET':
@@ -297,12 +304,14 @@ def listCategories():
 # add a category
 # input should be JSON ARRAY []
 # checked
+# front-end done, but method not allowed pops up even API processed data successfully
 @app.route('/api/v1/categories', methods = ['POST'])
 def addCategory():
     if request.method == "POST":
         print("Receiving category name")
         ##catName = request.args.get['categoryName']
         catName = str(request.get_data().decode())
+        print(catName)
         catName = catName.replace('\"', '')
         catName = catName.replace('\t', '')
         catName = catName.replace('\n', '')
@@ -324,6 +333,7 @@ def addCategory():
             data = {'acts':[]}
             with open("./data/categories/"+ catName + '/' + catName + ".json", 'w') as json_file:
                 data= json.dump(data, json_file, indent = 4)
+            print(catName + ' added')
             return catName + ' added'
         else:
             return catName + ' already present'
@@ -340,6 +350,7 @@ def addCategory():
 
 # remove a category
 # checked
+# front-end done, but need to reload page on submit
 @app.route('/api/v1/categories/<categoryName>', methods = ['DELETE'])
 def removecategory(categoryName):
     ##print('OBJECTIVE : ', categoryName)
@@ -366,7 +377,8 @@ def removecategory(categoryName):
 # list acts for a given category (when total #acts is less than 100)
 # return is JSON array [{}]
 # checked
-@app.route('/api/v1/categories/<categoryName>/acts', methods = http_methods)
+# front-end done, but need to check again after uploading act
+@app.route('/api/v1/categories/<categoryName>/acts', methods = ['GET'])
 def listActs(categoryName):
     if request.method == "GET":
         list_acts = []
@@ -391,6 +403,7 @@ def listActs(categoryName):
 # list number of acts for a given category
 # check if category is present
 # checked
+# front-end done
 @app.route('/api/v1/categories/<categoryName>/acts/size', methods = ['GET'])
 def listNoOfActs(categoryName):
     if request.method == "GET":
@@ -411,6 +424,7 @@ def listNoOfActs(categoryName):
 
 # return number of acts for a given category in a given range(inclusive)
 # checked
+# front-end done, need to check after uploading acts
 @app.route('/api/v1/categories/<categoryName>/acts?start=<startRange>&end=<endRange>', methods = ['GET'])
 def listActsInGivenRange(categoryName,startRange,endRange):
     print("Receiving data...")
@@ -439,6 +453,7 @@ def listActsInGivenRange(categoryName,startRange,endRange):
 # upvote an act
 # json array []
 # checked
+# need to modify catetemplate
 @app.route('/api/v1/acts/upvote', methods = ['POST'])
 def upvoteAct():
     if request.method == "POST":
@@ -477,9 +492,8 @@ def upvoteAct():
         return "Invalid Request"
 
 # remove an act
-# check if act is present or not
-# does not work
-# need to make act ID global
+# checked
+# front-end done
 @app.route('/api/v1/acts/<actId>', methods = ['DELETE'])
 def removeAct(actId):
     if request.method == "DELETE":
@@ -507,24 +521,18 @@ def removeAct(actId):
          return "Invalid Request"
 
 # upload an act
-# check if BASE64 string or not
 # checked
+# front-end works, but incoming base64 string is not loaded correctly in catetemplate
+# probably need to find a correct way to convert image to base64 string in upload.html
 @app.route('/api/v1/acts', methods = ['POST'])
 def uploadAct():
     x = datetime.datetime.now()
     print("Received @ ", x.time())
     if(request.method == 'POST'):
         print("Receiving data....")
-        ##print(request.data.decode())
-        print(json.loads(request.data.decode()))
-        u_actId = json.loads(request.data.decode())['actId']
-        ##print(u_actId)
-        u_name = json.loads(request.data.decode())['username']
-        u_time = json.loads(request.data.decode())['timestamp']
-        u_caption = json.loads(request.data.decode())['caption']
-        u_cat = json.loads(request.data.decode())['categoryName']
-        u_imgB64 = json.loads(request.data)['imgB64']
-        if(u_name == None):
+        if(request.form != ""):
+            print("Form data")
+            print(request.form)
             u_actId = request.form['actId']
             print(u_actId)
             u_name = request.form['username']
@@ -532,6 +540,16 @@ def uploadAct():
             u_cat = request.form['categoryName']
             u_imgB64 = str(request.form['imgB64'])
             u_time = request.form['timestamp']
+        else:
+            print("Not form data")
+            print(json.loads(request.data.decode()))
+            u_actId = json.loads(request.data.decode())['actId']
+            u_name = json.loads(request.data.decode())['username']
+            u_time = json.loads(request.data.decode())['timestamp']
+            u_caption = json.loads(request.data.decode())['caption']
+            u_cat = json.loads(request.data.decode())['categoryName']
+            u_imgB64 = json.loads(request.data)['imgB64']
+        ##if(u_name == None):
         print(u_actId, u_name, u_caption, u_cat, u_time, u_imgB64)
         timeFormat = "%d-%m-%Y:%S-%M-%H"
         try:
@@ -543,7 +561,7 @@ def uploadAct():
             return "invalid time format"
         image = ""
         try:
-            image = base64.decodestring(u_imgB64.encode())
+            image = base64.b64decode(u_imgB64)
             ##print(image)
         except:
             return "not a valid base64 string"
@@ -552,7 +570,7 @@ def uploadAct():
             return "category does not exists."
         val = checkId(u_actId)
         # checks if the actId is currently there in the given directory.
-        if(val == 0):
+        if(val == 1):
             return "act id is already assigned."
         new_val = checkUser(u_name)
         if(new_val == 0):

@@ -3,12 +3,33 @@
 	<head>
 		<title>REMOVE USER</title>
 		<script src="../static/jquery-3.3.1.min.js"></script>
+		<script>
+			// Shorthand for $(document).ready();
+			$(function() {
+				$('#form-rmuser').submit(function(){
+					var user = $('#user').val();
+					alert(user);
+					url = "http://{{ip_address}}:{{port_no}}/api/v1/users/" + user;
+					alert(url);
+					$.ajax({
+						url : url,
+						method : "DELETE",
+						success: function(response){
+							alert(response);
+						},
+						error: function(error){
+							alert("Error");
+						}
+					});
+				});
+			});
+		</script>
 	</head>
 	<center>
 		<h1> Choose the user you wish  to remove. </h1>
 	</center>
 	<body background="{{ url_for('static', filename='home/background.jpeg')}}">
-	 		<form id="form-us" enctype="multipart/form-data" action="" method="delete" role="form">
+	 		<form id="form-rmuser" enctype="multipart/form-data" method="delete" role="form">
 				{% for user in users %}
 	 					<h5> {{user}} </h5>
 				{% endfor %}
@@ -71,32 +92,6 @@
 				  transform: rotate(45deg);
 				}
 			</style>
-			<script>
-	  			// Shorthand for $(document).ready();
-	  			$(function() {
-	   				$('#form-us').submit(function(){
-						//alert("this works");
-						var user = $('#user').val();
-						//alert(user);
-						//$(this).attr('action', "http://localhost:5000/api/v1/categories/" + user + " ");
-						//$(this).attr('method', "DELETE");
-						msg = user;
-						//alert(user);
-						$.ajax({
-    						type: "DELETE",
-    						url: "http://{{ip_address}}:5000/api/v1/users/" + user,
-    						success: function(msg){
-        						alert("Data Deleted: " + msg);
-    						}
-						});
-	     				//var user = $("input[name*='checks']");
-						//alert(JSON.stringify(user));
-						/*for (var key in user){
-							alert(key + "---->" + JSON.stringify(user[key]));
-						}*/
-					});
-	   			});
-	 		</script>
 	</body>
 
 </html>

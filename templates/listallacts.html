@@ -3,14 +3,38 @@
 	<head>
 		<title>REMOVE CATEGORY</title>
 		<script src="../static/jquery-3.3.1.min.js"></script>
+		<script>
+			// Shorthand for $(document).ready();
+			$(function() {
+				$('#form-listacts').submit(function(){
+					var cat = $('#category').val();
+					url = "http://{{ip_address}}:{{port_no}}/api/v1/categories/" + cat + "/acts";
+					alert(url);
+					$.ajax({
+						method : "GET",
+						url : url,
+						success : function(response){
+							alert(response);
+						},
+						error : function(error){
+							alert("Error");
+						}
+					});
+				});
+			});
+		</script>
 	</head>
 	<center>
 		<h1> List of all categories. </h1>
 	</center>
 	<body background="{{ url_for('static', filename='home/background.jpeg')}}">
-		{% for category in categories %}
+				{% for category in categories %}
 	 					<h5> {{category}} </h5>
 				{% endfor %}
+				<form id="form-listacts" enctype="multipart/form-data" method="get" role="form">
+					<input type="text" name="category" id = "category">
+					<button type="submit" action = "submit">SUBMIT</button>
+				</form>
 			<style type="text/css">
 				.button{
 				}

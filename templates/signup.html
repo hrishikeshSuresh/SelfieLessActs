@@ -9,20 +9,17 @@
 	        $('.btnblock').click(function(){
 		              var user = $('#inputUsername').val();
 		              var pass = sha1($('#inputPassword').val());
+                      // JSON.stringify({username : user, password : pass})
                       //alert(pass);
-                      //alert(JSON.stringify({username : user, password : pass}))
-		              $.ajax({
-			                       url : 'http://localhost:5000/api/v1/users',
-			                       data : JSON.stringify({username : user, password : pass}),
-			                       type : 'POST',
-                                   method : 'post',
-                                   ContentType : 'text/plain',
-                                   dataType: 'json',
+                      $.ajax({
+			                       url : 'http://{{ip_address}}:{{port_no}}/api/v1/users',
+			                       data : {username : user, password : pass},
+			                       method : 'POST',
 			                       success: function(response){
 				                                   alert(response);
 			                       },
 			                       error: function(error){
-				                                   alert(error);
+				                                   alert("Error");
 			                       }
 		              });
 	          });
@@ -40,7 +37,7 @@
 
 <body background="{{ url_for('static', filename='home/background.jpeg')}}">
     <div class="container">
-        <form class="form-signin" enctype="multipart/form-data" role="form">
+        <form class="form-signup" enctype="multipart/form-data" role="form" >
         <input type="text" id="inputUsername" name="username" class="form-control" placeholder="Username" required autofocus>
         <br>
         <br>

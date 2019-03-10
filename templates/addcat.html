@@ -3,22 +3,24 @@
  <head>
 
 	 <script src="../static/jquery-3.3.1.min.js"></script>
-	 <!---<script src="signUp.js"></script>-->
 	 <script>
-     /*$(function(){
+     $(function(){
 	        $('.btnblock').click(function(){
 		              var cat = $('#inputcatname').val();
-                      alert(cat);
+                      alert(JSON.stringify([cat]));
 		              $.ajax({
-			                       url: '/api/v1/categories',
-			                       data: $('form').serialize(),
-			                       type: 'POST',
+			                       url : 'http://{{ip_address}}:{{port_no}}/api/v1/categories',
+			                       data : JSON.stringify([cat]),
+			                       method : 'POST',
 			                       success: function(response){
-				                                   console.log("SENT");
-			                       }
+				                            alert(response);
+			                       },
+                                   error : function(error){
+                                            alert("Error");
+                                   }
 		              });
 	          });
-     });*/
+     });
      </script>
 	 <meta charset="utf-8">
 	 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,7 +33,7 @@
 
 <body background="{{ url_for('static', filename='home/background.jpeg')}}">
     <div class="container">
-        <form class="form-addcat" enctype="multipart/form-data" action="http://ec2-54-91-43-57.compute-1.amazonaws.com:5000/api/v1/categories" method="post" role="form">
+        <form class="form-addcat" enctype="multipart/form-data" method="post" role="form">
         <h2 class="form-addcat-heading">Please Add a new Category</h2>
         <input type="text" id="inputcatname" name="categoryName" class="form-control" placeholder="Category Name" required autofocus>
         <button class="btnblock" type="submit">Create</button>

@@ -6,6 +6,33 @@ and enter the alert message if successful
 	<head>
 		<title>Return number of acts in a given range</title>
 		<script src="../static/jquery-3.3.1.min.js"></script>
+		<script>
+			// Shorthand for $(document).ready();
+			$(function() {
+				$('#form-range').submit(function(){
+					var catname = $('#category').val();
+					var start = $('#start').val();
+					var end = $('#end').val();
+					url = "http://{{ip_address}}:{{port_no}}/api/v1/categories/"+ catname +"/acts?start="+ start +"&end="+end;
+					alert(url);
+					$.ajax({
+						method : "GET",
+						url : url,
+						success: function(response){
+							alert(response);
+						},
+						error: function(error){
+							alert("Error");
+						}
+					});
+					//var user = $("input[name*='checks']");
+					//alert(JSON.stringify(user));
+					/*for (var key in user){
+						alert(key + "---->" + JSON.stringify(user[key]));
+					}*/
+				});
+			});
+		</script>
 	</head>
 	<center>
 		<h1> Return number of acts in a given range </h1>
@@ -80,34 +107,6 @@ Enter category<br><br>
 				  transform: rotate(45deg);
 				}
 			</style>
-			<script>
-	  			// Shorthand for $(document).ready();
-	  			$(function() {
-	   				$('#form-range').submit(function(){
-						//alert("this works");
-						var catname = $('#category').val();
-						var start = $('#start').val();
-						var end = $('#end').val();
-						//alert(user);
-						//$(this).attr('action', "http://localhost:5000/api/v1/categories/" + user + " ");
-						//$(this).attr('method', "DELETE");
-
-						//alert(user);
-						$.ajax({
-    						type: "GET",
-    						url: "http://ec2-54-91-43-57.compute-1.amazonaws.com:5000/api/v1/categories/"+ catname +"/acts?start="+ start +"&end="+end,
-    						success: function(msg){
-        						console.log("SENT");
-    						}
-						});
-	     				//var user = $("input[name*='checks']");
-						//alert(JSON.stringify(user));
-						/*for (var key in user){
-							alert(key + "---->" + JSON.stringify(user[key]));
-						}*/
-					});
-	   			});
-	 		</script>
 	</body>
 
 </html>
