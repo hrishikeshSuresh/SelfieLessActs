@@ -2,4 +2,4 @@
 
 Check file structure before starting with the code
 <br>
-<h3> add data/categories and static/categories
+<h3> run pre-run.sh before running server.py </h3>
