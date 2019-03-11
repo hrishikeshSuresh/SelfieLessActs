@@ -6,6 +6,7 @@ Status  : back-end front-end communications are mostly working
           pass ip_address and port_no as arguments (OPTIONAL)
 Notes   : # for developer's comment/insight
           ## for removing code
+          Modify IP address & Port before running with act_management_ms.py
           To access the V.M., get the .pem key and run
                 $ ssh -i "MYOSHLinux.pem" ubuntu@ec2-52-1-164-74.compute-1.amazonaws.com
           Run pre-run.sh before running this code on terminal/CMD PROMPT
