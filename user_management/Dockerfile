@@ -13,8 +13,10 @@ RUN apk add --update \
     python-dev \
     py-pip \
     build-base \
+    && python3 -m ensurepip \
+    && pip3 install --upgrade pip setuptools \
     && pip install --upgrade pip \
-    && pip install -r requirements.txt
+    && pip3 install -r requirements.txt
 
 # Make port 80 available to the world outside this container
 EXPOSE 80
@@ -23,6 +25,6 @@ EXPOSE 80
 ENV NAME World
 
 # Run app.py when the container launches
-CMD ["python3", "server.py"]
+CMD ["python3", "user_management_ms.py"]
 #CMD flask run --host 0.0.0.0
 

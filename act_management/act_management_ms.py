@@ -6,14 +6,16 @@ Status  : back-end front-end communications are mostly working
           pass ip_address and port_no as arguments (OPTIONAL)
 Notes   : # for developer's comment/insight
           ## for removing code
+          Modify IP address & Port before running with user_management_ms.py
           To access the V.M., get the .pem key and run
                 $ ssh -i "MYOSHLinux.pem" ubuntu@ec2-52-1-164-74.compute-1.amazonaws.com
           Run pre-run.sh before running this code on terminal/CMD PROMPT
 """
 # I.P. address should be a string
+# enter I.P. address of your AWS instance
 ip_address = '52.1.164.74'
 # port number should be a number
-port_no = 80
+port_no = 4000
 
 from flask import (
     Flask,
@@ -175,125 +177,6 @@ def categoryDisplaySupport(categoryName):
         ##i['imgB64'] = base64.b64decode(i['imgB64'])
         print(i['actId'],i['upvotes'])
     return render_template('catetemplate.html', categories = cat, image_data = data['acts'], catName = categoryName, ip_address = ip_address, port_no = port_no)
-
-"""
-APIs
-"""
-
-# add user
-# checked
-# front-end done
-@app.route('/api/v1/users', methods = ['POST'])
-def addUser():
-    if(request.method == 'POST'):
-        ##print(request.__dict__)
-        print("Receiving data....")
-        data = request.data.decode()
-        ##print(type(data))
-        ##print(request.form['username'], request.form['password'])
-        if(data != ""):
-            print("Not from front-end")
-            data = data.split(sep = ',')
-            u_data = data[0].split(sep = ':')[1]
-            u_password = data[1].split(sep = ':')[1]
-            u_data = u_data.lstrip()
-            u_data = u_data.rstrip()
-            u_data = u_data.replace("\"", "")
-            u_data = u_data.replace("\t", "")
-            u_data = u_data.replace("\n", "")
-            u_password = u_password.lstrip()
-            u_password = u_password.rstrip()
-            u_password = u_password.replace("\"", "")
-            u_password = u_password.replace("\t", "")
-            u_password = u_password.replace("\n", "")
-            u_password = u_password.replace("}", "")
-            print(u_data, u_password)
-            # check if SHA1 password
-            pattern = re.compile(r'\b[0-9a-f]{40}\b')
-            match = re.match(pattern, u_password)
-            ##print(match)
-            if(match != None):
-                return "not SHA1 password"
-        else:
-            print("from front-end")
-            u_data = request.form['username']
-            u_password = request.form['password']
-            print(u_data, u_password)
-        flag = False
-        file = os.listdir('./data/users')
-        ##print("This is file ---> ",file)
-        with open('./data/users/'+file[0]) as json_file:
-            ##print("Opening a file is done")
-            data = json.load(json_file)
-        ##print("This is data -->",data)
-        list_of_users = requests.get('http://' + ip_address + ':' + str(port_no) + '/api/v1/users')
-        list_of_users = list_of_users.text
-        list_of_users = list_of_users.strip()[1:-1].split(sep = ",")
-        print(list_of_users)
-        for u in list_of_users:
-            ##print(u)
-            if(u_data in u):
-                print("Match")
-                return "user already exists"
-        ##if(checkUser(u_data)):
-            ##return "user already exists."
-        dictionary = {}
-        dictionary["username"] = u_data
-        dictionary["password"] = u_password
-        data['users'].append(dictionary)
-        with open('./data/users/'+file[0],'w') as json_file:
-            data = json.dump(data, json_file,indent = 4)
-        message = u_data + ' has been added'
-        return message
-    else:
-        return 'Invalid Request'
-
-# remove user
-# checked
-# front-end done
-@app.route('/api/v1/users/<username>', methods = ['DELETE'])
-def removeUser(username):
-    if(request.method == 'DELETE'):
-        print("Receiving data....")
-        if(username == None):
-            return "username returned None"
-        print('OBJECTIVE : ', username)
-        file = os.listdir('./data/users/')
-        with open('./data/users/'+file[0]) as json_file:
-            data = json.load(json_file)
-        ##print("data is --> ",data)
-        list_of_users = requests.get('http://' + ip_address+ ':' + str(port_no) + '/api/v1/users')
-        list_of_users = list_of_users.text
-        list_of_users = list_of_users.strip()[1:-1].split(sep = ",")
-        print(list_of_users)
-        present = False
-        for u in list_of_users:
-            if(username in u):
-                present = True
-                break
-        if(present == False):
-            return "user does not exists"
-        ##if(not checkUser(username)):
-            ##return "user does not exists."
-        arr = data['users']
-        arr [:] = [d for d in arr if d.get('username') != username]
-        data['users'] = arr
-        with open('./data/users/'+file[0], 'w') as data_file:
-            data= json.dump(data, data_file,indent = 4)
-        return username + ' removed successfully'
-        ##print(folder)
-        ##target = username + ".json"
-        ##found = False
-        ##for i in folder:
-        ##    if(i == target):
-        ##        found =  True
-        ##        os.remove('data/users/'+target)
-        ##        message = username + ' has been removed'
-        ##        return message
-        ##if(found == False):
-        ##    return username + ' not found'
-    else:
-        return 'Invalid Request'
 
 # list all categories
 # checked
@@ -625,20 +508,5 @@ def uploadAct():
             f_img.write(image)
         return "act uploaded successfully"
 
-# list all users
-@app.route('/api/v1/users', methods = ['GET'])
-def listAllUsers():
-    if(request.method == "GET"):
-        path = "./data/users/users.json";
-        with open(path) as json_file:
-            data = json.load(json_file)
-        users = []
-        for i in data['users']:
-            users.append(i['username'])
-        print(users)
-        return str(users)
-    else:
-        return "Invalid request."
-
 if __name__ == '__main__':
-    app.run(debug = True, host = '0.0.0.0', port=port_no)
+    app.run(debug = True, host = '0.0.0.0', port = 80)
