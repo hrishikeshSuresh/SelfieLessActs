@@ -1,0 +1,79 @@
+172.031.025.158.42466-052.001.164.074.08080: GET /api/v1/users HTTP/1.1
+Host: 52.1.164.74:8080
+User-Agent: python-requests/2.21.0
+Accept-Encoding: gzip, deflate
+Accept: */*
+Connection: keep-alive
+
+
+052.001.164.074.42466-172.031.025.158.08080: GET /api/v1/users HTTP/1.1
+Host: 52.1.164.74:8080
+User-Agent: python-requests/2.21.0
+Accept-Encoding: gzip, deflate
+Accept: */*
+Connection: keep-alive
+
+
+172.031.025.158.08080-052.001.164.074.42466: HTTP/1.0 200 OK
+
+172.031.025.158.08080-052.001.164.074.42466: Content-Type: text/html; charset=utf-8
+Content-Length: 7
+Server: Werkzeug/0.14.1 Python/3.6.5
+Date: Mon, 25 Mar 2019 06:06:09 GMT
+
+['xyz']
+052.001.164.074.08080-172.031.025.158.42466: HTTP/1.0 200 OK
+
+052.001.164.074.08080-172.031.025.158.42466: Content-Type: text/html; charset=utf-8
+Content-Length: 7
+Server: Werkzeug/0.14.1 Python/3.6.5
+Date: Mon, 25 Mar 2019 06:06:09 GMT
+
+['xyz']
+172.031.025.158.57956-052.001.164.074.08080: GET /api/v1/users HTTP/1.1
+Host: 52.1.164.74:8080
+User-Agent: python-requests/2.21.0
+Accept-Encoding: gzip, deflate
+Accept: */*
+Connection: keep-alive
+
+
+052.001.164.074.57956-172.031.025.158.08080: GET /api/v1/users HTTP/1.1
+Host: 52.1.164.74:8080
+User-Agent: python-requests/2.21.0
+Accept-Encoding: gzip, deflate
+Accept: */*
+Connection: keep-alive
+
+
+172.031.025.158.08080-052.001.164.074.57956: HTTP/1.0 200 OK
+
+172.031.025.158.08080-052.001.164.074.57956: Content-Type: text/html; charset=utf-8
+Content-Length: 7
+Server: Werkzeug/0.14.1 Python/3.6.5
+Date: Mon, 25 Mar 2019 06:06:19 GMT
+
+['xyz']
+052.001.164.074.08080-172.031.025.158.57956: HTTP/1.0 200 OK
+
+052.001.164.074.08080-172.031.025.158.57956: Content-Type: text/html; charset=utf-8
+Content-Length: 7
+Server: Werkzeug/0.14.1 Python/3.6.5
+Date: Mon, 25 Mar 2019 06:06:19 GMT
+
+['xyz']
+127.000.000.001.41926-127.000.000.001.08080: DELETE /api/v1/users/xyz HTTP/1.1
+Host: localhost:8080
+User-Agent: curl/7.58.0
+Accept: */*
+
+
+127.000.000.001.08080-127.000.000.001.41926: HTTP/1.0 200 OK
+
+127.000.000.001.08080-127.000.000.001.41926: Content-Type: text/html; charset=utf-8
+Content-Length: 24
+Server: Werkzeug/0.14.1 Python/3.6.5
+Date: Mon, 25 Mar 2019 06:06:19 GMT
+
+
+127.000.000.001.08080-127.000.000.001.41926: xyz removed successfully

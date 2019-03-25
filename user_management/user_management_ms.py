@@ -14,7 +14,7 @@ Notes   : # for developer's comment/insight
 # I.P. address should be a string
 ip_address = '52.1.164.74'
 # port number should be a number
-port_no = 4000
+port_no = 8080
 
 from flask import (
     Flask,
@@ -213,7 +213,7 @@ def addUser():
             pattern = re.compile(r'\b[0-9a-f]{40}\b')
             match = re.match(pattern, u_password)
             ##print(match)
-            if(match != None):
+            if(match == None):
                 return "not SHA1 password"
         else:
             print("from front-end")
@@ -265,11 +265,11 @@ def removeUser(username):
         ##print("data is --> ",data)
         list_of_users = requests.get('http://' + ip_address+ ':' + str(port_no) + '/api/v1/users')
         list_of_users = list_of_users.text
-        list_of_users = list_of_users.strip()[1:-1].split(sep = ",")
+        list_of_users = list_of_users[1:-1].replace('\'', '').replace(', ', ',').split(sep = ",")
         print(list_of_users)
         present = False
         for u in list_of_users:
-            if(username in u):
+            if(username == u):
                 present = True
                 break
         if(present == False):

@@ -508,4 +508,4 @@ def uploadAct():
         return "act uploaded successfully"
 
 if __name__ == '__main__':
-    app.run(debug = True, host = ip_address, port = port_no)
+    app.run(debug = True, host = '0.0.0.0', port = port_no)

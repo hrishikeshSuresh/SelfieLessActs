@@ -22,7 +22,7 @@ RUN apk add --update \
 EXPOSE 80
 
 # Define environment variable
-ENV NAME World
+ENV TEAM_ID CC_139_159_158_713
 
 # Run app.py when the container launches
 CMD ["python3", "user_management_ms.py"]

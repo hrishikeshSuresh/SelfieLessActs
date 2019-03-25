@@ -23,6 +23,10 @@ EXPOSE 80
 ENV NAME World
 
 # Run app.py when the container launches
+<<<<<<< HEAD
 CMD ["python3", "server.py"]
 #CMD flask run --host 0.0.0.0
+=======
+CMD ["python", "server.py"]
+>>>>>>> 4ff5a4effbe1b311c167278f9da223535ccd1f7a
 

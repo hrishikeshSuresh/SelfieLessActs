@@ -15,7 +15,7 @@ Notes   : # for developer's comment/insight
 # enter I.P. address of your AWS instance
 ip_address = '52.1.164.74'
 # port number should be a number
-port_no = 4000
+port_no = 8080
 
 from flask import (
     Flask,
@@ -350,6 +350,7 @@ def listActsInGivenRange(categoryName,startRange,endRange):
         arr = []
         for i in range(int(startRange),int(endRange)+1):
             arr.append(data['acts'][i])
+        print(arr)
         return str(arr)
     else:
         return "Invalid Request"
@@ -372,6 +373,7 @@ def upvoteAct():
         print("actId is = ", actId)
         print("type of actId is = ", str(actId))
         list_cat = []
+        actId = int(actId)
         if(not checkId(actId)):
                 return "ActId does not Exists."
         path = "./data/categories"
@@ -403,7 +405,7 @@ def removeAct(actId):
     if request.method == "DELETE":
         list_cat = []
         print(actId)
-        ##actId = int(actId)
+        actId = int(actId)
         path = "./data/categories"
         list_cat = os.listdir(path)
         for fold in list_cat:
@@ -414,13 +416,13 @@ def removeAct(actId):
             with open(cur_path+'/'+list_file[0]) as json_file:
                 data = json.load(json_file)
             arr = data['acts']
-            arr [:] = [d for d in arr if str(d.get("actId")) != actId]
+            arr [:] = [d for d in arr if d.get("actId") != actId]
             print(arr)
             data['acts'] = arr
             print(data['acts'])
             with open(cur_path + '/' + list_file[0], 'w') as data_file:
                 data= json.dump(data, data_file,indent = 4)
-        return "Acts successfully removed"
+        return "Act successfully removed"
     else:
          return "Invalid Request"
 
@@ -434,7 +436,7 @@ def uploadAct():
     print("Received @ ", x.time())
     if(request.method == 'POST'):
         print("Receiving data....")
-        if(request.form != ""):
+        if(request.method == ""):
             print("Form data")
             print(request.form)
             u_actId = request.form['actId']
@@ -476,13 +478,14 @@ def uploadAct():
         # checks if the actId is currently there in the given directory.
         if(val == 1):
             return "act id is already assigned."
+        ##return "works till here"
         list_of_users = requests.get('http://' + ip_address+ ':' + str(port_no) + '/api/v1/users')
         list_of_users = list_of_users.text
-        list_of_users = list_of_users.strip()[1:-1].split(sep = ",")
+        list_of_users = list_of_users[1:-1].replace('\'','').replace(', ',',').split(sep = ",")
         print(list_of_users)
         present = False
         for u in list_of_users:
-            if(u_name in u):
+            if(u_name == u):
                 present = True
                 break
         if(present == False):
@@ -491,13 +494,13 @@ def uploadAct():
         ##if(new_val == 0):
            ##return "user not found"
         dictionary = {}
-        dictionary['actId'] = str(u_actId)
+        dictionary['actId'] = u_actId
         dictionary['username'] = u_name
         dictionary['timestamp'] = u_time
         dictionary['caption'] = u_caption
         dictionary['categoryName'] = u_cat
         dictionary['imgB64'] = u_imgB64
-        dictionary['upvotes'] = 0
+        dictionary['upvotes'] = "0"
         path = "./data/categories/" + u_cat + '/' + u_cat + ".json"
         with open(path) as json_file:
             data = json.load(json_file)
