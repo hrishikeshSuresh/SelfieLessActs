@@ -525,21 +525,21 @@ def uploadAct():
 @app.route('/api/v1/acts/_count', methods = ['GET'])
 def count_http_request():
     n_http_requests = n_http_requests + 1
-	if(request.method == "GET"):
-		count_array = []
-		count_array[0] = n_http_requests
-		return str(count_array)
+    if(request.method == "GET"):
+	    count_array = []
+	    count_array[0] = n_http_requests
+	    return str(count_array)
 
 @app.route('/api/v1/acts/_count', methods = ['DELETE'])
 def reset_http_request():
     n_http_requests = n_http_requests + 1
-	if(request.method == "DELETE"):
-		n_http_requests = 0
-		return "{}"
+    if(request.method == "DELETE"):
+	    n_http_requests = 0
+	    return "{}"
 
 @app.route('/api/v1/acts/count', methods = ['GET'])
 def countAllActs():
-    n_http_requests = n_http_requests + 1
+	n_http_requests = n_http_requests + 1
 	if(request.method == "GET"):
 		path = "./data/categories/"
 		list_folder = os.listdir(path)
