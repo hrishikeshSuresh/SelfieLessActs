@@ -39,9 +39,9 @@ import requests
 
 http_methods = ['GET', 'POST']
 
-##Markup('<h1><strong>Hello!</strong></h1>')
-
 n_http_requests = 0
+
+##Markup('<h1><strong>Hello!</strong></h1>')
 
 """
 General Functions
@@ -185,6 +185,7 @@ def categoryDisplaySupport(categoryName):
 # front-end done
 @app.route('/api/v1/categories', methods = ['GET'])
 def listCategories():
+    global n_http_requests
     n_http_requests = n_http_requests + 1
     if request.method == 'GET':
         ##print(os.listdir())
@@ -554,4 +555,4 @@ def countAllActs():
 		return "Invalid request"
 
 if __name__ == '__main__':
-    app.run(debug = True, host = '0.0.0.0', port = 80)
+    app.run(debug = True, host = 'localhost', port = 8080)
