@@ -41,6 +41,8 @@ http_methods = ['GET', 'POST']
 
 ##Markup('<h1><strong>Hello!</strong></h1>')
 
+n_http_requests = 0
+
 """
 General Functions
 """
@@ -510,6 +512,20 @@ def uploadAct():
         with open('./static/categories/' + u_cat + '/'+ str(u_actId) + '.png', 'wb') as f_img:
             f_img.write(image)
         return "act uploaded successfully"
+
+@app.route('/api/v1/acts/count', methods = ['GET'])
+def count_http_request():
+	if(request.method == "POST"):
+		count_array = []
+		count_array[0] = n_http_requests
+		return str(count_array)
+
+@app.route('/api/v1/acts/_count', methods = ['GET'])
+def count_http_request():
+	if(request.method == "POST"):
+		count_array = []
+		count_array[0] = n_http_requests
+		return str(count_array)
 
 if __name__ == '__main__':
     app.run(debug = True, host = '0.0.0.0', port = 80)
