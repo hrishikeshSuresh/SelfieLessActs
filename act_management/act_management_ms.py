@@ -185,6 +185,7 @@ def categoryDisplaySupport(categoryName):
 # front-end done
 @app.route('/api/v1/categories', methods = ['GET'])
 def listCategories():
+	n_http_requests = n_http_requests + 1
     if request.method == 'GET':
         ##print(os.listdir())
         cat = []
@@ -213,6 +214,7 @@ def listCategories():
 # front-end done, but method not allowed pops up even API processed data successfully
 @app.route('/api/v1/categories', methods = ['POST'])
 def addCategory():
+	n_http_requests = n_http_requests + 1
     if request.method == "POST":
         print("Receiving category name")
         ##catName = request.args.get['categoryName']
@@ -259,6 +261,7 @@ def addCategory():
 # front-end done, but need to reload page on submit
 @app.route('/api/v1/categories/<categoryName>', methods = ['DELETE'])
 def removecategory(categoryName):
+	n_http_requests = n_http_requests + 1
     ##print('OBJECTIVE : ', categoryName)
     if(request.method == 'DELETE'):
         print("Receiving data....")
@@ -286,6 +289,7 @@ def removecategory(categoryName):
 # front-end done, but need to check again after uploading act
 @app.route('/api/v1/categories/<categoryName>/acts', methods = ['GET'])
 def listActs(categoryName):
+	n_http_requests = n_http_requests + 1
     if request.method == "GET":
         list_acts = []
         cats = os.listdir('./data/categories')
@@ -312,6 +316,7 @@ def listActs(categoryName):
 # front-end done
 @app.route('/api/v1/categories/<categoryName>/acts/size', methods = ['GET'])
 def listNoOfActs(categoryName):
+	n_http_requests = n_http_requests + 1
     if request.method == "GET":
         list_acts = []
         cats = os.listdir('./data/categories')
@@ -333,6 +338,7 @@ def listNoOfActs(categoryName):
 # front-end done, need to check after uploading acts
 @app.route('/api/v1/categories/<categoryName>/acts?start=<startRange>&end=<endRange>', methods = ['GET'])
 def listActsInGivenRange(categoryName,startRange,endRange):
+	n_http_requests = n_http_requests + 1
     print("Receiving data...")
     if(request.method == "GET"):
         #startRange = request.args.get('start')
@@ -363,6 +369,7 @@ def listActsInGivenRange(categoryName,startRange,endRange):
 # need to modify catetemplate
 @app.route('/api/v1/acts/upvote', methods = ['POST'])
 def upvoteAct():
+	n_http_requests = n_http_requests + 1
     if request.method == "POST":
         actId = request.get_data().decode()
         actId = str(actId)
@@ -404,6 +411,7 @@ def upvoteAct():
 # front-end done
 @app.route('/api/v1/acts/<actId>', methods = ['DELETE'])
 def removeAct(actId):
+	n_http_requests = n_http_requests + 1
     if request.method == "DELETE":
         list_cat = []
         print(actId)
@@ -434,6 +442,7 @@ def removeAct(actId):
 # probably need to find a correct way to convert image to base64 string in upload.html
 @app.route('/api/v1/acts', methods = ['POST'])
 def uploadAct():
+	n_http_requests = n_http_requests + 1
     x = datetime.datetime.now()
     print("Received @ ", x.time())
     if(request.method == 'POST'):
@@ -513,19 +522,36 @@ def uploadAct():
             f_img.write(image)
         return "act uploaded successfully"
 
-@app.route('/api/v1/acts/count', methods = ['GET'])
+@app.route('/api/v1/acts/_count', methods = ['GET'])
 def count_http_request():
-	if(request.method == "POST"):
+	n_http_requests = n_http_requests + 1
+	if(request.method == "GET"):
 		count_array = []
 		count_array[0] = n_http_requests
 		return str(count_array)
 
-@app.route('/api/v1/acts/_count', methods = ['GET'])
-def count_http_request():
-	if(request.method == "POST"):
-		count_array = []
-		count_array[0] = n_http_requests
-		return str(count_array)
+@app.route('/api/v1/acts/_count', methods = ['DELETE'])
+def reset_http_request():
+	n_http_requests = n_http_requests + 1
+	if(request.method == "DELETE"):
+		n_http_requests = 0
+		return "{}"
+
+@app.route('/api/v1/acts/count', methods = ['GET'])
+def countAllActs():
+	n_http_requests = n_http_requests + 1
+	if(request.method == "GET"):
+		path = "./data/categories/"
+		list_folder = os.listdir(path)
+		count = 0
+		for fold in list_folder:
+			new_path = path + fold + '/' + fold + ".json"
+			with open(new_path) as json_file:
+				data = json.load(json_file)
+			count += len(data['acts'])
+		return str(count)
+	else:
+		return "Invalid request"
 
 if __name__ == '__main__':
     app.run(debug = True, host = '0.0.0.0', port = 80)

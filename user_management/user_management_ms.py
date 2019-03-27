@@ -38,6 +38,8 @@ import requests
 
 http_methods = ['GET', 'POST']
 
+n_http_requests = 0
+
 ##Markup('<h1><strong>Hello!</strong></h1>')
 
 """
@@ -229,7 +231,7 @@ def addUser():
         ##print("This is data -->",data)
         list_of_users = requests.get('http://' + ip_address + ':' + str(port_no) + '/api/v1/users')
         list_of_users = list_of_users.text
-        list_of_users = list_of_users.strip()[1:-1].split(sep = ",")
+        list_of_users = list_of_users[1:-1].replace('\'','').replace(', ',',').split(sep = ",")
         print(list_of_users)
         for u in list_of_users:
             ##print(u)
@@ -310,6 +312,21 @@ def listAllUsers():
         return str(users)
     else:
         return "Invalid request."
+
+@app.route('/api/v1/acts/_count', methods = ['GET'])
+def count_http_request():
+	n_http_requests = n_http_requests + 1
+	if(request.method == "GET"):
+		count_array = []
+		count_array[0] = n_http_requests
+		return str(count_array)
+
+@app.route('/api/v1/acts/_count', methods = ['DELETE'])
+def reset_http_request():
+	n_http_requests = n_http_requests + 1
+	if(request.method == "DELETE"):
+		n_http_requests = 0
+		return "{}"
 
 if __name__ == '__main__':
     app.run(debug = True, host = '0.0.0.0', port = 80)
