@@ -38,7 +38,7 @@ import requests
 
 http_methods = ['GET', 'POST']
 
-n_http_requests = 0
+global n_http_requests = 0
 
 ##Markup('<h1><strong>Hello!</strong></h1>')
 
