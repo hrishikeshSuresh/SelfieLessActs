@@ -188,6 +188,7 @@ APIs
 # front-end done
 @app.route('/api/v1/users', methods = ['POST'])
 def addUser():
+    n_http_requests = n_http_requests + 1
     if(request.method == 'POST'):
         ##print(request.__dict__)
         print("Receiving data....")
@@ -256,6 +257,7 @@ def addUser():
 # front-end done
 @app.route('/api/v1/users/<username>', methods = ['DELETE'])
 def removeUser(username):
+    n_http_requests = n_http_requests + 1
     if(request.method == 'DELETE'):
         print("Receiving data....")
         if(username == None):
@@ -301,6 +303,7 @@ def removeUser(username):
 # list all users
 @app.route('/api/v1/users', methods = ['GET'])
 def listAllUsers():
+    n_http_requests = n_http_requests + 1
     if(request.method == "GET"):
         path = "./data/users/users.json";
         with open(path) as json_file:
@@ -315,7 +318,7 @@ def listAllUsers():
 
 @app.route('/api/v1/acts/_count', methods = ['GET'])
 def count_http_request():
-	n_http_requests = n_http_requests + 1
+    n_http_requests = n_http_requests + 1
 	if(request.method == "GET"):
 		count_array = []
 		count_array[0] = n_http_requests
@@ -323,7 +326,7 @@ def count_http_request():
 
 @app.route('/api/v1/acts/_count', methods = ['DELETE'])
 def reset_http_request():
-	n_http_requests = n_http_requests + 1
+    n_http_requests = n_http_requests + 1
 	if(request.method == "DELETE"):
 		n_http_requests = 0
 		return "{}"
