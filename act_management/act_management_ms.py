@@ -215,6 +215,7 @@ def listCategories():
 # front-end done, but method not allowed pops up even API processed data successfully
 @app.route('/api/v1/categories', methods = ['POST'])
 def addCategory():
+    global n_http_requests
     n_http_requests = n_http_requests + 1
     if request.method == "POST":
         print("Receiving category name")
@@ -262,6 +263,7 @@ def addCategory():
 # front-end done, but need to reload page on submit
 @app.route('/api/v1/categories/<categoryName>', methods = ['DELETE'])
 def removecategory(categoryName):
+    global n_http_requests
     n_http_requests = n_http_requests + 1
     ##print('OBJECTIVE : ', categoryName)
     if(request.method == 'DELETE'):
@@ -290,6 +292,7 @@ def removecategory(categoryName):
 # front-end done, but need to check again after uploading act
 @app.route('/api/v1/categories/<categoryName>/acts', methods = ['GET'])
 def listActs(categoryName):
+    global n_http_requests
     n_http_requests = n_http_requests + 1
     if request.method == "GET":
         list_acts = []
@@ -317,6 +320,7 @@ def listActs(categoryName):
 # front-end done
 @app.route('/api/v1/categories/<categoryName>/acts/size', methods = ['GET'])
 def listNoOfActs(categoryName):
+    global n_http_requests
     n_http_requests = n_http_requests + 1
     if request.method == "GET":
         list_acts = []
@@ -339,6 +343,7 @@ def listNoOfActs(categoryName):
 # front-end done, need to check after uploading acts
 @app.route('/api/v1/categories/<categoryName>/acts?start=<startRange>&end=<endRange>', methods = ['GET'])
 def listActsInGivenRange(categoryName,startRange,endRange):
+    global n_http_requests
     n_http_requests = n_http_requests + 1
     print("Receiving data...")
     if(request.method == "GET"):
@@ -370,6 +375,7 @@ def listActsInGivenRange(categoryName,startRange,endRange):
 # need to modify catetemplate
 @app.route('/api/v1/acts/upvote', methods = ['POST'])
 def upvoteAct():
+    global n_http_requests
     n_http_requests = n_http_requests + 1
     if request.method == "POST":
         actId = request.get_data().decode()
@@ -412,6 +418,7 @@ def upvoteAct():
 # front-end done
 @app.route('/api/v1/acts/<actId>', methods = ['DELETE'])
 def removeAct(actId):
+    global n_http_requests
     n_http_requests = n_http_requests + 1
     if request.method == "DELETE":
         list_cat = []
@@ -443,6 +450,7 @@ def removeAct(actId):
 # probably need to find a correct way to convert image to base64 string in upload.html
 @app.route('/api/v1/acts', methods = ['POST'])
 def uploadAct():
+    global n_http_requests
     n_http_requests = n_http_requests + 1
     x = datetime.datetime.now()
     print("Received @ ", x.time())
@@ -525,6 +533,7 @@ def uploadAct():
 
 @app.route('/api/v1/acts/_count', methods = ['GET'])
 def count_http_request():
+    global n_http_requests
     n_http_requests = n_http_requests + 1
     if(request.method == "GET"):
 	    count_array = []
@@ -533,6 +542,7 @@ def count_http_request():
 
 @app.route('/api/v1/acts/_count', methods = ['DELETE'])
 def reset_http_request():
+    global n_http_requests
     n_http_requests = n_http_requests + 1
     if(request.method == "DELETE"):
 	    n_http_requests = 0
@@ -540,6 +550,7 @@ def reset_http_request():
 
 @app.route('/api/v1/acts/count', methods = ['GET'])
 def countAllActs():
+    global n_http_requests
 	n_http_requests = n_http_requests + 1
 	if(request.method == "GET"):
 		path = "./data/categories/"
