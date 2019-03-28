@@ -550,7 +550,7 @@ def reset_http_request():
 
 @app.route('/api/v1/acts/count', methods = ['GET'])
 def countAllActs():
-    global n_http_requests
+	global n_http_requests
 	n_http_requests = n_http_requests + 1
 	if(request.method == "GET"):
 		path = "./data/categories/"
