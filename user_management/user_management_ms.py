@@ -8,11 +8,11 @@ Notes   : # for developer's comment/insight
           ## for removing code
           Modify IP address & Port before running with act_management_ms.py
           To access the V.M., get the .pem key and run
-                $ ssh -i "MYOSHLinux.pem" ubuntu@ec2-52-1-164-74.compute-1.amazonaws.com
+                $ ssh -i "MYOSHLinux.pem" ubuntu@ec2-54-208-40-27.compute-1.amazonaws.com
           Run pre-run.sh before running this code on terminal/CMD PROMPT
 """
 # I.P. address should be a string
-ip_address = '52.1.164.74'
+ip_address = '54.208.40.27'
 # port number should be a number
 port_no = 8080
 
@@ -38,7 +38,7 @@ import requests
 
 http_methods = ['GET', 'POST']
 
-global n_http_requests = 0
+n_http_requests = 0
 
 ##Markup('<h1><strong>Hello!</strong></h1>')
 
@@ -188,6 +188,7 @@ APIs
 # front-end done
 @app.route('/api/v1/users', methods = ['POST'])
 def addUser():
+    global n_http_requests
     n_http_requests = n_http_requests + 1
     if(request.method == 'POST'):
         ##print(request.__dict__)
@@ -257,6 +258,7 @@ def addUser():
 # front-end done
 @app.route('/api/v1/users/<username>', methods = ['DELETE'])
 def removeUser(username):
+    global n_http_requests
     n_http_requests = n_http_requests + 1
     if(request.method == 'DELETE'):
         print("Receiving data....")
@@ -303,6 +305,7 @@ def removeUser(username):
 # list all users
 @app.route('/api/v1/users', methods = ['GET'])
 def listAllUsers():
+    global n_http_requests
     n_http_requests = n_http_requests + 1
     if(request.method == "GET"):
         path = "./data/users/users.json";
@@ -318,6 +321,7 @@ def listAllUsers():
 
 @app.route('/api/v1/acts/_count', methods = ['GET'])
 def count_http_request():
+    global n_http_requests
     n_http_requests = n_http_requests + 1
 	if(request.method == "GET"):
 		count_array = []
@@ -326,6 +330,7 @@ def count_http_request():
 
 @app.route('/api/v1/acts/_count', methods = ['DELETE'])
 def reset_http_request():
+    global n_http_requests
     n_http_requests = n_http_requests + 1
 	if(request.method == "DELETE"):
 		n_http_requests = 0

@@ -8,12 +8,12 @@ Notes   : # for developer's comment/insight
           ## for removing code
           Modify IP address & Port before running with user_management_ms.py
           To access the V.M., get the .pem key and run
-                $ ssh -i "MYOSHLinux.pem" ubuntu@ec2-52-1-164-74.compute-1.amazonaws.com
+                $ ssh -i "MYOSHLinux.pem" ubuntu@ec2-3-86-77-173.compute-1.amazonaws.com
           Run pre-run.sh before running this code on terminal/CMD PROMPT
 """
 # I.P. address should be a string
 # enter I.P. address of your AWS instance
-ip_address = '52.1.164.74'
+ip_address = '54.208.40.27'
 # port number should be a number
 port_no = 8080
 
