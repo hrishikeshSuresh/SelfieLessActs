@@ -319,19 +319,19 @@ def listAllUsers():
     else:
         return "Invalid request."
 
-@app.route('/api/v1/acts/_count', methods = ['GET'])
+@app.route('/api/v1/_count', methods = ['GET'])
 def count_http_request():
-    global n_http_requests
-    n_http_requests = n_http_requests + 1
+    ##global n_http_requests
+    ##n_http_requests = n_http_requests + 1
     if(request.method == "GET"):
         count_array = []
         count_array[0] = n_http_requests
         return str(count_array)
 
-@app.route('/api/v1/acts/_count', methods = ['DELETE'])
+@app.route('/api/v1/_count', methods = ['DELETE'])
 def reset_http_request():
-    global n_http_requests
-    n_http_requests = n_http_requests + 1
+    ##global n_http_requests
+    ##n_http_requests = n_http_requests + 1
     if(request.method == "DELETE"):
         n_http_requests = 0
         return "{}"
