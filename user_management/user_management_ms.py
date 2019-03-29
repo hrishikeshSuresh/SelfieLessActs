@@ -14,7 +14,7 @@ Notes   : # for developer's comment/insight
 # I.P. address should be a string
 ip_address = '54.208.40.27'
 # port number should be a number
-port_no = 8080
+port_no = 80
 
 from flask import (
     Flask,
