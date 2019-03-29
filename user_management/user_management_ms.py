@@ -323,18 +323,18 @@ def listAllUsers():
 def count_http_request():
     global n_http_requests
     n_http_requests = n_http_requests + 1
-	if(request.method == "GET"):
-		count_array = []
-		count_array[0] = n_http_requests
-		return str(count_array)
+    if(request.method == "GET"):
+        count_array = []
+        count_array[0] = n_http_requests
+        return str(count_array)
 
 @app.route('/api/v1/acts/_count', methods = ['DELETE'])
 def reset_http_request():
     global n_http_requests
     n_http_requests = n_http_requests + 1
-	if(request.method == "DELETE"):
-		n_http_requests = 0
-		return "{}"
+    if(request.method == "DELETE"):
+        n_http_requests = 0
+        return "{}"
 
 if __name__ == '__main__':
     app.run(debug = True, host = '0.0.0.0', port = 80)
