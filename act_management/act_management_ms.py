@@ -14,6 +14,7 @@ Notes   : # for developer's comment/insight
 # I.P. address should be a string
 # enter I.P. address of your AWS instance
 ip_address = '54.208.40.27'
+origin = '3.86.77.173'
 # port number should be a number
 port_no = 80
 
@@ -40,6 +41,8 @@ import requests
 http_methods = ['GET', 'POST']
 
 n_http_requests = 0
+
+headers = {'Origin' : '3.86.77.173'}
 
 ##Markup('<h1><strong>Hello!</strong></h1>')
 
@@ -450,6 +453,7 @@ def removeAct(actId):
 # probably need to find a correct way to convert image to base64 string in upload.html
 @app.route('/api/v1/acts', methods = ['POST'])
 def uploadAct():
+    headers = {'Origin' : '3.86.77.173'}
     global n_http_requests
     n_http_requests = n_http_requests + 1
     x = datetime.datetime.now()
@@ -499,7 +503,7 @@ def uploadAct():
         if(val == 1):
             return "act id is already assigned."
         ##return "works till here"
-        list_of_users = requests.get('http://' + ip_address+ ':' + str(port_no) + '/api/v1/users')
+        list_of_users = requests.get('http://' + ip_address+ ':' + str(port_no) + '/api/v1/users', headers = headers)
         list_of_users = list_of_users.text
         list_of_users = list_of_users[1:-1].replace('\'','').replace(', ',',').split(sep = ",")
         print(list_of_users)
