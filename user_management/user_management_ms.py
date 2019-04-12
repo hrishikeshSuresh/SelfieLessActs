@@ -324,9 +324,9 @@ def count_http_request():
     ##global n_http_requests
     ##n_http_requests = n_http_requests + 1
     if(request.method == "GET"):
-        count_array = []
-        count_array[0] = n_http_requests
-        return str(count_array)
+        ##count_array = []
+        ##count_array[0] = n_http_requests
+        return '[' + str(n_http_requests) + ']'
 
 @app.route('/api/v1/_count', methods = ['DELETE'])
 def reset_http_request():
