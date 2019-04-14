@@ -8,7 +8,7 @@ Notes   : # for developer's comment/insight
           ## for removing code
           Modify IP address & Port before running with user_management_ms.py
           To access the V.M., get the .pem key and run
-                $ ssh -i "MYOSHLinux.pem" ubuntu@ec2-3-86-77-173.compute-1.amazonaws.com
+                $ ssh -i "MYOSHLinux.pem" ubuntu@public_dns
           Run pre-run.sh before running this code on terminal/CMD PROMPT
 """
 # I.P. address should be a string
