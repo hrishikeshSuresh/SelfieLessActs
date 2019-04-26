@@ -69,9 +69,9 @@ def run_app():
     app.run(debug = True, host = '0.0.0.0', port = 80)
 
 # critical task - FAULT TOLERANCE
-def faultTolarence():
+def faultTolerance():
     print("Name of thread : ", threading.current_thread().name())
-    threading.timer(1.0,faultTolarence).start()
+    threading.timer(1.0,faultTolerance).start()
 	for i in range(len(act_public_dns_list)):
 		response = requests.get("http://" + act_public_dns_list[i] + ":" + str(act_ports[i]) + "api/v1/_health")
 		if(response == 500):
@@ -154,9 +154,14 @@ def removecategory(categoryName):
 if __name__ == '__main__':
     # creating threads
     auto_scale_thread = threading.Thread(target = auto_scaling, name = 'AUTO SCALE')
+    fault_tolerance_thread = threading.Thread(target = faultTolerance, name = 'FAULT TOLERANCE')
     ##threading.Timer(120.0, auto_scaling).start()
     app_thread = threading.Thread(target = run_app, name = 'RUN APP')
-
     # starting threads
     auto_scale_thread.start()
     app_thread.start()
+    fault_tolerance_thread.start()
+
+    auto_scale_thread.join()
+    fault_tolerance_thread.join()
+    app_thread.join()
