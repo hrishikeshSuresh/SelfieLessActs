@@ -119,7 +119,7 @@ def listCategories():
     # increment rr pointer after usage
     	rr_pointer = (rr_pointer+1)%3
     	return response
-    else
+    else:
     	return 'Invalid Request'
 
 # add a category
@@ -134,7 +134,7 @@ def addCategory():
     # increment rr pointer after usage
     	rr_pointer = (rr_pointer+1)%3
     	return response
-    else
+    else:
     	return 'Invalid Request'
 
 # remove a category
@@ -148,7 +148,7 @@ def removecategory(categoryName):
     # increment rr pointer after usage
     	rr_pointer = (rr_pointer+1)%3
     	return response
-    else
+    else:
     	return 'Invalid Request'
 
 if __name__ == '__main__':
