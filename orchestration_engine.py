@@ -93,12 +93,12 @@ auto_scale_flag = 1
 
 # critical task - RUN APP
 def run_app():
-    print("Name of thread : ", threading.current_thread().name())
+    print("Name of thread : ", threading.current_thread().name)
     app.run(debug = True, host = '0.0.0.0', port = 80)
 
 # critical task - FAULT TOLERANCE
 def faultTolerance():
-    print("Name of thread : ", threading.current_thread().name())
+    print("Name of thread : ", threading.current_thread().name)
     threading.timer(1.0,faultTolerance).start()
     for i in range(len(act_public_dns_list)):
     	response = requests.get("http://" + act_public_dns_list[i] + ":" + str(act_ports[i]) + "api/v1/_health")
@@ -110,7 +110,7 @@ def faultTolerance():
 # critical task - AUTO SCALING
 def auto_scaling():
     # start timer only if first requests
-    print("Name of thread : ", threading.current_thread().name())
+    print("Name of thread : ", threading.current_thread().name)
     global n_http_requests, auto_scale_flag, docker_client, act_ports, active_ports
     # one container will start immediately
     ##if(n_http_requests < 20 and act_ports[0] not in active_ports):
