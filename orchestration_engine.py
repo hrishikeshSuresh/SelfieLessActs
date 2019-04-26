@@ -100,6 +100,7 @@ def run_app():
 # critical task - FAULT TOLERANCE
 def faultTolerance():
     print("Name of thread : ", threading.current_thread().name)
+    global n_http_requests, docker_client, active_ports
     threading.Timer(10.0,faultTolerance).start()
     for i in range(len(active_ports)):
     	response = requests.get("http://" + act_public_dns_list + ":" + str(active_ports[i]) + "/api/v1/_health")
@@ -108,37 +109,73 @@ def faultTolerance():
     		container.stop()
     		docker_client.containers.run("hrishikesh/acts:latest", ports = {'80':str(active_ports[i])})
 
-# critical task - AUTO SCALING
+def up_scale(scale_factor):
+    print("Upscaling...")
+    global n_http_requests, docker_client, act_port_init, act_port_end, active_ports
+    act_port_end = act_port_end + scale_factor
+    for port_i in range(act_port_init, act_port_end):
+        if(port_i not in active_ports):
+            docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)})
+            active_ports.append({port_i : docker_client.containers.list(limit = 1)})
+            print("New container started. Current active ports ", active_ports)
+    return
+
+def down_scale(scale_factor):
+    print("Downscaling...")
+    global n_http_requests, docker_client, act_port_init, act_port_end, active_ports
+    # scale_factor is negative, so we add
+    for port_i in range(act_port_end + scale_factor, act_port_end):
+        if(port_i in active_ports):
+            container_to_be_stopped = active_ports[port_i]
+            container_to_be_stopped.stop()
+            # None to prevent error
+            active_ports.pop(port_i, None)
+    # scale_factor is negative, so we add
+    act_port_end = act_port_end + scale_factor
+    return
+
+# critical task - AUTO SCALING MAIN
 def auto_scaling():
     # start timer only if first requests
     print("Name of thread : ", threading.current_thread().name)
-    global n_http_requests, auto_scale_flag, docker_client, act_ports, active_ports
-    # one container will start immediately
+    global n_http_requests, auto_scale_flag, docker_client, act_port_init, act_port_end, active_ports
     ##if(n_http_requests < 20 and act_ports[0] not in active_ports):
+
+    # one container will start immediately
     # container starts before first incoming requests
     if(act_port_init not in active_ports):
         docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(act_ports[0])})
         active_ports.append({act_ports[0] : docker_client.containers.list(limit = 1)})
         print("First container started. Current active ports ", active_ports)
         act_port_end = act_port_end + 1
+
     # wait till we get the first request
     while(auto_scale_flag == 1):
         time.sleep(5)
         if n_http_requests >= 1:
             auto_scale_flag = 0
+
     # number of containers to be created
     containers_to_be_created = n_http_requests // 20
     # to decide port range for next iterations
-    next_act_port_end = act_port_end + containers_to_be_created
-    for port_i in range(act_port_init, act_port_end + containers_to_be_created):
-        if(containers_to_be_created >= 1 and port_i not in active_ports):
-            docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)})
-            active_ports.append({port_i : docker_client.containers.list(limit = 1)})
-            print("New container started. Current active ports ", active_ports)
-            act_port_end = act_port_end + 1
-            containers_to_be_created = containers_to_be_created - 1
+    # formula scale_factor = r - n + 1
+    scale_factor = containers_to_be_created - len(active_ports) + 1
+    if(scale_factor > 0):
+        up_scale(scale_factor)
+    elif(scale_factor < 0):
+        down_scale(scale_factor)
+
+    ##next_act_port_end = act_port_end + containers_to_be_created
+    ##for port_i in range(act_port_init, act_port_end + containers_to_be_created):
+        ##if(containers_to_be_created >= 1 and port_i not in active_ports):
+            ##docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)})
+            ##active_ports.append({port_i : docker_client.containers.list(limit = 1)})
+            ##print("New container started. Current active ports ", active_ports)
+            ##act_port_end = act_port_end + 1
+            ##containers_to_be_created = containers_to_be_created - 1
+    ##act_port_end = new_act_port_end
+
     # start timer and execute every 2 minutes
-    act_port_end = new_act_port_end
     print("starting timer")
     n_http_requests = 0
     threading.Timer(120.0, auto_scaling).start()
