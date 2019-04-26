@@ -15,6 +15,11 @@ Notes   : # for developer's comment/insight
 ip_address = '54.208.40.27'
 origin = '3.86.77.173'
 
+# create application instance
+app = Flask(__name__)
+# generating a secret key for sessions
+app.secret_key = os.urandom(16)
+
 # port number should be a number
 port_no = 80
 
