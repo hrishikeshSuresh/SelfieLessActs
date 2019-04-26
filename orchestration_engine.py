@@ -94,12 +94,12 @@ auto_scale_flag = 1
 # critical task - RUN APP
 def run_app():
     print("Name of thread : ", threading.current_thread().name)
-    app.run(debug = True, host = '0.0.0.0', port = 80)
+    app.run(debug = True, host = '0.0.0.0', port = 8080)
 
 # critical task - FAULT TOLERANCE
 def faultTolerance():
     print("Name of thread : ", threading.current_thread().name)
-    threading.timer(1.0,faultTolerance).start()
+    threading.Timer(1.0,faultTolerance).start()
     for i in range(len(act_public_dns_list)):
     	response = requests.get("http://" + act_public_dns_list[i] + ":" + str(act_ports[i]) + "api/v1/_health")
     	if(response == 500):
