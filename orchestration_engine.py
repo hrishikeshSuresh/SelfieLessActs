@@ -72,12 +72,12 @@ def run_app():
 def faultTolerance():
     print("Name of thread : ", threading.current_thread().name())
     threading.timer(1.0,faultTolerance).start()
-	for i in range(len(act_public_dns_list)):
-		response = requests.get("http://" + act_public_dns_list[i] + ":" + str(act_ports[i]) + "api/v1/_health")
-		if(response == 500):
-			container = dict_cont_port[act_ports[i]]
-			container.stop()
-			docker_client.containers.run("hrishikesh/acts:latest",ports = {'80':str(act_ports[i])})
+    for i in range(len(act_public_dns_list)):
+    	response = requests.get("http://" + act_public_dns_list[i] + ":" + str(act_ports[i]) + "api/v1/_health")
+    	if(response == 500):
+    		container = dict_cont_port[act_ports[i]]
+    		container.stop()
+    		docker_client.containers.run("hrishikesh/acts:latest",ports = {'80':str(act_ports[i])})
 
 # critical task - AUTO SCALING
 def auto_scaling():
