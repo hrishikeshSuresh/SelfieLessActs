@@ -114,13 +114,13 @@ def auto_scaling():
 def listCategories():
     global rr_pointer, n_http_requests, act_public_dns_list, active_ports
     n_http_requests = n_http_requests + 1
-	if request.method == 'GET':
-		response = requests.get('http://' + act_public_dns_list[rr_pointer] + ':' + str(active_ports[rr_pointer])+'/api/v1/categories')
-	# increment rr pointer after usage
-		rr_pointer = (rr_pointer+1)%3
-		return response
-	else
-		return 'Invalid Request'
+    if request.method == 'GET':
+    	response = requests.get('http://' + act_public_dns_list[rr_pointer] + ':' + str(active_ports[rr_pointer])+'/api/v1/categories')
+    # increment rr pointer after usage
+    	rr_pointer = (rr_pointer+1)%3
+    	return response
+    else
+    	return 'Invalid Request'
 
 # add a category
 # input should be JSON ARRAY []
@@ -129,13 +129,13 @@ def addCategory():
     global rr_pointer, n_http_requests, act_public_dns_list, active_ports
     n_http_requests = n_http_requests + 1
     if request.method == 'POST':
-		data = str(request.get_data().decode())
-		response = requests.post('http://' + act_public_dns_list[rr_pointer] + ':' + str(active_ports[rr_pointer])+'/api/v1/categories', data = data)
-	# increment rr pointer after usage
-		rr_pointer = (rr_pointer+1)%3
-		return response
-	else
-		return 'Invalid Request'
+    	data = str(request.get_data().decode())
+    	response = requests.post('http://' + act_public_dns_list[rr_pointer] + ':' + str(active_ports[rr_pointer])+'/api/v1/categories', data = data)
+    # increment rr pointer after usage
+    	rr_pointer = (rr_pointer+1)%3
+    	return response
+    else
+    	return 'Invalid Request'
 
 # remove a category
 @app.route('/api/v1/categories/<categoryName>', methods = ['DELETE'])
@@ -143,13 +143,13 @@ def removecategory(categoryName):
     global rr_pointer, n_http_requests, act_public_dns_list, active_ports
     n_http_requests = n_http_requests + 1
     if request.method == 'DELETE':
-		data = str(request.get_data().decode())
-		response = requests.post('http://' + act_public_dns_list[rr_pointer] + ':' + str(active_ports[rr_pointer])+'/api/v1/categories/'+categoryName)
-	# increment rr pointer after usage
-		rr_pointer = (rr_pointer+1)%3
-		return response
-	else
-		return 'Invalid Request'
+    	data = str(request.get_data().decode())
+    	response = requests.post('http://' + act_public_dns_list[rr_pointer] + ':' + str(active_ports[rr_pointer])+'/api/v1/categories/'+categoryName)
+    # increment rr pointer after usage
+    	rr_pointer = (rr_pointer+1)%3
+    	return response
+    else
+    	return 'Invalid Request'
 
 if __name__ == '__main__':
     # creating threads
