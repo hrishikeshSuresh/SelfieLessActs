@@ -128,12 +128,13 @@ def auto_scaling():
             auto_scale_flag = 0
     # number of containers to be created
     containers_to_be_created = n_http_requests // 20
-    for port_i in range(act_port_init, act_port_end):
-    if(containers_to_be_created >= 1 and port_i not in active_ports):
-        docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)})
-        active_ports.append({port_i : docker_client.containers.list(limit = 1)})
-        print("New container started. Current active ports ", active_ports)
-        act_port_end = act_port_end + 1
+    for port_i in range(act_port_init, act_port_end + containers_to_be_created):
+        if(containers_to_be_created >= 1 and port_i not in active_ports):
+            docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)})
+            active_ports.append({port_i : docker_client.containers.list(limit = 1)})
+            print("New container started. Current active ports ", active_ports)
+            act_port_end = act_port_end + 1
+            containers_to_be_created = containers_to_be_created - 1
     # start timer and execute every 2 minutes
     print("starting timer")
     n_http_requests = 0
