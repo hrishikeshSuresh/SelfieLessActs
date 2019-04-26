@@ -112,7 +112,7 @@ def auto_scaling():
 # list all categories
 @app.route('/api/v1/categories', methods = ['GET'])
 def listCategories():
-	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    global rr_pointer, n_http_requests, act_public_dns_list, active_ports
     n_http_requests = n_http_requests + 1
 	if request.method == 'GET':
 		response = requests.get('http://' + act_public_dns_list[rr_pointer] + ':' + str(active_ports[rr_pointer])+'/api/v1/categories')
@@ -126,9 +126,9 @@ def listCategories():
 # input should be JSON ARRAY []
 @app.route('/api/v1/categories', methods = ['POST'])
 def addCategory():
-	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    global rr_pointer, n_http_requests, act_public_dns_list, active_ports
     n_http_requests = n_http_requests + 1
-	if request.method == 'POST':
+    if request.method == 'POST':
 		data = str(request.get_data().decode())
 		response = requests.post('http://' + act_public_dns_list[rr_pointer] + ':' + str(active_ports[rr_pointer])+'/api/v1/categories', data = data)
 	# increment rr pointer after usage
@@ -140,9 +140,9 @@ def addCategory():
 # remove a category
 @app.route('/api/v1/categories/<categoryName>', methods = ['DELETE'])
 def removecategory(categoryName):
-	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    global rr_pointer, n_http_requests, act_public_dns_list, active_ports
     n_http_requests = n_http_requests + 1
-	if request.method == 'DELETE':
+    if request.method == 'DELETE':
 		data = str(request.get_data().decode())
 		response = requests.post('http://' + act_public_dns_list[rr_pointer] + ':' + str(active_ports[rr_pointer])+'/api/v1/categories/'+categoryName)
 	# increment rr pointer after usage
