@@ -164,6 +164,8 @@ def auto_scaling():
         up_scale(scale_factor)
     elif(scale_factor < 0):
         down_scale(scale_factor)
+    else:
+        print("No scaling...")
 
     ##next_act_port_end = act_port_end + containers_to_be_created
     ##for port_i in range(act_port_init, act_port_end + containers_to_be_created):
@@ -176,7 +178,7 @@ def auto_scaling():
     ##act_port_end = new_act_port_end
 
     # start timer and execute every 2 minutes
-    print("starting timer")
+    print("starting timer...")
     n_http_requests = 0
     threading.Timer(120.0, auto_scaling).start()
 
