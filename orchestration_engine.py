@@ -47,12 +47,13 @@ app.secret_key = os.urandom(16)
 port_no = 80
 
 # acts port numbers
-act_ports = [8000, 8001, 8002]
-act_public_dns_list = ['ip1', 'ip2', 'ip3']
+act_port_init = 8000
+act_port_end = 8001
+act_public_dns_list = 'ip1'
 
 # active containers
-active_ports = {8000:"dkjfhal32877",8001:"ssjf2983mj"}
-healthy_containers = [1, 1]
+active_ports = OrderedDict([])
+healthy_containers = []
 
 from flask import (
     Flask,
@@ -100,12 +101,12 @@ def run_app():
 def faultTolerance():
     print("Name of thread : ", threading.current_thread().name)
     threading.Timer(1.0,faultTolerance).start()
-    for i in range(len(act_public_dns_list)):
-    	response = requests.get("http://" + act_public_dns_list[i] + ":" + str(act_ports[i]) + "api/v1/_health")
+    for i in range(len(active_ports)):
+    	response = requests.get("http://" + act_public_dns_list + ":" + str(active_ports[i]) + "/api/v1/_health")
     	if(response == 500):
-    		container = dict_cont_port[act_ports[i]]
+    		container = dict_cont_port[active_ports[i]]
     		container.stop()
-    		docker_client.containers.run("hrishikesh/acts:latest",ports = {'80':str(act_ports[i])})
+    		docker_client.containers.run("hrishikesh/acts:latest", ports = {'80':str(active_ports[i])})
 
 # critical task - AUTO SCALING
 def auto_scaling():
@@ -115,27 +116,26 @@ def auto_scaling():
     # one container will start immediately
     ##if(n_http_requests < 20 and act_ports[0] not in active_ports):
     # container starts before first incoming requests
-    if(act_ports[0] not in active_ports):
+    if(act_port_init not in active_ports):
         docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(act_ports[0])})
         active_ports.append({act_ports[0] : docker_client.containers.list(limit = 1)})
         print("First container started. Current active ports ", active_ports)
+        act_port_end = act_port_end + 1
     # wait till we get the first request
     while(auto_scale_flag == 1):
-        time.sleep(1)
+        time.sleep(5)
         if n_http_requests >= 1:
             auto_scale_flag = 0
-    if(n_http_requests >= 20 and n_http_requests < 40 and act_ports[1] not in active_ports):
-        docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(act_ports[1])})
-        active_ports.append({act_ports[1] : docker_client.containers.list(limit = 1)})
-        print("Second container started. Current active ports ", active_ports)
-    elif(n_http_requests >= 40 and n_http_requests < 60 and act_ports[2] not in active_ports):
-        docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(act_ports[2])})
-        active_ports.append({act_ports[2] : docker_client.containers.list(limit = 1)})
-        print("Third container started. Current active ports ", active_ports)
+    for port_i in range(act_port_init, act_port_end):
+    if(n_http_requests >= 20 and n_http_requests < 40 and port_i not in active_ports):
+        docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)})
+        active_ports.append({port_i : docker_client.containers.list(limit = 1)})
+        print("New container started. Current active ports ", active_ports)
+        act_port_end = act_port_end + 1
     # start timer and execute every 2 minutes
     print("starting timer")
+    n_http_requests = 0
     threading.Timer(120.0, auto_scaling).start()
-    ##n_http_requests = 0
 
 # list all categories
 @app.route('/api/v1/categories', methods = ['GET'])
