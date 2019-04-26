@@ -100,7 +100,7 @@ def run_app():
 # critical task - FAULT TOLERANCE
 def faultTolerance():
     print("Name of thread : ", threading.current_thread().name)
-    threading.Timer(1.0,faultTolerance).start()
+    threading.Timer(10.0,faultTolerance).start()
     for i in range(len(active_ports)):
     	response = requests.get("http://" + act_public_dns_list + ":" + str(active_ports[i]) + "/api/v1/_health")
     	if(response == 500):
