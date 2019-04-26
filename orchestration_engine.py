@@ -15,6 +15,29 @@ Notes   : # for developer's comment/insight
 ip_address = '54.208.40.27'
 origin = '3.86.77.173'
 
+from flask import (
+    Flask,
+    render_template,
+    url_for,
+    Markup,
+    send_from_directory,
+    flash,
+    request
+)
+
+import os
+import json
+from werkzeug import secure_filename, exceptions
+import datetime
+import shutil
+import base64
+import binascii
+import re
+import requests
+
+http_methods = ['GET', 'POST']
+
+
 # create application instance
 app = Flask(__name__)
 # generating a secret key for sessions
