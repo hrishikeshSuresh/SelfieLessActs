@@ -123,6 +123,7 @@ def up_scale(scale_factor):
             ##active_ports.append({port_i : docker_client.containers.list(limit = 1)})
             active_ports[port_i] = docker_client.containers.list(limit = 1)
             print("New container started. Current active ports ", active_ports)
+            print("New container @ port ", port_i)
     return
 
 def down_scale(scale_factor):
@@ -135,6 +136,7 @@ def down_scale(scale_factor):
             container_to_be_stopped.stop()
             # None to prevent error
             active_ports.pop(port_i, None)
+            print("Container removed @ port ", )
     # scale_factor is negative, so we add
     act_port_end = act_port_end + scale_factor
     return
@@ -159,6 +161,7 @@ def auto_scaling():
     # wait till we get the first request
     while(auto_scale_flag == 1):
         time.sleep(5)
+        print("Waiting for first request")
         if n_http_requests >= 1:
             auto_scale_flag = 0
 
@@ -166,6 +169,7 @@ def auto_scaling():
     containers_to_be_created = n_http_requests // 20
     # to decide port range for next iterations
     # formula scale_factor = r - n + 1
+    print("Deciding scale factor")
     scale_factor = containers_to_be_created - len(active_ports) + 1
     if(scale_factor > 0):
         up_scale(scale_factor)
