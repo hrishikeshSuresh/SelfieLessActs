@@ -157,12 +157,9 @@ def auto_scaling():
     if(act_port_init not in active_ports):
         docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(act_port_init)}, detach = True)
         ##active_ports.append({act_ports[0] : docker_client.containers.list(limit = 1)})
-        active_ports[port_i] = docker_client.containers.list(limit = 1)
+        active_ports[act_port_init] = docker_client.containers.list(limit = 1)
         print("First container started. Current active ports ", active_ports)
         act_port_end = act_port_end + 1
-        print("starting timer...")
-        n_http_requests = 0
-        threading.Timer(120.0, auto_scaling).start()
     # wait till we get the first request
     while(auto_scale_flag == 1):
         time.sleep(5)
