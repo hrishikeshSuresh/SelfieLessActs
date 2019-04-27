@@ -123,8 +123,10 @@ def faultTolerance():
 
 def up_scale(scale_factor):
     print("Upscaling...")
+    print(scale_factor)
     global n_http_requests, docker_client, act_port_init, act_port_end, active_ports
     act_port_end = act_port_end + scale_factor
+    print(act_port_init, act_port_end)
     for port_i in range(act_port_init, act_port_end):
         if(port_i not in active_ports):
             docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)})
@@ -136,8 +138,10 @@ def up_scale(scale_factor):
 
 def down_scale(scale_factor):
     print("Downscaling...")
+    print(scale_factor)
     global n_http_requests, docker_client, act_port_init, act_port_end, active_ports
     # scale_factor is negative, so we add
+    print(act_port_end + scale_factor, act_port_end)
     for port_i in range(act_port_end + scale_factor, act_port_end):
         if(port_i in active_ports):
             container_to_be_stopped = active_ports[port_i]
@@ -227,7 +231,7 @@ def addCategory():
     	response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories', data = data)
         # increment rr pointer after usage
     	rr_pointer = (rr_pointer+1)%(len(active_ports))
-    	return response
+    	return str(response)
     else:
     	return 'Invalid Request'
 
@@ -241,7 +245,7 @@ def removecategory(categoryName):
     	response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName)
         # increment rr pointer after usage
     	rr_pointer = (rr_pointer+1)%(len(active_ports))
-    	return response
+    	return str(response)
     else:
     	return 'Invalid Request'
 
