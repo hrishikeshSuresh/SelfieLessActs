@@ -95,7 +95,7 @@ auto_scale_flag = 1
 # critical task - RUN APP
 def run_app():
     print("Name of thread : ", threading.current_thread().name)
-    app.run(debug = True, host = '0.0.0.0', port = 8080)
+    app.run(debug = True, use_reloader = False, host = '0.0.0.0', port = 8080)
 
 # critical task - FAULT TOLERANCE
 def faultTolerance():
@@ -140,12 +140,13 @@ def auto_scaling():
     # start timer only if first requests
     print("Name of thread : ", threading.current_thread().name)
     global n_http_requests, auto_scale_flag, docker_client, act_port_init, act_port_end, active_ports
+    print("Number of containers running ", len(active_ports))
     ##if(n_http_requests < 20 and act_ports[0] not in active_ports):
 
     # one container will start immediately
     # container starts before first incoming requests
     if(act_port_init not in active_ports):
-        docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(act_ports[0])})
+        docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(act_port_init)})
         ##active_ports.append({act_ports[0] : docker_client.containers.list(limit = 1)})
         active_ports[port_i] = docker_client.containers.list(limit = 1)
         print("First container started. Current active ports ", active_ports)
