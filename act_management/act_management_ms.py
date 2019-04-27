@@ -27,7 +27,8 @@ from flask import (
     Markup,
     send_from_directory,
     flash,
-    request
+    request,
+    jsonify
 )
 
 import os
