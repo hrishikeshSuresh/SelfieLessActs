@@ -206,7 +206,7 @@ def listCategories():
     global rr_pointer, n_http_requests, act_public_dns_list, active_ports
     n_http_requests = n_http_requests + 1
     if request.method == 'GET':
-    	response = requests.get('http://' + act_public_dns_list[rr_pointer] + ':' + str(active_ports[rr_pointer])+'/api/v1/categories')
+    	response = requests.get('http://' + act_public_dns_list[rr_pointer] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories')
     # increment rr pointer after usage
     	rr_pointer = (rr_pointer+1)%3
     	return response
@@ -221,7 +221,7 @@ def addCategory():
     n_http_requests = n_http_requests + 1
     if request.method == 'POST':
     	data = str(request.get_data().decode())
-    	response = requests.post('http://' + act_public_dns_list[rr_pointer] + ':' + str(active_ports[rr_pointer])+'/api/v1/categories', data = data)
+    	response = requests.post('http://' + act_public_dns_list[rr_pointer] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories', data = data)
     # increment rr pointer after usage
     	rr_pointer = (rr_pointer+1)%3
     	return response
@@ -235,7 +235,7 @@ def removecategory(categoryName):
     n_http_requests = n_http_requests + 1
     if request.method == 'DELETE':
     	data = str(request.get_data().decode())
-    	response = requests.post('http://' + act_public_dns_list[rr_pointer] + ':' + str(active_ports[rr_pointer])+'/api/v1/categories/'+categoryName)
+    	response = requests.post('http://' + act_public_dns_list[rr_pointer] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName)
     # increment rr pointer after usage
     	rr_pointer = (rr_pointer+1)%3
     	return response
