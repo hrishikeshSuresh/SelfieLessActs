@@ -104,12 +104,14 @@ def faultTolerance():
     print("Fault Tolerance")
     global n_http_requests, docker_client, active_ports
     threading.Timer(10.0,faultTolerance).start()
-    for i in range(len(active_ports)):
-    	response = requests.get("http://" + act_public_dns_list + ":" + str(active_ports[i]) + "/api/v1/_health")
+    for port_i in active_ports:
+    	response = requests.get("http://" + act_public_dns_list + ":" + str(port_i) + "/api/v1/_health")
         if(response == 500):
-            container = dict_cont_port[active_ports[i]]
-            container.stop()
-            docker_client.containers.run("hrishikesh/acts:latest", ports = {'80':str(active_ports[i])})
+            container = active_ports[port_i]
+            print("Fault found at port ", port_i)
+            container.restart(timeout = 1)
+            ##time.sleep(5)
+            ##docker_client.containers.run("hrishikesh/acts:latest", ports = {'80':str(active_ports[i])})
             print("Faulty container restarted @ port ", active_ports[i])
         else:
             print("No faulty container")
