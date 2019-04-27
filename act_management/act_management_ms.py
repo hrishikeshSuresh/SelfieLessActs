@@ -572,9 +572,9 @@ def countAllActs():
 # health check
 @app.route('/api/v1/_health', methods = ['GET'])
 def health():
-	if(healthy == True)
+	if(healthy == True):
 		return jsonify({}), 200
-	else
+	else:
 		return jsonify({}), 500
 
 # crash server
