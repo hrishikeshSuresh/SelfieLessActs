@@ -106,6 +106,8 @@ def faultTolerance():
     threading.Timer(10.0,faultTolerance).start()
     for port_i in active_ports:
     	response = requests.get("http://" + act_public_dns_list + ":" + str(port_i) + "/api/v1/_health")
+        time.sleep(3)
+        print(act_public_dns_list + ":" + str(port_i) + " RESPONSE ---> " + response)
         if(response == 500):
             container = active_ports[port_i]
             print("Fault found at port ", port_i)
