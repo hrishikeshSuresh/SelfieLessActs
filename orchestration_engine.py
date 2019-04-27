@@ -109,7 +109,7 @@ def faultTolerance():
         if(response == 500):
             container = dict_cont_port[active_ports[i]]
             container.stop()
-            docker_client.containers.run("hrishikesh/acts:latest", ports = {str(active_ports[i]) : '80'})
+            docker_client.containers.run("hrishikesh/acts:latest", ports = {'80':str(active_ports[i])})
             print("Faulty container restarted @ port ", active_ports[i])
         else:
             print("No faulty container")
@@ -153,7 +153,7 @@ def auto_scaling():
     # one container will start immediately
     # container starts before first incoming requests
     if(act_port_init not in active_ports):
-        docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {str(act_port_init) : '80'})
+        docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(act_port_init)})
         ##active_ports.append({act_ports[0] : docker_client.containers.list(limit = 1)})
         active_ports[port_i] = docker_client.containers.list(limit = 1)
         print("First container started. Current active ports ", active_ports)
