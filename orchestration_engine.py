@@ -131,6 +131,7 @@ def up_scale(scale_factor):
         if(port_i not in active_ports):
             docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)}, detach = True)
             ##active_ports.append({port_i : docker_client.containers.list(limit = 1)})
+            time.sleep(5)
             active_ports[port_i] = docker_client.containers.list(limit = 1)
             print("New container started. Current active ports ", active_ports)
             print("New container @ port ", port_i)
@@ -145,10 +146,10 @@ def down_scale(scale_factor):
     for port_i in range(act_port_end + scale_factor, act_port_end):
         if(port_i in active_ports):
             container_to_be_stopped = active_ports[port_i]
-            container_to_be_stopped.stop()
+            container_to_be_stopped[0].stop()
             # None to prevent error
             active_ports.pop(port_i, None)
-            print("Container removed @ port ", )
+            print("Container removed @ port ", port_i)
     # scale_factor is negative, so we add
     act_port_end = act_port_end + scale_factor
     return
