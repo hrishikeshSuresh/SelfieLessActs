@@ -142,17 +142,16 @@ def down_scale(scale_factor):
     print(scale_factor)
     global n_http_requests, docker_client, act_port_init, act_port_end, active_ports
     # scale_factor is negative, so we add
-    print(act_port_end + scale_factor + 1, act_port_end)
-    for port_i in range(act_port_end + scale_factor + 1, act_port_end):
+    print(act_port_end + scale_factor, act_port_end)
+    for port_i in range(act_port_end + scale_factor, act_port_end):
         if(port_i in active_ports):
             container_to_be_stopped = active_ports[port_i]
-            container_to_be_stopped[0].stop(timeout = 2)
-            time.sleep(5)
+            container_to_be_stopped[0].stop(timeout = 1)
             # None to prevent error
             active_ports.pop(port_i, None)
             print("Container removed @ port ", port_i)
     # scale_factor is negative, so we add
-    act_port_end = act_port_end + scale_factor + 1
+    act_port_end = act_port_end + scale_factor
     return
 
 # critical task - AUTO SCALING MAIN
