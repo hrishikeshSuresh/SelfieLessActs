@@ -104,9 +104,10 @@ def faultTolerance():
     print("Fault Tolerance")
     global n_http_requests, docker_client, active_ports
     for port_i in active_ports:
-        print(act_public_dns_list + ":" + str(port_i) + " RESPONSE ---> " + response)
+        print(act_public_dns_list + ":" + str(port_i))
     	response = requests.get("http://" + act_public_dns_list + ":" + str(port_i) + "/api/v1/_health")
-        time.sleep(3)
+        ##time.sleep(3)
+        print(response)
         if(response == 500):
             container = active_ports[port_i]
             print("Fault found at port ", port_i)
@@ -116,7 +117,7 @@ def faultTolerance():
             print("Faulty container restarted @ port ", active_ports[i])
         else:
             print("No faulty container")
-    threading.Timer(10.0,faultTolerance).start()
+    threading.Timer(10.0, faultTolerance).start()
 
 def up_scale(scale_factor):
     print("Upscaling...")
