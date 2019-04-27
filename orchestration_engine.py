@@ -243,10 +243,11 @@ if __name__ == '__main__':
     ##threading.Timer(120.0, auto_scaling).start()
     app_thread = threading.Thread(target = run_app, name = 'RUN APP')
     # starting threads
-    auto_scale_thread.start()
     app_thread.start()
+    time.sleep(5)
+    auto_scale_thread.start()
     fault_tolerance_thread.start()
 
+    app_thread.join()
     auto_scale_thread.join()
     fault_tolerance_thread.join()
-    app_thread.join()
