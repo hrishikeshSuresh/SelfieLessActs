@@ -151,6 +151,7 @@ def auto_scaling():
     ##if(n_http_requests < 20 and act_ports[0] not in active_ports):
     print("INIT PORT ", act_port_init)
     print("ACTIVE PORT ", active_ports)
+    print(act_port_init not in active_ports)
     # one container will start immediately
     # container starts before first incoming requests
     if(act_port_init not in active_ports):
