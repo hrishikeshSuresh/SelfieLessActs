@@ -106,9 +106,9 @@ def faultTolerance():
     print("Number of HTTP requests received ", n_http_requests)
     for port_i in active_ports:
         print(act_public_dns_list[0] + ":" + str(port_i))
-    	response = requests.get("http://" + act_public_dns_list[0] + ":" + str(port_i) + "/api/v1/_health", stream = True)
+    	response = requests.get("http://" + act_public_dns_list[0] + ":" + str(port_i) + "/api/v1/_health")
         ##time.sleep(3)
-        print(response.status_code)
+        print("STATUS CODE ", response.status_code)
         if(response.status_code == 500):
             container = active_ports[port_i]
             print("Fault found at port ", port_i)
@@ -207,7 +207,7 @@ def listCategories():
     global rr_pointer, n_http_requests, act_public_dns_list, active_ports
     n_http_requests = n_http_requests + 1
     if request.method == 'GET':
-    	response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories', stream = True)
+    	response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories')
         # increment rr pointer after usage
     	rr_pointer = (rr_pointer+1)%(len(active_ports))
     	return response
