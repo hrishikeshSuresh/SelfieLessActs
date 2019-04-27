@@ -15,9 +15,10 @@ Notes   : # for developer's comment/insight
 # enter I.P. address of your AWS instance
 ip_address = '54.208.40.27'
 origin = '3.86.77.173'
-crash_flag = 1
 # port number should be a number
 port_no = 80
+# health of container
+healthy = True
 
 from flask import (
     Flask,
@@ -571,16 +572,16 @@ def countAllActs():
 # health check
 @app.route('/api/v1/_health', methods = ['GET'])
 def health():
-	if(request.method == 'GET' and crash_flag == 1)
-		return 200
+	if(healthy == True)
+		return jsonify({}), 200
 	else
-		return 500
+		return jsonify({}), 500
 
 # crash server
 @app.route('/api/v1/_crash', methods = ['POST'])
 def crash():
-	##crash_flag = 0
-	exit(0)
+	healthy = False
+    return jsonify({}), 200
 
 if __name__ == '__main__':
     app.run(debug = True, host = '0.0.0.0', port = 80)

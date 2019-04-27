@@ -108,7 +108,7 @@ def faultTolerance():
     	response = requests.get("http://" + act_public_dns_list + ":" + str(port_i) + "/api/v1/_health")
         ##time.sleep(3)
         print(response)
-        if(response == 500):
+        if(response.status_code == 500):
             container = active_ports[port_i]
             print("Fault found at port ", port_i)
             container.restart(timeout = 1)
