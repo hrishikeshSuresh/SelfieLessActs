@@ -101,6 +101,7 @@ def run_app():
 # critical task - FAULT TOLERANCE
 def faultTolerance():
     print("Name of thread : ", threading.current_thread().name)
+    print("Fault Tolerance")
     global n_http_requests, docker_client, active_ports
     threading.Timer(10.0,faultTolerance).start()
     for i in range(len(active_ports)):
