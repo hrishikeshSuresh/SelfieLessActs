@@ -105,7 +105,7 @@ def faultTolerance():
     global n_http_requests, docker_client, active_ports
     print("Number of HTTP requests received ", n_http_requests)
     for port_i in active_ports:
-        print(act_public_dns_list[0] + ":" + str(port_i))
+        print(active_ports)
     	response = requests.get("http://" + act_public_dns_list[0] + ":" + str(port_i) + "/api/v1/_health")
         ##time.sleep(3)
         print("STATUS CODE ", response.status_code)
@@ -129,7 +129,7 @@ def up_scale(scale_factor):
     print(act_port_init, act_port_end)
     for port_i in range(act_port_init, act_port_end):
         if(port_i not in active_ports):
-            docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)})
+            docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)}, detach = True)
             ##active_ports.append({port_i : docker_client.containers.list(limit = 1)})
             active_ports[port_i] = docker_client.containers.list(limit = 1)
             print("New container started. Current active ports ", active_ports)
