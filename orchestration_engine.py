@@ -108,7 +108,7 @@ def faultTolerance():
     	if(response == 500):
     		container = dict_cont_port[active_ports[i]]
     		container.stop()
-    		docker_client.containers.run("hrishikesh/acts:latest", ports = {'80':str(active_ports[i])})
+            docker_client.containers.run("hrishikesh/acts:latest", ports = {'80':str(active_ports[i])})
             print("Faulty container restarted @ port ", active_ports[i])
         else:
             print("No faulty container")
