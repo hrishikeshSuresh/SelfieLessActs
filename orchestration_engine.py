@@ -246,6 +246,7 @@ if __name__ == '__main__':
     app_thread.start()
     time.sleep(5)
     auto_scale_thread.start()
+    time.sleep(2)
     fault_tolerance_thread.start()
 
     app_thread.join()
