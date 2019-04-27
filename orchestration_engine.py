@@ -212,7 +212,7 @@ def listCategories():
         print(response)
         # increment rr pointer after usage
     	rr_pointer = (rr_pointer+1)%(len(active_ports))
-    	return response
+    	return str(response)
     else:
     	return 'Invalid Request'
 
