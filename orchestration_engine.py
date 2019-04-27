@@ -103,6 +103,7 @@ def faultTolerance():
     print("Name of thread : ", threading.current_thread().name)
     print("Fault Tolerance")
     global n_http_requests, docker_client, active_ports
+    print("Number of HTTP requests received ", n_http_requests)
     for port_i in active_ports:
         print(act_public_dns_list + ":" + str(port_i))
     	response = requests.get("http://" + act_public_dns_list + ":" + str(port_i) + "/api/v1/_health")
