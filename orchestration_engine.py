@@ -52,7 +52,7 @@ act_port_end = 8001
 act_public_dns_list = 'ip1'
 
 # active containers
-active_ports = OrderedDict([])
+active_ports = {}
 healthy_containers = []
 
 from flask import (
@@ -116,7 +116,8 @@ def up_scale(scale_factor):
     for port_i in range(act_port_init, act_port_end):
         if(port_i not in active_ports):
             docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)})
-            active_ports.append({port_i : docker_client.containers.list(limit = 1)})
+            ##active_ports.append({port_i : docker_client.containers.list(limit = 1)})
+            active_ports[port_i] = docker_client.containers.list(limit = 1)
             print("New container started. Current active ports ", active_ports)
     return
 
@@ -145,7 +146,8 @@ def auto_scaling():
     # container starts before first incoming requests
     if(act_port_init not in active_ports):
         docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(act_ports[0])})
-        active_ports.append({act_ports[0] : docker_client.containers.list(limit = 1)})
+        ##active_ports.append({act_ports[0] : docker_client.containers.list(limit = 1)})
+        active_ports[port_i] = docker_client.containers.list(limit = 1)
         print("First container started. Current active ports ", active_ports)
         act_port_end = act_port_end + 1
 
