@@ -149,7 +149,8 @@ def auto_scaling():
     global n_http_requests, auto_scale_flag, docker_client, act_port_init, act_port_end, active_ports
     print("Number of containers running ", len(active_ports))
     ##if(n_http_requests < 20 and act_ports[0] not in active_ports):
-
+    print("INIT PORT ", act_port_init)
+    print("ACTIVE PORT ", active_ports)
     # one container will start immediately
     # container starts before first incoming requests
     if(act_port_init not in active_ports):
@@ -158,7 +159,9 @@ def auto_scaling():
         active_ports[port_i] = docker_client.containers.list(limit = 1)
         print("First container started. Current active ports ", active_ports)
         act_port_end = act_port_end + 1
-
+        print("starting timer...")
+        n_http_requests = 0
+        threading.Timer(120.0, auto_scaling).start()
     # wait till we get the first request
     while(auto_scale_flag == 1):
         time.sleep(5)
