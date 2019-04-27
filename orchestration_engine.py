@@ -49,7 +49,7 @@ port_no = 80
 # acts port numbers
 act_port_init = 8000
 act_port_end = 8001
-act_public_dns_list = 'ip1'
+act_public_dns_list = '18.207.223.105'
 
 # active containers
 active_ports = {}
@@ -95,6 +95,7 @@ auto_scale_flag = 1
 # critical task - RUN APP
 def run_app():
     print("Name of thread : ", threading.current_thread().name)
+    print("App running @ port 8080")
     app.run(debug = True, use_reloader = False, host = '0.0.0.0', port = 8080)
 
 # critical task - FAULT TOLERANCE
@@ -108,6 +109,9 @@ def faultTolerance():
     		container = dict_cont_port[active_ports[i]]
     		container.stop()
     		docker_client.containers.run("hrishikesh/acts:latest", ports = {'80':str(active_ports[i])})
+            print("Faulty container restarted @ port ", active_ports[i])
+        else:
+            print("No faulty container")
 
 def up_scale(scale_factor):
     print("Upscaling...")
