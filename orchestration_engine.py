@@ -100,26 +100,26 @@ def run_app():
 
 # critical task - FAULT TOLERANCE
 def faultTolerance():
-    print("Name of thread : ", threading.current_thread().name)
-    print("Fault Tolerance")
-    global n_http_requests, docker_client, active_ports
-    print("Number of HTTP requests received ", n_http_requests)
-    for port_i in active_ports:
-        print(active_ports)
-    	response = requests.get("http://" + act_public_dns_list[0] + ":" + str(port_i) + "/api/v1/_health")
-        ##time.sleep(3)
-        print("STATUS CODE ", response.status_code)
-        code = int(response.status_code)
-        if(code == 500):
-            container = active_ports[port_i]
-            print("Fault found at port ", port_i)
-            container.restart(timeout = 1)
-            ##time.sleep(5)
-            ##docker_client.containers.run("hrishikesh/acts:latest", ports = {'80':str(active_ports[i])})
-            print("Faulty container restarted @ port ", active_ports[i])
-        else:
-            print("No faulty container")
-    threading.Timer(10.0, faultTolerance).start()
+	print("Name of thread : ", threading.current_thread().name)
+	print("Fault Tolerance")
+	global n_http_requests, docker_client, active_ports
+	print("Number of HTTP requests received ", n_http_requests)
+	for port_i in active_ports:
+		print(active_ports)
+		response = requests.get("http://" + act_public_dns_list[0] + ":" + str(port_i) + "/api/v1/_health")
+		##time.sleep(3)
+		print("STATUS CODE ", response.status_code)
+		code = int(response.status_code)
+		if(code == 500):
+			container = active_ports[port_i]
+			print("Fault found at port ", port_i)
+			container.restart(timeout = 1)
+			##time.sleep(5)
+			##docker_client.containers.run("hrishikesh/acts:latest", ports = {'80':str(active_ports[i])})
+			print("Faulty container restarted @ port ", active_ports[i])
+		else:
+			print("No faulty container")
+	threading.Timer(10.0, faultTolerance).start()
 
 def up_scale(scale_factor):
     print("Upscaling...")
@@ -210,16 +210,16 @@ def auto_scaling():
 # list all categories
 @app.route('/api/v1/categories', methods = ['GET'])
 def listCategories():
-    global rr_pointer, n_http_requests, act_public_dns_list, active_ports
-    n_http_requests = n_http_requests + 1
-    if request.method == 'GET':
-    	response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories')
-        print(response)
-        # increment rr pointer after usage
-    	rr_pointer = (rr_pointer+1)%(len(active_ports))
-    	return str(response)
-    else:
-    	return 'Invalid Request'
+	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+	n_http_requests = n_http_requests + 1
+	if request.method == 'GET':
+		response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories')
+		print(response)
+		# increment rr pointer after usage
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
+		return str(response)
+	else:
+		return 'Invalid Request'
 
 # add a category
 # input should be JSON ARRAY []
@@ -257,12 +257,10 @@ if __name__ == '__main__':
     ##threading.Timer(120.0, auto_scaling).start()
     app_thread = threading.Thread(target = run_app, name = 'RUN APP')
     # starting threads
-    app_thread.start()
-    time.sleep(5)
     auto_scale_thread.start()
-    time.sleep(2)
+    app_thread.start()
     fault_tolerance_thread.start()
 
-    app_thread.join()
     auto_scale_thread.join()
+    app_thread.join()
     fault_tolerance_thread.join()
