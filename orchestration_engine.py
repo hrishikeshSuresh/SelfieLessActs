@@ -95,6 +95,9 @@ n_http_requests = 0
 # auto scale started flag
 auto_scale_flag = 1
 
+#headers for POST
+headers = {'Content-Type': 'application/json', 'Accept':'application/json'}
+
 # critical task - RUN APP
 def run_app():
     print("Name of thread : ", threading.current_thread().name)
@@ -228,18 +231,22 @@ def listCategories():
 # input should be JSON ARRAY []
 @app.route('/api/v1/categories', methods = ['POST'])
 def addCategory():
-    global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    global rr_pointer, n_http_requests, act_public_dns_list, active_ports, headers
     n_http_requests = n_http_requests + 1
     if request.method == 'POST':
     	data = ast.literal_eval(json.dumps(request.get_data().decode()))
         print("RAW DATA : ", data)
 	print(type(data))
 	##data = data[1:-1].replace('\'','').replace(', ',',').split(sep = ",")
-	data = list(data.replace('\"', '').strip(']['))
-	data = list(''.join(map(str, data)))
+	data = data.replace('\"', '').strip('][')
+	##data = ''.join(x for x in data)
+	##json_data = list([])
+	##json_data.insert(0,data)
+	##data = json.loads(data)
+	data = [data]
 	print("FORMATTED DATA : ", data)
 	print(type(data))
-    	response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories', data = data)
+    	response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories', data = json.dumps(data), headers = headers)
         # increment rr pointer after usage
     	rr_pointer = (rr_pointer+1)%(len(active_ports))
 	print("Response is ", str(response))
