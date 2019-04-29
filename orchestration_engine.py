@@ -25,7 +25,7 @@ from flask import (
     request
 )
 
-import os
+import os, ast
 import json
 from werkzeug import secure_filename, exceptions
 import datetime
@@ -231,11 +231,18 @@ def addCategory():
     global rr_pointer, n_http_requests, act_public_dns_list, active_ports
     n_http_requests = n_http_requests + 1
     if request.method == 'POST':
-    	data = str(request.get_data().decode())
-        print(data)
+    	data = ast.literal_eval(json.dumps(request.get_data().decode()))
+        print("RAW DATA : ", data)
+	print(type(data))
+	##data = data[1:-1].replace('\'','').replace(', ',',').split(sep = ",")
+	data = list(data.replace('\"', '').strip(']['))
+	data = list(''.join(map(str, data)))
+	print("FORMATTED DATA : ", data)
+	print(type(data))
     	response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories', data = data)
         # increment rr pointer after usage
     	rr_pointer = (rr_pointer+1)%(len(active_ports))
+	print("Response is ", str(response))
     	return str(response)
     else:
     	return 'Invalid Request'
