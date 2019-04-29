@@ -56,7 +56,7 @@ active_ports = {}
 healthy_containers = []
 
 # volume bindings
-volume_bindings = {'/home/ubuntu/acts_storage' : {'bind' : '/app', 'mode' : 'rw'}}
+volume_bindings = {'/home/ubuntu/acts_storage' : {'bind' : '/home/alpine/app', 'mode' : 'rw'}}
 
 from flask import (
     Flask,
@@ -110,7 +110,7 @@ def faultTolerance():
 	for port_i in active_ports:
 		print(active_ports)
 		response = requests.get("http://" + act_public_dns_list[0] + ":" + str(port_i) + "/api/v1/_health")
-		##time.sleep(3)
+		time.sleep(3)
 		print("STATUS CODE ", response.status_code)
 		code = int(response.status_code)
 		if(code == 500):
@@ -382,16 +382,16 @@ def crash():
 		return 'Invalid Request'
 
 if __name__ == '__main__':
-    # creating threads
-    auto_scale_thread = threading.Thread(target = auto_scaling, name = 'AUTO SCALE')
-    fault_tolerance_thread = threading.Thread(target = faultTolerance, name = 'FAULT TOLERANCE')
-    ##threading.Timer(120.0, auto_scaling).start()
-    app_thread = threading.Thread(target = run_app, name = 'RUN APP')
-    # starting threads
-    auto_scale_thread.start()
-    app_thread.start()
-    fault_tolerance_thread.start()
+	# creating threads
+	auto_scale_thread = threading.Thread(target = auto_scaling, name = 'AUTO SCALE')
+	fault_tolerance_thread = threading.Thread(target = faultTolerance, name = 'FAULT TOLERANCE')
+	##threading.Timer(120.0, auto_scaling).start()
+	app_thread = threading.Thread(target = run_app, name = 'RUN APP')
+	# starting threads
+	auto_scale_thread.start()
+	fault_tolerance_thread.start()
+	app_thread.start()
 
-    auto_scale_thread.join()
-    app_thread.join()
-    fault_tolerance_thread.join()
+	auto_scale_thread.join()
+	fault_tolerance_thread.join()
+	app_thread.join()
