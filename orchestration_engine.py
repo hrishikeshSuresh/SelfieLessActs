@@ -22,7 +22,8 @@ from flask import (
     Markup,
     send_from_directory,
     flash,
-    request
+    request,
+    jsonify
 )
 
 import os, ast
@@ -56,7 +57,7 @@ active_ports = {}
 healthy_containers = []
 
 # volume bindings
-volume_bindings = {'/home/ubuntu/acts_storage' : {'bind' : '/home/alpine/app', 'mode' : 'rw'}}
+volume_bindings = {'/home/ubuntu/acts_storage' : {'bind' : '/home/app', 'mode' : 'rw'}}
 
 from flask import (
     Flask,
@@ -248,6 +249,7 @@ def addCategory():
 	print(type(data))
     	response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories', data = json.dumps(data), headers = headers)
         # increment rr pointer after usage
+	print(response.text)
     	rr_pointer = (rr_pointer+1)%(len(active_ports))
 	print("Response is ", str(response))
     	return str(response)
