@@ -229,6 +229,7 @@ def addCategory():
     n_http_requests = n_http_requests + 1
     if request.method == 'POST':
     	data = str(request.get_data().decode())
+        print(data)
     	response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories', data = data)
         # increment rr pointer after usage
     	rr_pointer = (rr_pointer+1)%(len(active_ports))
@@ -242,14 +243,140 @@ def removecategory(categoryName):
     global rr_pointer, n_http_requests, act_public_dns_list, active_ports
     n_http_requests = n_http_requests + 1
     if request.method == 'DELETE':
-    	data = str(request.get_data().decode())
-    	response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName)
+    	response = requests.delete('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName)
         # increment rr pointer after usage
     	rr_pointer = (rr_pointer+1)%(len(active_ports))
     	return str(response)
     else:
     	return 'Invalid Request'
 
+@app.route('/api/v1/categories/<categoryName>/acts', methods = ['GET'])
+def listActs(categoryName):
+	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    n_http_requests = n_http_requests + 1
+    if request.method == 'GET':
+    	response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName + '/acts')
+    	rr_pointer = (rr_pointer+1)%(len(active_ports))
+    	return str(response)
+    else:
+    	return 'Invalid Request'
+
+@app.route('/api/v1/categories/<categoryName>/acts/size', methods = ['GET'])
+def listNoOfActs(categoryName):
+	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    n_http_requests = n_http_requests + 1
+    if request.method == 'GET':
+    	response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName + '/acts/size')
+    	rr_pointer = (rr_pointer+1)%(len(active_ports))
+    	return str(response)
+    else:
+    	return 'Invalid Request'
+
+@app.route('/api/v1/categories/<categoryName>/acts?start=<startRange>&end=<endRange>', methods = ['GET'])
+def listActsInGivenRange(categoryName, startRange, endRange):
+	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    n_http_requests = n_http_requests + 1
+    if request.method == 'GET':
+    	response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName + '/acts?start=' + startRange + '&end=' + endRange)
+    	rr_pointer = (rr_pointer+1)%(len(active_ports))
+    	return str(response)
+    else:
+    	return 'Invalid Request'
+
+@app.route('/api/v1/acts/upvote', methods = ['POST'])
+def upvoteAct():
+	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    n_http_requests = n_http_requests + 1
+    if request.method == 'POST':
+    	data = str(request.get_data().decode())
+        print(data)
+    	response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/acts/upvote', data = data)
+    	rr_pointer = (rr_pointer+1)%(len(active_ports))
+    	return str(response)
+    else:
+    	return 'Invalid Request'
+
+@app.route('/api/v1/acts/<actId>', methods = ['DELETE'])
+def removeAct(actId):
+	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    n_http_requests = n_http_requests + 1
+    if request.method == 'DELETE':
+    	response = requests.delete('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) + '/api/v1/acts/' + actId)
+    	rr_pointer = (rr_pointer+1)%(len(active_ports))
+    	return str(response)
+    else:
+    	return 'Invalid Request'
+
+@app.route('/api/v1/acts', methods = ['POST'])
+def uploadAct():
+	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    n_http_requests = n_http_requests + 1
+    if request.method == 'POST':
+    	data = str(request.get_data().decode())
+        print(data)
+    	response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/acts', data = data)
+    	rr_pointer = (rr_pointer+1)%(len(active_ports))
+    	return str(response)
+    else:
+    	return 'Invalid Request'
+
+@app.route('/api/v1/_count', methods = ['GET'])
+def count_http_request():
+	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    n_http_requests = n_http_requests + 1
+    if request.method == 'GET':
+    	response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/_count')
+    	rr_pointer = (rr_pointer+1)%(len(active_ports))
+    	return str(response)
+    else:
+    	return 'Invalid Request'
+
+@app.route('/api/v1/_count', methods = ['DELETE'])
+def reset_http_request():
+	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    n_http_requests = n_http_requests + 1
+    if request.method == 'DELETE':
+    	response = requests.delete('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/_count')
+    	rr_pointer = (rr_pointer+1)%(len(active_ports))
+    	return str(response)
+    else:
+    	return 'Invalid Request'
+
+@app.route('/api/v1/acts/count', methods = ['GET'])
+def countAllActs():
+	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    n_http_requests = n_http_requests + 1
+    if request.method == 'GET':
+    	response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/acts/count')
+    	rr_pointer = (rr_pointer+1)%(len(active_ports))
+    	return str(response)
+    else:
+    	return 'Invalid Request'
+
+# health check
+@app.route('/api/v1/_health', methods = ['GET'])
+def health():
+	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    n_http_requests = n_http_requests + 1
+    if request.method == 'GET':
+    	response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/_health' + categoryName)
+    	rr_pointer = (rr_pointer+1)%(len(active_ports))
+    	return str(response)
+    else:
+    	return 'Invalid Request'
+
+# crash server
+@app.route('/api/v1/_crash', methods = ['POST'])
+def crash():
+	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+    n_http_requests = n_http_requests + 1
+    if request.method == 'POST':
+    	data = str(request.get_data().decode())
+    	response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/_crash', data = data)
+    	rr_pointer = (rr_pointer+1)%(len(active_ports))
+    	return str(response)
+    else:
+    	return 'Invalid Request'
 if __name__ == '__main__':
     # creating threads
     auto_scale_thread = threading.Thread(target = auto_scaling, name = 'AUTO SCALE')
