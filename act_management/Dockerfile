@@ -25,6 +25,9 @@ EXPOSE 80
 ENV TEAM_ID CC_139_159_158_713
 
 # Run app.py when the container launches
+CMD ["ls"]
+CMD ["ls", "/home"]
+CMD ["ls", "../"]
 CMD ["python3", "act_management_ms.py"]
 #CMD flask run --host 0.0.0.0
 
