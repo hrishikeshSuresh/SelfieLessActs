@@ -235,7 +235,8 @@ def addCategory():
     global rr_pointer, n_http_requests, act_public_dns_list, active_ports, headers
     n_http_requests = n_http_requests + 1
     if request.method == 'POST':
-    	data = ast.literal_eval(json.dumps(request.get_data().decode()))
+	print(request.get_data().decode())
+    	data = ast.literal_eval(json.dumps(data))
         print("RAW DATA : ", data)
 	print(type(data))
 	##data = data[1:-1].replace('\'','').replace(', ',',').split(sep = ",")
