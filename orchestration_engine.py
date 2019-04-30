@@ -57,7 +57,7 @@ active_ports = {}
 healthy_containers = []
 
 # volume bindings
-volume_bindings = {'/app' : {'bind' : '/home/ubuntu/acts_storage', 'mode' : 'rw'}}
+volume_bindings = { '/home/ubuntu/act_management' : {'bind' : '/app', 'mode' : 'rw'}}
 
 from flask import (
     Flask,
