@@ -235,20 +235,21 @@ def addCategory():
     global rr_pointer, n_http_requests, act_public_dns_list, active_ports, headers
     n_http_requests = n_http_requests + 1
     if request.method == 'POST':
-	print(request.get_data().decode())
-    	data = ast.literal_eval(json.dumps(data))
-        print("RAW DATA : ", data)
-	print(type(data))
+	data = request.get_data().decode()
+	print(data)
+    	##data = ast.literal_eval(json.dumps(data))
+        ##print("RAW DATA : ", data)
+	##print(type(data))
 	##data = data[1:-1].replace('\'','').replace(', ',',').split(sep = ",")
-	data = data.replace('\"', '').strip('][')
+	##data = data.replace('\"', '').strip('][')
 	##data = ''.join(x for x in data)
 	##json_data = list([])
 	##json_data.insert(0,data)
 	##data = json.loads(data)
-	data = [data]
-	print("FORMATTED DATA : ", data)
-	print(type(data))
-    	response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories', data = json.dumps(data), headers = headers)
+	##data = [data]
+	##print("FORMATTED DATA : ", data)
+	##print(type(data))
+    	response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories', data = data, headers = headers)
         # increment rr pointer after usage
 	##print(response.text)
     	rr_pointer = (rr_pointer+1)%(len(active_ports))
