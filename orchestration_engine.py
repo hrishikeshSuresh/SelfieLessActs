@@ -12,8 +12,8 @@ Notes   : # for developer's comment/insight
 """
 # I.P. address should be a string
 # enter I.P. address of your AWS instance
-ip_address = '54.208.40.27'
-origin = '3.86.77.173'
+ip_address = '35.174.107.114'
+origin = '18.212.26.145'
 
 from flask import (
     Flask,
