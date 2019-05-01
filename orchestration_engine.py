@@ -142,7 +142,7 @@ def up_scale(scale_factor):
     print(act_port_init, act_port_end)
     for port_i in range(act_port_init, act_port_end):
         if(port_i not in active_ports):
-            docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'8080' : str(port_i)}, detach = True, volumes = volume_bindings, privileged = True)
+            docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)}, detach = True, volumes = volume_bindings, privileged = True)
             ##active_ports.append({port_i : docker_client.containers.list(limit = 1)})
             time.sleep(5)
             active_ports[port_i] = docker_client.containers.list(limit = 1)
@@ -181,7 +181,7 @@ def auto_scaling():
 	# one container will start immediately
 	# container starts before first incoming requests
 	if(act_port_init not in active_ports):
-		docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'8080' : str(act_port_init)}, detach = True, volumes = volume_bindings, privileged = True)
+		docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(act_port_init)}, detach = True, volumes = volume_bindings, privileged = True)
 		##active_ports.append({act_ports[0] : docker_client.containers.list(limit = 1)})
 		active_ports[act_port_init] = docker_client.containers.list(limit = 1)
 		print("First container started. Current active ports ", active_ports)
