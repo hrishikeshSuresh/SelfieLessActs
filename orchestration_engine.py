@@ -102,9 +102,9 @@ headers = {'Content-Type': 'application/json', 'Accept':'application/json'}
 
 # critical task - RUN APP
 def run_app():
-    print("Name of thread : ", threading.current_thread().name)
-    print("App running @ port 8080")
-    app.run(debug = True, use_reloader = False, host = '0.0.0.0', port = 8080)
+	print("Name of thread : ", threading.current_thread().name)
+	print("App running @ port 80")
+	app.run(debug = True, use_reloader = False, host = '0.0.0.0', port = 80)
 
 # critical task - FAULT TOLERANCE
 def faultTolerance():
@@ -113,21 +113,25 @@ def faultTolerance():
 	global n_http_requests, docker_client, active_ports, ft_scale_factor
 	print("FT scale factor  = ", ft_scale_factor)
 	print("Number of HTTP requests received ", n_http_requests)
-	for port_i in active_ports:
-		print(active_ports)
-		response = requests.get("http://" + act_public_dns_list[0] + ":" + str(port_i) + "/api/v1/_health")
-		time.sleep(3)
-		print("STATUS CODE ", response.status_code)
-		code = int(response.status_code)
-		if(code == 500):
-			container = active_ports[port_i]
-			print("Fault found at port ", port_i)
-			container.restart(timeout = 1)
-			##time.sleep(5)
-			##docker_client.containers.run("hrishikesh/acts:latest", ports = {'80':str(active_ports[i])})
-			print("Faulty container restarted @ port ", active_ports[i])
-		else:
-			print("No faulty container")
+	try:
+		for port_i in active_ports:
+			print(active_ports)
+			response = requests.get("http://" + act_public_dns_list[0] + ":" + str(port_i) + "/api/v1/_health")
+			time.sleep(3)
+			print("STATUS CODE ", response.status_code)
+			code = int(response.status_code)
+			if(code == 500):
+				container = active_ports[port_i]
+				print("Fault found at port ", port_i)
+				container.restart(timeout = 1)
+				##time.sleep(5)
+				##docker_client.containers.run("hrishikesh/acts:latest", ports = {'80':str(active_ports[i])})
+				print("Faulty container restarted @ port ", active_ports[i])
+			else:
+				print("No faulty container")
+	except RuntimeError as e:
+		print(e)
+		pass
 	threading.Timer(10.0, faultTolerance).start()
 
 def up_scale(scale_factor):
@@ -138,7 +142,7 @@ def up_scale(scale_factor):
     print(act_port_init, act_port_end)
     for port_i in range(act_port_init, act_port_end):
         if(port_i not in active_ports):
-            docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)}, detach = True, volumes = volume_bindings, privileged = True)
+            docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'8080' : str(port_i)}, detach = True, volumes = volume_bindings, privileged = True)
             ##active_ports.append({port_i : docker_client.containers.list(limit = 1)})
             time.sleep(5)
             active_ports[port_i] = docker_client.containers.list(limit = 1)
@@ -177,7 +181,7 @@ def auto_scaling():
 	# one container will start immediately
 	# container starts before first incoming requests
 	if(act_port_init not in active_ports):
-		docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(act_port_init)}, detach = True, volumes = volume_bindings, privileged = True)
+		docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'8080' : str(act_port_init)}, detach = True, volumes = volume_bindings, privileged = True)
 		##active_ports.append({act_ports[0] : docker_client.containers.list(limit = 1)})
 		active_ports[act_port_init] = docker_client.containers.list(limit = 1)
 		print("First container started. Current active ports ", active_ports)
