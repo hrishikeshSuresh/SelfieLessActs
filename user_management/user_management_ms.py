@@ -12,7 +12,7 @@ Notes   : # for developer's comment/insight
           Run pre-run.sh before running this code on terminal/CMD PROMPT
 """
 # I.P. address should be a string
-ip_address = '54.208.40.27'
+ip_address = '35.174.107.114'
 # port number should be a number
 port_no = 80
 

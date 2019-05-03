@@ -132,7 +132,7 @@ def faultTolerance():
 	except RuntimeError as e:
 		print(e)
 		pass
-	threading.Timer(10.0, faultTolerance).start()
+	threading.Timer(1.0, faultTolerance).start()
 
 def up_scale(scale_factor):
     print("Upscaling...")
@@ -144,7 +144,7 @@ def up_scale(scale_factor):
         if(port_i not in active_ports):
             docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)}, detach = True, volumes = volume_bindings, privileged = True)
             ##active_ports.append({port_i : docker_client.containers.list(limit = 1)})
-            time.sleep(5)
+            time.sleep(1)
             active_ports[port_i] = docker_client.containers.list(limit = 1)
             print("New container started. Current active ports ", active_ports)
             print("New container @ port ", port_i)
@@ -188,7 +188,7 @@ def auto_scaling():
 		act_port_end = act_port_end + 1
 	# wait till we get the first request
 	while(auto_scale_flag == 1):
-		time.sleep(5)
+		time.sleep(1)
 		print("Waiting for first request")
 		if n_http_requests >= 1:
 			auto_scale_flag = 0
@@ -269,17 +269,17 @@ def addCategory():
 # remove a category
 @app.route('/api/v1/categories/<categoryName>', methods = ['DELETE'])
 def removecategory(categoryName):
-    global rr_pointer, n_http_requests, act_public_dns_list, active_ports
-    n_http_requests = n_http_requests + 1
-    if request.method == 'DELETE':
-	print(categoryName)
-    	response = requests.delete('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName)
-        # increment rr pointer after usage
-	print(response.text)
-    	rr_pointer = (rr_pointer+1)%(len(active_ports))
-    	return str(response.text)
-    else:
-    	return 'Invalid Request'
+	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
+	n_http_requests = n_http_requests + 1
+	if request.method == 'DELETE':
+		print(categoryName)
+		response = requests.delete('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName)
+		# increment rr pointer after usage
+		print(response.text)
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
+		return str(response.text)
+	else:
+		return 'Invalid Request'
 
 @app.route('/api/v1/categories/<categoryName>/acts', methods = ['GET'])
 def listActs(categoryName):

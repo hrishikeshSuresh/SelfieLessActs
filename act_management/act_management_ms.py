@@ -12,9 +12,9 @@ Notes   : # for developer's comment/insight
           Run pre-run.sh before running this code on terminal/CMD PROMPT
 """
 # I.P. address should be a string
-# enter I.P. address of your AWS instance
-ip_address = '54.208.40.27'
-origin = '3.86.77.173'
+# enter I.P. address of users instance
+ip_address = '35.174.107.114'
+origin = '18.212.26.145'
 # port number should be a number
 port_no = 80
 # health of container
@@ -45,7 +45,7 @@ http_methods = ['GET', 'POST']
 
 n_http_requests = 0
 
-headers = {'Origin' : '3.86.77.173'}
+headers = {'Origin' : '18.212.26.145'}
 
 ##Markup('<h1><strong>Hello!</strong></h1>')
 
