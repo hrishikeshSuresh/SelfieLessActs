@@ -1,5 +1,9 @@
 <h1>Cloud Computing Project</h1>
 
+<h6> LOAD BALANCER DNS NAME </h6> : http://CCFINAL-246629101.us-east-1.elb.amazonaws.com
+<h6> ACTS INSTANCE IP </h6> : 18.212.26.145 , PORT 80
+<h6> USER INSTANCE IP </h6> : 35.174.107.114 , PORT 80
+
 INSTRUCTIONS :
 Check file structure before starting with the code
 <br>
