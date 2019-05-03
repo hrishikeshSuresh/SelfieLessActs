@@ -1,0 +1,8 @@
+{
+    "CC_139_159_158_713": {
+        "selfieless_ip": "CCFINAL-246629101.us-east-1.elb.amazonaws.com",
+        "acts_ip": "18.212.26.145",
+        "acts_username": "ubuntu",
+        "acts_private_key": "MYOSHLinux.pem"
+    }
+}
