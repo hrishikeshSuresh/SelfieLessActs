@@ -211,7 +211,7 @@ def listCategories():
             with open(json_file, 'r') as fp:
                data = json.load(fp)
             dictionary[file] = len(data['acts'])
-        return str(dictionary)
+        return jsonify(dictionary), 200
     else:
         return 'Invalid Request'
 
