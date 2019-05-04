@@ -512,7 +512,7 @@ def uploadAct():
         print(list_of_users)
         present = False
         for u in list_of_users:
-            if(u_name == u):
+            if(u_name in  u):
                 present = True
                 break
         if(present == False):

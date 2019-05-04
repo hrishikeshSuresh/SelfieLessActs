@@ -121,12 +121,15 @@ def faultTolerance():
 			print("STATUS CODE ", response.status_code)
 			code = int(response.status_code)
 			if(code == 500):
-				container = active_ports[port_i]
+				container_id = active_ports[port_i]
 				print("Fault found at port ", port_i)
-				container.restart(timeout = 1)
+				container_id = container_id[0].id
+				print(container_id)
+				container = docker_client.containers.get(container_id)
+				container.stop(timeout = 0)
 				##time.sleep(5)
-				##docker_client.containers.run("hrishikesh/acts:latest", ports = {'80':str(active_ports[i])})
-				print("Faulty container restarted @ port ", active_ports[i])
+				docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80':str(port_i)}, detach = True, volumes = volume_bindings, privileged = True)
+				print("Faulty container restarted @ port ", port_i)
 			else:
 				print("No faulty container")
 	except RuntimeError as e:

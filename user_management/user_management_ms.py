@@ -23,7 +23,8 @@ from flask import (
     Markup,
     send_from_directory,
     flash,
-    request
+    request,
+    jsonify
 )
 
 import os
@@ -275,7 +276,7 @@ def removeUser(username):
         print(list_of_users)
         present = False
         for u in list_of_users:
-            if(username == u):
+            if(username in u):
                 present = True
                 break
         if(present == False):
