@@ -315,7 +315,7 @@ def listAllUsers():
         for i in data['users']:
             users.append(i['username'])
         print(users)
-        return str(users)
+        return jsonify(users), 200
     else:
         return "Invalid request."
 
