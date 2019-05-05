@@ -211,14 +211,17 @@ def listCategories():
             with open(json_file, 'r') as fp:
                data = json.load(fp)
             dictionary[file] = len(data['acts'])
+            if(len(data['acts']) == 0):
+                return jsonify({}), 204
         return jsonify(dictionary), 200
     else:
-        return 'Invalid Request'
+        return jsonify({}), 405
 
 # add a category
 # input should be JSON ARRAY []
 # checked
 # front-end done, but method not allowed pops up even API processed data successfully
+# need to find reason for code 400
 @app.route('/api/v1/categories', methods = ['POST'])
 def addCategory():
     global n_http_requests
@@ -250,9 +253,9 @@ def addCategory():
             with open("./data/categories/"+ catName + '/' + catName + ".json", 'w') as json_file:
                 data= json.dump(data, json_file, indent = 4)
             print(catName + ' added')
-            return catName + ' added'
+            return jsonify({}), 200
         else:
-            return catName + ' already present'
+            return jsonify({}), 400
     ##else:
     ##    print("method is -->",request.method)
     ##    return 'category not added'
@@ -261,8 +264,7 @@ def addCategory():
     ##    # should be entered into database
     ##    return 'Category added'
     else:
-        return 'Invalid Request'
-
+        return jsonify({}), 405
 
 # remove a category
 # checked
@@ -279,9 +281,9 @@ def removecategory(categoryName):
         if categoryName  in cats:
             shutil.rmtree("./static/categories/" + categoryName)
             shutil.rmtree("./data/categories/" + categoryName)
-            return categoryName + " successfully removed"
+            return jsonify({}), 200
         else:
-            return categoryName + " not found"
+            return jsonify({}), 400
         ##if(os.path.exists("data/categories/" + categoryName)):
             ##print("Going to delete it")
             ##os.rmdir("data/categories/"+categoryName)
@@ -290,7 +292,7 @@ def removecategory(categoryName):
         ##else:
         ##    return 'This category does not exists'
     else:
-        return 'Invalid Request'
+        return jsonify({}), 405
 
 # list acts for a given category (when total #acts is less than 100)
 # return is JSON array [{}]
@@ -314,11 +316,13 @@ def listActs(categoryName):
         with open(path + '/'+ file) as json_file:
             data = json.load(json_file)
         if(len(data['acts']) > 100):
-            return "Number of acts are more than 100"
+            return jsonify({}), 413
         ##print("This is data -->",data['acts'])
-        return str(data['acts'])
+        if(len(data['acts']) == 0):
+            return jsonify({}), 204
+        return jsonify(data['acts']), 200
     else:
-        return 'Invalid Request'
+        return jsonify({}), 405
 
 # list number of acts for a given category
 # check if category is present
@@ -332,7 +336,7 @@ def listNoOfActs(categoryName):
         list_acts = []
         cats = os.listdir('./data/categories')
         if(categoryName not in cats):
-            return "category Name Not Exists."
+            return jsonify({}), 404
         path = "./data/categories/"+categoryName
         list_acts = os.listdir(path)
         file = list_acts[0]
@@ -340,9 +344,10 @@ def listNoOfActs(categoryName):
             data = json.load(json_file)
             print(data['acts'])
             print(len(data['acts']))
-            return str(len(data['acts']))
+            number_of_acts = list(len(data['acts']))
+            return jsonify(number_of_acts), 200
     else:
-        return "Invalid Request"
+        return jsonify({}), 405
 
 # return number of acts for a given category in a given range(inclusive)
 # checked
@@ -361,7 +366,7 @@ def listActsInGivenRange(categoryName,startRange,endRange):
         list_acts = []
         cats = os.listdir('./data/categories')
         if(not checkCategory(categoryName)):
-            return "category does not exists."
+            return jsonify({}), 404
         path = "./data/categories/"+categoryName
         list_acts = os.listdir(path)
         file = list_acts[0]
@@ -370,10 +375,15 @@ def listActsInGivenRange(categoryName,startRange,endRange):
         arr = []
         for i in range(int(startRange),int(endRange)+1):
             arr.append(data['acts'][i])
+        if(len(arr) > 100):
+            return jsonify({}), 413
+        if(len(arr) == 0):
+            return jsonify({}), 204
         print(arr)
-        return str(arr)
+        arr = list(len(arr))
+        return jsonify(arr), 200
     else:
-        return "Invalid Request"
+        return jsonify({}), 405
 
 # upvote an act
 # json array []
@@ -397,7 +407,7 @@ def upvoteAct():
         list_cat = []
         actId = int(actId)
         if(not checkId(actId)):
-                return "ActId does not Exists."
+                return jsonify({}), 404
         path = "./data/categories"
         list_cat = os.listdir(path)
         for fold in list_cat:
@@ -413,11 +423,11 @@ def upvoteAct():
                     count+=1
             with open(cur_path+'/'+list_file[0], 'w') as data_file:
                 data= json.dump(data, data_file,indent = 4)
-        return "Upvote Done"
+        return jsonify({}), 200
             ##with open(list_file[0], 'w') as data_file:
             ##    data= json.dump(data, data_file,indent = 4)
     else:
-        return "Invalid Request"
+        return jsonify({}), 405
 
 # remove an act
 # checked
@@ -436,7 +446,7 @@ def removeAct(actId):
             cur_path = path+"/"+fold
             list_file = os.listdir(cur_path)
             if(not checkId(actId)):
-                return "ActId does not Exists."
+                return jsonify({}), 404
             with open(cur_path+'/'+list_file[0]) as json_file:
                 data = json.load(json_file)
             arr = data['acts']
@@ -446,9 +456,9 @@ def removeAct(actId):
             print(data['acts'])
             with open(cur_path + '/' + list_file[0], 'w') as data_file:
                 data= json.dump(data, data_file,indent = 4)
-        return "Act successfully removed"
+        return jsonify({}), 200
     else:
-         return "Invalid Request"
+         return jsonify({}), 405
 
 # upload an act
 # checked
@@ -456,7 +466,8 @@ def removeAct(actId):
 # probably need to find a correct way to convert image to base64 string in upload.html
 @app.route('/api/v1/acts', methods = ['POST'])
 def uploadAct():
-    headers = {'Origin' : '3.86.77.173'}
+    global origin
+    headers = {'Origin' : origin}
     global n_http_requests
     n_http_requests = n_http_requests + 1
     x = datetime.datetime.now()
@@ -491,20 +502,20 @@ def uploadAct():
         except ValueError:
             print("Incorrect Time format")
             print(u_time)
-            return "invalid time format"
+            return jsonify({}), 400
         image = ""
         try:
             image = base64.b64decode(u_imgB64)
             ##print(image)
         except:
-            return "not a valid base64 string"
+            return jsonify({}), 400
         val = checkCategory(u_cat)
         if(val == 0):
-            return "category does not exists."
+            return jsonify({}), 404
         val = checkId(u_actId)
         # checks if the actId is currently there in the given directory.
         if(val == 1):
-            return "act id is already assigned."
+            return jsonify({}), 400
         ##return "works till here"
         list_of_users = requests.get('http://' + ip_address+ ':' + str(port_no) + '/api/v1/users', headers = headers)
         list_of_users = list_of_users.text
@@ -516,7 +527,7 @@ def uploadAct():
                 present = True
                 break
         if(present == False):
-            return "user does not exists"
+            return jsonify({}), 404
         ##new_val = checkUser(u_name)
         ##if(new_val == 0):
            ##return "user not found"
@@ -536,22 +547,27 @@ def uploadAct():
             data= json.dump(data, data_file,indent = 4)
         with open('./static/categories/' + u_cat + '/'+ str(u_actId) + '.png', 'wb') as f_img:
             f_img.write(image)
-        return "act uploaded successfully"
+        return jsonify({}), 405
 
 @app.route('/api/v1/_count', methods = ['GET'])
 def count_http_request():
-    ##global n_http_requests
-    ##n_http_requests = n_http_requests + 1
+    global n_http_requests
+    n_http_requests = n_http_requests + 1
     if(request.method == "GET"):
-	    return "[" + str(n_http_requests) + "]"
+        n_http_requests_list = list(n_http_requests)
+	    return jsonify(n_http_requests_list), 200
+    else:
+        return jsonify({}), 405
 
 @app.route('/api/v1/_count', methods = ['DELETE'])
 def reset_http_request():
-    ##global n_http_requests
-    ##n_http_requests = n_http_requests + 1
+    global n_http_requests
+    n_http_requests = n_http_requests + 1
     if(request.method == "DELETE"):
 	    n_http_requests = 0
-	    return "{}"
+	    return jsonify({}), 200
+    else:
+        return jsonify({}), 405
 
 @app.route('/api/v1/acts/count', methods = ['GET'])
 def countAllActs():
@@ -566,9 +582,10 @@ def countAllActs():
 			with open(new_path) as json_file:
 				data = json.load(json_file)
 			count += len(data['acts'])
-		return "[" + str(count) + "]"
+            count_list = list(count)
+		return jsonify(count), 200
 	else:
-		return "Invalid request"
+		return jsonify({}), 405
 
 # health check
 @app.route('/api/v1/_health', methods = ['GET'])

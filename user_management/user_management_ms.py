@@ -219,7 +219,7 @@ def addUser():
             match = re.match(pattern, u_password)
             ##print(match)
             if(match == None):
-                return "not SHA1 password"
+                return jsonify({}), 400
         else:
             print("from front-end")
             u_data = request.form['username']
@@ -240,7 +240,7 @@ def addUser():
             ##print(u)
             if(u_data in u):
                 print("Match")
-                return "user already exists"
+                return jsonify({}), 405
         ##if(checkUser(u_data)):
             ##return "user already exists."
         dictionary = {}
@@ -250,9 +250,9 @@ def addUser():
         with open('./data/users/'+file[0],'w') as json_file:
             data = json.dump(data, json_file,indent = 4)
         message = u_data + ' has been added'
-        return message
+        return jsonify({}), 201
     else:
-        return 'Invalid Request'
+        return jsonify({}), 405
 
 # remove user
 # checked
@@ -288,7 +288,7 @@ def removeUser(username):
         data['users'] = arr
         with open('./data/users/'+file[0], 'w') as data_file:
             data= json.dump(data, data_file,indent = 4)
-        return username + ' removed successfully'
+        return jsonify({}), 200
         ##print(folder)
         ##target = username + ".json"
         ##found = False
@@ -301,7 +301,7 @@ def removeUser(username):
         ##if(found == False):
         ##    return username + ' not found'
     else:
-        return 'Invalid Request'
+        return jsonify({}), 405
 
 # list all users
 @app.route('/api/v1/users', methods = ['GET'])
@@ -316,26 +316,33 @@ def listAllUsers():
         for i in data['users']:
             users.append(i['username'])
         print(users)
+        if(len(users) == 0):
+            jsonify([]), 204
         return jsonify(users), 200
     else:
-        return "Invalid request."
+        return jsonify({}), 405
 
 @app.route('/api/v1/_count', methods = ['GET'])
 def count_http_request():
-    ##global n_http_requests
-    ##n_http_requests = n_http_requests + 1
+    global n_http_requests
+    n_http_requests = n_http_requests + 1
     if(request.method == "GET"):
         ##count_array = []
         ##count_array[0] = n_http_requests
-        return '[' + str(n_http_requests) + ']'
+        n_http_requests_list = list(n_http_requests)
+        return jsonify(n_http_requests_list), 200
+    else:
+        return jsonify({}), 405
 
 @app.route('/api/v1/_count', methods = ['DELETE'])
 def reset_http_request():
-    ##global n_http_requests
-    ##n_http_requests = n_http_requests + 1
+    global n_http_requests
+    n_http_requests = n_http_requests + 1
     if(request.method == "DELETE"):
         n_http_requests = 0
-        return "{}"
+        return jsonify({}), 200
+    else
+        return jsonify({}), 405
 
 if __name__ == '__main__':
     app.run(debug = True, host = '0.0.0.0', port = 80)
