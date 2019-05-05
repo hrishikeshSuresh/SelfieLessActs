@@ -100,6 +100,14 @@ ft_scale_factor = 0
 #headers for POST
 headers = {'Content-Type': 'application/json', 'Accept':'application/json'}
 
+# get url
+def get_url_rule():
+    rule = None
+    url_rule = request.url_rule
+    if url_rule is not None:
+        rule = url_rule.rule
+    return rule
+
 # critical task - RUN APP
 def run_app():
 	print("Name of thread : ", threading.current_thread().name)
@@ -225,6 +233,7 @@ def auto_scaling():
 	n_http_requests = 0
 	threading.Timer(120.0, auto_scaling).start()
 
+'''
 # list all categories
 @app.route('/api/v1/categories', methods = ['GET'])
 def listCategories():
@@ -424,6 +433,7 @@ def crash():
 		return jsonify({}), 200
 	else:
 		return jsonify({}), 405
+'''
 
 if __name__ == '__main__':
 	# creating threads
