@@ -233,7 +233,6 @@ def auto_scaling():
 	n_http_requests = 0
 	threading.Timer(120.0, auto_scaling).start()
 
-'''
 # list all categories
 @app.route('/api/v1/categories', methods = ['GET'])
 def listCategories():
@@ -433,7 +432,6 @@ def crash():
 		return jsonify({}), 200
 	else:
 		return jsonify({}), 405
-'''
 
 if __name__ == '__main__':
 	# creating threads
