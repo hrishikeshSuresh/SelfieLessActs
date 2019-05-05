@@ -121,11 +121,14 @@ def faultTolerance():
 	global n_http_requests, docker_client, active_ports, ft_scale_factor
 	print("FT scale factor  = ", ft_scale_factor)
 	print("Number of HTTP requests received ", n_http_requests)
-	try:
+	##try:
+	if(len(active_ports) == len(docker_client.containers.list())):
+		##print("START FAULT TOLERANCE............CONDITION PASSED")
+		##print(active_ports)
 		for port_i in active_ports:
 			print(active_ports)
 			response = requests.get("http://" + act_public_dns_list[0] + ":" + str(port_i) + "/api/v1/_health")
-			time.sleep(3)
+			##time.sleep(3)
 			print("STATUS CODE ", response.status_code)
 			code = int(response.status_code)
 			if(code == 500):
@@ -140,9 +143,9 @@ def faultTolerance():
 				print("Faulty container restarted @ port ", port_i)
 			else:
 				print("No faulty container")
-	except RuntimeError as e:
-		print(e)
-		pass
+	##except RuntimeError as e:
+		##print(e)
+		##pass
 	threading.Timer(1.0, faultTolerance).start()
 
 def up_scale(scale_factor):
@@ -155,7 +158,7 @@ def up_scale(scale_factor):
         if(port_i not in active_ports):
             docker_client.containers.run("hrishikeshsuresh/acts:latest", ports = {'80' : str(port_i)}, detach = True, volumes = volume_bindings, privileged = True)
             ##active_ports.append({port_i : docker_client.containers.list(limit = 1)})
-            time.sleep(1)
+            ##time.sleep(5)
             active_ports[port_i] = docker_client.containers.list(limit = 1)
             print("New container started. Current active ports ", active_ports)
             print("New container @ port ", port_i)
@@ -170,7 +173,7 @@ def down_scale(scale_factor):
 	for port_i in range(act_port_end + scale_factor, act_port_end):
 		if(port_i in active_ports):
 			container_to_be_stopped = active_ports[port_i]
-			container_to_be_stopped[0].stop(timeout = 1)
+			container_to_be_stopped[0].stop(timeout = 0)
 			# None to prevent error
 			active_ports.pop(port_i, None)
 			print("Container removed @ port ", port_i)
@@ -239,11 +242,11 @@ def listCategories():
 	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
 	n_http_requests = n_http_requests + 1
 	if request.method == 'GET':
-        rr_pointer = (rr_pointer+1)%(len(active_ports))
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
 		response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories')
 		print(response.text)
 		# increment rr pointer after usage
-		return jsonify({}), 200
+		return response.text, 200
 	else:
 		return jsonify({}), 405
 
@@ -268,7 +271,7 @@ def addCategory():
 		##data = [data]
 		##print("FORMATTED DATA : ", data)
 		##print(type(data))
-        rr_pointer = (rr_pointer+1)%(len(active_ports))
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
 		response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer])+'/api/v1/categories', data = data, headers = headers)
 		# increment rr pointer after usage
 		##print(response.text)
@@ -285,12 +288,12 @@ def removecategory(categoryName):
 	n_http_requests = n_http_requests + 1
 	if request.method == 'DELETE':
 		print(categoryName)
-        rr_pointer = (rr_pointer+1)%(len(active_ports))
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
 		response = requests.delete('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName)
 		# increment rr pointer after usage
 		print(response.text)
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
-		return jsonify({}), 200
+		return jsonify(response.text), 200
 	else:
 		return jsonify({}), 405
 
@@ -299,11 +302,11 @@ def listActs(categoryName):
 	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
 	n_http_requests = n_http_requests + 1
 	if request.method == 'GET':
-        rr_pointer = (rr_pointer+1)%(len(active_ports))
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
 		response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName + '/acts')
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
-		return jsonify({}), 200
+		return jsonify(response.text), 200
 	else:
 		return jsonify({}), 405
 
@@ -312,11 +315,11 @@ def listNoOfActs(categoryName):
 	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
 	n_http_requests = n_http_requests + 1
 	if request.method == 'GET':
-        rr_pointer = (rr_pointer+1)%(len(active_ports))
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
 		response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName + '/acts/size')
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
-		return jsonify({}), 200
+		return jsonify(response.text), 200
 	else:
 	    return jsonify({}), 405
 
@@ -325,7 +328,7 @@ def listActsInGivenRange(categoryName, startRange, endRange):
 	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
 	n_http_requests = n_http_requests + 1
 	if request.method == 'GET':
-        rr_pointer = (rr_pointer+1)%(len(active_ports))
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
 		response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName + '/acts?start=' + startRange + '&end=' + endRange)
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
@@ -340,7 +343,7 @@ def upvoteAct():
 	if request.method == 'POST':
 		data = request.get_data().decode()
 		print(data)
-        rr_pointer = (rr_pointer+1)%(len(active_ports))
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
 		response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/acts/upvote', data = data)
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
@@ -354,7 +357,7 @@ def removeAct(actId):
 	n_http_requests = n_http_requests + 1
 	if request.method == 'DELETE':
 		print(actId)
-        rr_pointer = (rr_pointer+1)%(len(active_ports))
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
 		response = requests.delete('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) + '/api/v1/acts/' + actId)
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
@@ -369,7 +372,7 @@ def uploadAct():
 	if request.method == 'POST':
 		data = request.get_data().decode()
 		print(data)
-        rr_pointer = (rr_pointer+1)%(len(active_ports))
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
 		response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/acts', data = data)
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
@@ -382,7 +385,7 @@ def count_http_request():
 	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
 	n_http_requests = n_http_requests + 1
 	if request.method == 'GET':
-        rr_pointer = (rr_pointer+1)%(len(active_ports))
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
 		response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/_count')
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
@@ -395,7 +398,7 @@ def reset_http_request():
 	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
 	n_http_requests = n_http_requests + 1
 	if request.method == 'DELETE':
-        rr_pointer = (rr_pointer+1)%(len(active_ports))
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
 		response = requests.delete('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/_count')
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
@@ -408,7 +411,7 @@ def countAllActs():
 	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
 	n_http_requests = n_http_requests + 1
 	if request.method == 'GET':
-        rr_pointer = (rr_pointer+1)%(len(active_ports))
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
 		response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/acts/count')
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
@@ -422,7 +425,7 @@ def health():
 	global rr_pointer, n_http_requests, act_public_dns_list, active_ports
 	n_http_requests = n_http_requests + 1
 	if request.method == 'GET':
-        rr_pointer = (rr_pointer+1)%(len(active_ports))
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
 		response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/_health' + categoryName)
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
@@ -438,7 +441,7 @@ def crash():
 	if request.method == 'POST':
 		data = request.get_data().decode()
 		print(data)
-        rr_pointer = (rr_pointer+1)%(len(active_ports))
+		rr_pointer = (rr_pointer+1)%(len(active_ports))
 		response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/_crash', data = data)
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)

@@ -211,8 +211,8 @@ def listCategories():
             with open(json_file, 'r') as fp:
                data = json.load(fp)
             dictionary[file] = len(data['acts'])
-            if(len(data['acts']) == 0):
-                return jsonify({}), 204
+            ##if(len(data['acts']) == 0):
+                ##return jsonify({}), 204
         return jsonify(dictionary), 200
     else:
         return jsonify({}), 405
@@ -551,23 +551,23 @@ def uploadAct():
 
 @app.route('/api/v1/_count', methods = ['GET'])
 def count_http_request():
-    global n_http_requests
-    n_http_requests = n_http_requests + 1
-    if(request.method == "GET"):
-        n_http_requests_list = list(n_http_requests)
-	    return jsonify(n_http_requests_list), 200
-    else:
-        return jsonify({}), 405
+	global n_http_requests
+	n_http_requests = n_http_requests + 1
+	if(request.method == "GET"):
+		n_http_requests_list = list(n_http_requests)
+		return jsonify(n_http_requests_list), 200
+	else:
+		return jsonify({}), 405
 
 @app.route('/api/v1/_count', methods = ['DELETE'])
 def reset_http_request():
-    global n_http_requests
-    n_http_requests = n_http_requests + 1
-    if(request.method == "DELETE"):
-	    n_http_requests = 0
-	    return jsonify({}), 200
-    else:
-        return jsonify({}), 405
+	global n_http_requests
+	n_http_requests = n_http_requests + 1
+	if(request.method == "DELETE"):
+		n_http_requests = 0
+		return jsonify({}), 200
+	else:
+		return jsonify({}), 405
 
 @app.route('/api/v1/acts/count', methods = ['GET'])
 def countAllActs():
@@ -582,7 +582,7 @@ def countAllActs():
 			with open(new_path) as json_file:
 				data = json.load(json_file)
 			count += len(data['acts'])
-            count_list = list(count)
+		count_list = list(count)
 		return jsonify(count), 200
 	else:
 		return jsonify({}), 405

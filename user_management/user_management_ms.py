@@ -341,7 +341,7 @@ def reset_http_request():
     if(request.method == "DELETE"):
         n_http_requests = 0
         return jsonify({}), 200
-    else
+    else:
         return jsonify({}), 405
 
 if __name__ == '__main__':
