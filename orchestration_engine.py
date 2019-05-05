@@ -277,7 +277,7 @@ def addCategory():
 		##print(response.text)
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
-		return jsonify({}), 200
+		return response.text, 200
 	else:
 		return jsonify({}), 405
 
@@ -306,7 +306,7 @@ def listActs(categoryName):
 		response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName + '/acts')
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
-		return jsonify(response.text), 200
+		return response.text, 200
 	else:
 		return jsonify({}), 405
 
@@ -319,7 +319,7 @@ def listNoOfActs(categoryName):
 		response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName + '/acts/size')
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
-		return jsonify(response.text), 200
+		return response.text, 200
 	else:
 	    return jsonify({}), 405
 
@@ -332,7 +332,7 @@ def listActsInGivenRange(categoryName, startRange, endRange):
 		response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/categories/' + categoryName + '/acts?start=' + startRange + '&end=' + endRange)
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
-		return jsonify({}), 200
+		return response.text, 200
 	else:
 		return jsonify({}), 405
 
@@ -347,7 +347,7 @@ def upvoteAct():
 		response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/acts/upvote', data = data)
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
-		return jsonify({}), 200
+		return response.text, 200
 	else:
 		return jsonify({}), 405
 
@@ -361,7 +361,7 @@ def removeAct(actId):
 		response = requests.delete('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) + '/api/v1/acts/' + actId)
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
-		return jsonify({}), 200
+		return response.text, 200
 	else:
 		return jsonify({}), 405
 
@@ -376,7 +376,7 @@ def uploadAct():
 		response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/acts', data = data)
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
-		return jsonify({}), 200
+		return response.text, 200
 	else:
 		return jsonify({}), 405
 
@@ -389,7 +389,7 @@ def count_http_request():
 		response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/_count')
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
-		return jsonify({}), 200
+		return response.text, 200
 	else:
 		return jsonify({}), 405
 
@@ -402,9 +402,9 @@ def reset_http_request():
 		response = requests.delete('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/_count')
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
-		return jsonify({}), 200
+		return response.text, 200
 	else:
-		return jsonify({}), 405
+		return "invalid"
 
 @app.route('/api/v1/acts/count', methods = ['GET'])
 def countAllActs():
@@ -415,7 +415,7 @@ def countAllActs():
 		response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/acts/count')
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
-		return jsonify({}), 200
+		return response.text, 200
 	else:
 		return jsonify({}), 405
 
@@ -429,7 +429,7 @@ def health():
 		response = requests.get('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/_health' + categoryName)
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
-		return jsonify({}), 200
+		return response.text, 200
 	else:
 		return jsonify({}), 405
 
@@ -445,7 +445,7 @@ def crash():
 		response = requests.post('http://' + act_public_dns_list[0] + ':' + str(list(active_ports)[rr_pointer]) +'/api/v1/_crash', data = data)
 		##rr_pointer = (rr_pointer+1)%(len(active_ports))
 		print(response.text)
-		return jsonify({}), 200
+		return response.text, 200
 	else:
 		return jsonify({}), 405
 
