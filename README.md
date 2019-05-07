@@ -8,8 +8,14 @@ INSTRUCTIONS :
 Check file structure before starting with the code
 <br>
 <h3> Run pre-run.sh before running server.py </h3>
-Instructions to execute code is below the explanation.<br>
-
+<h3> Run user management container on VM 1 using, </h3>
+$ sudo docker run -dp 80:80 -v user_management:user_management hrishikeshsuresh/users:latest
+<h3> Run act management container, which contains the orchestration engine, on VM 2 using, </h3>
+$ sudo python3 orchestration
+<h3> To kill the processes, run </h3>
+$ ./kill_rogue_unprivileged.sh
+$ ./search_python_process.sh
+<h2>About the project.</h2>
 SelfieLessActs is a cloud-based web application, that is used to share information about anything that is good for soceity that you 
 observe.<br>
 Examples of such acts could be<br>
