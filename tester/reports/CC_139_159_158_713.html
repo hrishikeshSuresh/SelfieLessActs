@@ -27,19 +27,19 @@
     
       <li>
         <span id="positive_result">
-          One Acts container running with ID 5142ef341134
+          One Acts container running with ID 6c6b2c1359d8
         </span>
       </li>
     
       <li>
         <span id="positive_result">
-          Acts container 5142ef341134 is listening on port 8000
+          Acts container 6c6b2c1359d8 is listening on port 8000
         </span>
       </li>
     
       <li>
         <span id="positive_result">
-          Acts container 5142ef341134 is healthy
+          Acts container 6c6b2c1359d8 is healthy
         </span>
       </li>
     
@@ -57,13 +57,13 @@
     
       <li>
         <span id="positive_result">
-          Second Acts container now running with ID 9637affac805
+          Second Acts container now running with ID c805ac115482
         </span>
       </li>
     
       <li>
         <span id="positive_result">
-          Acts container 9637affac805 is listening on port 8001
+          Acts container c805ac115482 is listening on port 8001
         </span>
       </li>
     
@@ -73,13 +73,49 @@
         </span>
       </li>
     
-
-    
       <li>
-        <span id="negative_result">
-          API requests were NOT evenly distributed b/w 2 Acts containers (round-robin manner)
+        <span id="positive_result">
+          API requests evenly distributed b/w 2 Acts containers in round-robin manner
         </span>
       </li>
+    
+      <li>
+        <span id="positive_result">
+          Successfully crashed container 6c6b2c1359d8 with /api/v1/_crash
+        </span>
+      </li>
+    
+      <li>
+        <span id="positive_result">
+          Replacement Acts container running with ID b6278999b7eb
+        </span>
+      </li>
+    
+      <li>
+        <span id="positive_result">
+          Replacement Acts container b6278999b7eb is listening on port 8000
+        </span>
+      </li>
+    
+      <li>
+        <span id="positive_result">
+          Replacement Acts container b6278999b7eb is healthy
+        </span>
+      </li>
+    
+      <li>
+        <span id="positive_result">
+          Script slept for 2 minutes
+        </span>
+      </li>
+    
+      <li>
+        <span id="positive_result">
+          Orchestrator successfully scaled down containers. Only 1 Acts container running with ID b6278999b7eb
+        </span>
+      </li>
+    
+
     
   </ol>
 
