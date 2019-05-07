@@ -547,7 +547,7 @@ def uploadAct():
             data= json.dump(data, data_file,indent = 4)
         with open('./static/categories/' + u_cat + '/'+ str(u_actId) + '.png', 'wb') as f_img:
             f_img.write(image)
-        return jsonify({}), 405
+        return "act uploaded"
 
 @app.route('/api/v1/_count', methods = ['GET'])
 def count_http_request():
